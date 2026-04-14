@@ -1,0 +1,78 @@
+$azul-ursula: #325172; // Tu color pedido
+$verde-btn: #374f43;
+$blanco-off: #e6eceb;
+
+.viewport-qr {
+  background-color: $azul-ursula;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  height: 100vh;
+  padding: 40px;
+}
+
+.header-qr {
+  text-align: center;
+  h1 {
+    font-family: 'Playfair Display', serif; 
+    color: $blanco-off;
+    font-size: 3rem;
+    margin: 0;
+  }
+  .sub-elegante {
+    color: $blanco-off;
+    opacity: 0.7;
+    letter-spacing: 3px;
+    font-size: 0.8rem;
+    margin-top: 5px;
+  }
+}
+
+.action-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+    .btn-scan-solido {
+    width: 220px;
+    height: 220px;
+    background-color: #374f43;
+    border-radius: 50%;
+    border: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+    cursor: pointer;
+    overflow: hidden; 
+    position: relative;
+
+    .gif-centro {
+        width: 110%; //tamaño del gif del boton
+        height: auto;
+        object-fit: contain;
+        mix-blend-mode: multiply;
+    }
+
+    &:active {
+        transform: scale(0.95);
+        background-color: lighten(#374f43, 5%);
+    }
+    }
+
+  span {
+    color: $blanco-off;
+    font-weight: 700;
+    letter-spacing: 2px;
+    font-size: 0.9rem;
+  }
+}
+
+.footer-status {
+  p {
+    color: $blanco-off;
+    opacity: 0.6;
+    font-size: 0.8rem;
+  }
+}

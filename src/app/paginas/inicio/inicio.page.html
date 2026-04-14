@@ -1,0 +1,20 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title class="titulo-ursula">Úrsula - Inicio</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="cerrarSesion()" color="danger">
+        <ion-icon name="log-out-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding ion-text-center">
+  <div class="contenedor-bienvenida">
+    <img src="assets/oso-ursula.png" class="logo-inicio">
+    <h2 class="cormorant">¡Bienvenido!</h2>    
+    <ion-button expand="block" fill="outline" color="danger" (click)="cerrarSesion()" class="ion-margin-top">
+      Cerrar Sesión
+    </ion-button>
+  </div>
+</ion-content>

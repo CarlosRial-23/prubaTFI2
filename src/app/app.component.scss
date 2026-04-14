@@ -1,0 +1,49 @@
+.global-splash-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #325172; 
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  box-shadow: inset 0 0 150px rgba(0,0,0,0.5);
+
+  .splash-content {
+    text-align: center;
+    
+    .gif-box {
+      width: 250px;
+      height: 250px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #325172; 
+
+      .loading-gif {
+        width: 100%;
+        mix-blend-mode: multiply; 
+        filter: contrast(110%) brightness(1.1);
+      }
+    }
+
+    .loading-tagline {
+      margin-top: 20px;
+      color: #e6eceb;
+      font-size: 0.7rem;
+      letter-spacing: 5px;
+      font-weight: 300;
+      opacity: 0.8;
+      animation: pulse 1.5s infinite ease-in-out;
+    }
+  }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}

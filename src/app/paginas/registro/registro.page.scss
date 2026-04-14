@@ -1,0 +1,164 @@
+$azul-fondo: #121737;
+$azul-card: #325172;
+$gris-medio: #456880;
+$celeste: #769690;
+$verde-btn: #374f43;
+$blanco-off: #e6eceb;
+
+:host {
+  --ion-background-color: #{$azul-card} !important;
+  display: block;
+  height: 100%; // Cambiado de 100vh a 100% para evitar redimensionamiento
+}
+
+ion-content {
+  --background: #{$azul-card} !important;
+  --padding-top: 0;
+  --padding-bottom: 0;
+}
+
+.viewport {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  min-height: 100%; // Permite que el contenido crezca si es necesario sin comprimir
+  background-color: $azul-card;
+  padding: 20px 0; // Espaciado para que la card no toque los bordes
+}
+
+.main-card {
+  width: 92%;
+  // Definimos una altura mínima para que no se deforme,
+  // pero permitimos que se adapte al contenido.
+  height: auto;
+  min-height: 600px;
+  max-width: 400px;
+  background-color: $azul-card !important;
+  border-radius: 40px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid rgba($gris-medio, 0.4);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+}
+
+.hero-image {
+  height: 160px; // Altura fija en px en lugar de flex ratio para evitar compresión
+  background: url("../../../assets/imagenes/ursula-fondo.png") center/cover
+    no-repeat;
+  position: relative;
+  background-color: $azul-card;
+
+  .overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, transparent, $azul-card);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 15px 25px;
+  }
+
+  h1 {
+    color: $blanco-off;
+    font-size: 1.8rem;
+    margin: 0;
+    font-weight: 800;
+  }
+
+  .sub-elegante {
+    color: $azul-fondo;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: 700;
+  }
+}
+
+.form-content {
+  padding: 10px 25px 30px;
+  display: flex;
+  flex-direction: column;
+  // Si el teclado tapa campos, el usuario podrá hacer scroll dentro de la card
+  overflow-y: visible;
+
+  .input-group {
+    width: 100%;
+    margin-bottom: 12px;
+
+    .custom-label {
+      display: block;
+      color: $celeste;
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 1.2px;
+      margin-bottom: 4px;
+    }
+
+    .input-standard {
+      width: 100%;
+      height: 45px;
+      background-color: $azul-fondo;
+      color: $blanco-off;
+      border: 1px solid $gris-medio;
+      border-radius: 12px;
+      padding: 0 15px;
+      font-size: 0.95rem;
+      outline: none;
+      box-sizing: border-box;
+
+      &::placeholder {
+        color: rgba($celeste, 0.3);
+      }
+      &:focus {
+        border-color: $celeste;
+      }
+    }
+  }
+}
+
+// Estilo para el error de validación (agregado de la lógica git)
+.error-text {
+  color: #ff6b6b;
+  font-size: 0.65rem;
+  margin-top: 4px;
+  display: block;
+}
+
+.btn-registro {
+  width: 100%;
+  height: 50px;
+  background-color: $verde-btn;
+  color: $blanco-off;
+  border: none;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin-top: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+
+  &:active {
+    transform: scale(0.98);
+    background-color: #466556;
+  }
+}
+
+.login-redirect {
+  text-align: center;
+  margin-top: 20px;
+  p {
+    color: rgba($blanco-off, 0.6);
+    font-size: 0.8rem;
+  }
+  .link-text {
+    color: $celeste;
+    font-weight: 700;
+    border-bottom: 1.5px solid $celeste;
+    margin-left: 5px;
+    padding-bottom: 1px;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+  }
+}

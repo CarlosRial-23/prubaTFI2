@@ -1,0 +1,20 @@
+<ion-content [fullscreen]="true">
+  <div class="viewport-qr">
+    
+    <div class="header-qr">
+      <h1 class="font-elegante">Úrsula</h1>
+      <p class="sub-elegante">ACCESO AL LOCAL</p>
+    </div>
+
+    <div class="action-center">
+      <button class="btn-scan-solido" (click)="iniciarProcesoEscaneo()">
+        <img src="assets/imagenes/Scanning.gif" alt="Escanear" class="gif-centro">
+      </button>
+      <span>TOCÁ PARA ESCANEAR</span>
+    </div>
+
+    <div class="footer-status">
+      <p>{{ estadoEscaneo }}</p>
+    </div>
+  </div>
+</ion-content>

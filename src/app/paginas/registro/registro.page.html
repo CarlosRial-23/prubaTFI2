@@ -1,0 +1,107 @@
+<ion-content [fullscreen]="true" scroll-y="false">
+  <div class="viewport">
+    <div class="main-card">
+      <div class="hero-image">
+        <div class="overlay">
+          <h1 class="font-elegante">Crea tu cuenta</h1>
+          <p class="sub-elegante">Únete a Úrsula</p>
+        </div>
+      </div>
+
+      <div class="form-content scrollable-form">
+        <form [formGroup]="registroForm" (ngSubmit)="onRegister()">
+          <div class="input-group">
+            <label class="custom-label">NOMBRES</label>
+            <input
+              type="text"
+              formControlName="nombres"
+              placeholder="Ingrese su nombre"
+              class="input-standard"
+            />
+            <span class="error-text">{{ getErrorMessage('nombres') }}</span>
+          </div>
+
+          <div class="input-group">
+            <label class="custom-label">APELLIDOS</label>
+            <input
+              type="text"
+              formControlName="apellidos"
+              placeholder="Ingrese su apellido"
+              class="input-standard"
+            />
+            <span class="error-text">{{ getErrorMessage('apellidos') }}</span>
+          </div>
+
+          <div class="input-group">
+            <label class="custom-label">Documento nacional de identidad</label>
+            <input
+              type="tel"
+              formControlName="dni_cuil"
+              placeholder="Ingese su DNI"
+              class="input-standard"
+            />
+            <span class="error-text">{{ getErrorMessage('dni_cuil') }}</span>
+          </div>
+
+          <div class="input-group">
+            <label class="custom-label">CORREO ELECTRÓNICO</label>
+            <input
+              type="email"
+              formControlName="correo_electronico"
+              placeholder="Ingrese su correo electronico"
+              class="input-standard"
+            />
+            <span class="error-text"
+              >{{ getErrorMessage('correo_electronico') }}</span
+            >
+          </div>
+
+          <div class="input-group">
+            <label class="custom-label">CONTRASEÑA</label>
+            <input
+              type="password"
+              formControlName="clave"
+              placeholder="••••••••"
+              class="input-standard"
+            />
+            <span class="error-text">{{ getErrorMessage('clave') }}</span>
+          </div>
+
+          <div class="input-group">
+            <label class="custom-label">PERFIL</label>
+            <select
+              formControlName="perfil"
+              class="input-standard custom-select"
+            >
+              <option value="" disabled selected>Seleccione un perfil</option>
+              <optgroup label="Administración">
+                <option value="duenio">Dueño</option>
+                <option value="supervisor">Supervisor</option>
+              </optgroup>
+              <optgroup label="Personal">
+                <option value="metre">Metre</option>
+                <option value="mozo">Mozo</option>
+                <option value="cocinero">Cocinero</option>
+              </optgroup>
+              <optgroup label="Usuarios">
+                <option value="cliente">Cliente</option>
+              </optgroup>
+            </select>
+            <span class="error-text">{{ getErrorMessage('perfil') }}</span>
+          </div>
+
+          <div class="button-wrapper">
+            <button type="submit" class="btn-registro">CREAR CUENTA</button>
+          </div>
+        </form>
+
+        <div class="login-redirect">
+          <p>
+            ¿Ya tienes cuenta?
+            <span class="link-text" (click)="irAlLogin()">Inicia sesión</span>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</ion-content>

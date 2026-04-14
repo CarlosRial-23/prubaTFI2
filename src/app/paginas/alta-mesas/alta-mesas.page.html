@@ -1,0 +1,49 @@
+<ion-content [fullscreen]="true" class="admin-container">
+  
+  <div class="header-section">
+    <div class="back-button-custom" routerLink="/dashboard-admin">
+      <div class="arrow-icon"></div>
+    </div>
+    <h1>Alta de Mesas</h1>
+    <p>Definir nueva unidad en el salón</p>
+  </div>
+
+  <div class="form-wrapper">
+    <form (ngSubmit)="guardarMesa()">
+      
+      <div class="input-group">
+        <label>Número de Mesa</label>
+        <input type="number" [(ngModel)]="nuevaMesa.numero" name="numero" 
+               (input)="validarDuplicado()" placeholder="Ingrese el numero de mesa">
+        <span class="error-text" *ngIf="errorDuplicado">Este número ya existe en el salón.</span>
+      </div>
+
+      <div class="input-group">
+        <label>Capacidad de Comensales</label>
+        <input type="number" [(ngModel)]="nuevaMesa.capacidad" name="capacidad" placeholder="Ingrese la cantidad de comensales">
+      </div>
+
+      <div class="input-group">
+        <label>Tipo de Mesa</label>
+        <select [(ngModel)]="nuevaMesa.tipo" name="tipo">
+          <option value="estandar">Estándar</option>
+          <option value="vip">VIP</option>
+          <option value="movilidad_reducida">Movilidad Reducida</option>
+        </select>
+      </div>
+
+      <div class="photo-section" (click)="tomarFoto()">
+        <div class="photo-placeholder" *ngIf="!nuevaMesa.foto">
+          <ion-icon name="camera-outline"></ion-icon>
+          <span>Capturar lugar físico</span>
+        </div>
+        <img [src]="nuevaMesa.foto" *ngIf="nuevaMesa.foto" class="preview-img">
+      </div>
+
+      <ion-button expand="block" type="submit" [disabled]="errorDuplicado || !nuevaMesa.numero" class="btn-principal">
+        GENERAR MESA Y CODIGO QR
+      </ion-button>
+
+    </form>
+  </div>
+</ion-content>

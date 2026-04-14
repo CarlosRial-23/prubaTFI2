@@ -1,0 +1,16 @@
+<ion-app>
+  @if (loadingService.isLoading$ | async) {
+    <div class="global-splash">
+      <div class="splash-content">
+        <div class="gif-container">
+          <img src="assets/loader.gif" class="custom-gif">
+        </div>
+        <div class="loader-tag">
+          <p></p>
+        </div>
+      </div>
+    </div>
+  }
+
+  <ion-router-outlet></ion-router-outlet>
+</ion-app>

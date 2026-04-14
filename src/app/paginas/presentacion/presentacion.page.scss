@@ -1,0 +1,83 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,700;1,400&display=swap');
+
+$azul-card: #325172;
+$blanco-off: #E6ECEB;
+$celeste: #769690;
+
+:host {
+  --ion-background-color: #{$azul-card} !important;
+  display: block;
+  height: 100%;
+}
+
+ion-content {
+  --background: #{$azul-card} !important;
+  height: 100%;
+}
+
+.contenedor-principal {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  height: 100vh; 
+  width: 100%;
+  padding: 60px 20px 40px;
+  box-sizing: border-box;
+  background-color: $azul-card;
+}
+
+.bloque-marca {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center; 
+  align-items: center;
+}
+
+.seccion-logo {
+  margin-bottom: 10px;
+  .logo-animado {
+    width: 170px;
+    height: auto;
+    opacity: 0;
+    animation: reboteSuave 1.2s ease-out forwards; 
+    filter: drop-shadow(0 10px 20px rgba(0,0,0,0.3));
+  }
+}
+
+.seccion-info {
+  text-align: center;
+  .titulo-restaurante {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 3.5rem;
+    color: $blanco-off;
+    text-transform: uppercase;
+    letter-spacing: 5px;
+    margin: 0;
+    line-height: 1;
+  }
+  .subtitulo {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1.4rem;
+    color: $celeste;
+  }
+}
+
+.footer-academico {
+  width: 100%;
+  text-align: center;
+  p, span {
+    font-size: 0.6rem;
+    color: rgba($blanco-off, 0.4);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+}
+
+@keyframes reboteSuave {
+  0% { transform: scale(0.3) translateY(100px); opacity: 0; }
+  60% { transform: scale(1.1) translateY(-15px); opacity: 1; }
+  100% { transform: scale(1) translateY(0); opacity: 1; }
+}

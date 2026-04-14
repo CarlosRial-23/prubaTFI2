@@ -1,0 +1,50 @@
+<ion-content [fullscreen]="true" class="dashboard-container">
+  <div class="viewport-admin">
+    
+    <header class="header-admin">
+      <p class="subtitle">GESTIÓN INTERNA</p>
+      <h1>Panel de Control</h1>
+      <div class="user-info">
+        <ion-icon name="person-circle-outline"></ion-icon>
+        <span>Administrador</span>
+      </div>
+    </header>
+
+    <div class="main-body">
+      <ion-grid>
+        <ion-row>
+          <ion-col size="6">
+            <div class="admin-card">
+              <div class="badge-container">
+                <ion-badge color="danger" *ngIf="pendientesClientes > 0">{{ pendientesClientes }}</ion-badge>
+              </div>
+              <ion-icon name="people-outline" class="card-icon"></ion-icon>
+              <span>Aprobar Clientes</span>
+            </div>
+          </ion-col>
+
+          <ion-col size="6">
+            <div class="admin-card">
+              <ion-icon name="briefcase-outline" class="card-icon"></ion-icon>
+              <span>Alta Empleados</span>
+            </div>
+          </ion-col>
+
+          <ion-col size="6">
+            <div class="admin-card">
+              <ion-icon name="grid-outline" class="card-icon"></ion-icon>
+              <span>Alta Mesas</span>
+            </div>
+          </ion-col>
+
+          <ion-col size="6">
+            <div class="admin-card disabled">
+              <ion-icon name="bar-chart-outline" class="card-icon"></ion-icon>
+              <span>Estadísticas</span>
+            </div>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+  </div>
+</ion-content>

@@ -1,0 +1,45 @@
+<ion-content [fullscreen]="true">
+  <div class="viewport">
+    <div class="main-card">
+      <div class="hero-image">
+        <div class="overlay">
+          <h1 class="font-elegante">Bienvenido</h1>
+          <p class="sub-elegante">Úrsula App</p>
+        </div>
+      </div>
+
+      <div class="form-content">
+        <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
+          <div class="input-group">
+            <label class="custom-label">CORREO ELECTRÓNICO</label>
+            <input
+              type="email"
+              formControlName="email"
+              placeholder="Ingrese su correo electronico"
+              class="input-standard"
+            />
+          </div>
+
+          <div class="input-group">
+            <label class="custom-label">CONTRASEÑA</label>
+            <input
+              type="password"
+              formControlName="password"
+              placeholder="••••••••"
+              class="input-standard"
+            />
+          </div>
+
+          <button type="submit" class="btn-registro">INICIAR SESIÓN</button>
+        </form>
+
+        <div class="login-redirect">
+          <p>
+            ¿No tienes cuenta?
+            <span class="register-link" (click)="irAlRegistro()">Regístrate</span>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</ion-content>
