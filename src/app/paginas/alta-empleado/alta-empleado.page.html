@@ -1,0 +1,94 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Alta de Empleado</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <form [formGroup]="altaForm" (ngSubmit)="guardarEmpleado()">
+    
+    <ion-button expand="block" color="secondary" (click)="escanearDNI()" class="ion-margin-bottom">
+      <ion-icon name="qr-code-outline" slot="start"></ion-icon>
+      Escanear DNI
+    </ion-button>
+
+    <ion-list>
+      <ion-item>
+        <ion-input label="Nombres" labelPlacement="floating" formControlName="nombres" type="text"></ion-input>
+      </ion-item>
+      <ion-note color="danger" *ngIf="altaForm.get('nombres')?.invalid && altaForm.get('nombres')?.touched">
+        El nombre es requerido y no debe contener números.
+      </ion-note>
+
+      <ion-item>
+        <ion-input label="Apellidos" labelPlacement="floating" formControlName="apellidos" type="text"></ion-input>
+      </ion-item>
+      <ion-note color="danger" *ngIf="altaForm.get('apellidos')?.invalid && altaForm.get('apellidos')?.touched">
+        El apellido es requerido y no debe contener números.
+      </ion-note>
+
+      <ion-item>
+        <ion-input label="DNI" labelPlacement="floating" formControlName="dni" type="tel" maxlength="8"></ion-input>
+      </ion-item>
+      <ion-note color="danger" *ngIf="altaForm.get('dni')?.invalid && altaForm.get('dni')?.touched">
+        Ingrese un DNI válido (7 u 8 números).
+      </ion-note>
+
+      <ion-item>
+        <ion-input label="CUIL" labelPlacement="floating" formControlName="cuil" type="tel" maxlength="11"></ion-input>
+      </ion-item>
+      <ion-note color="danger" *ngIf="altaForm.get('cuil')?.invalid && altaForm.get('cuil')?.touched">
+        Ingrese un CUIL válido (11 números sin guiones).
+      </ion-note>
+
+      <ion-item>
+        <ion-input label="Correo Electrónico" labelPlacement="floating" formControlName="correo_electronico" type="email"></ion-input>
+      </ion-item>
+      <ion-note color="danger" *ngIf="altaForm.get('correo_electronico')?.invalid && altaForm.get('correo_electronico')?.touched">
+        Ingrese un correo electrónico válido.
+      </ion-note>
+
+      <ion-item>
+        <ion-input label="Contraseña" labelPlacement="floating" formControlName="clave" type="password"></ion-input>
+      </ion-item>
+      <ion-note color="danger" *ngIf="altaForm.get('clave')?.invalid && altaForm.get('clave')?.touched">
+        La contraseña debe tener al menos 6 caracteres.
+      </ion-note>
+
+      <ion-item>
+        <ion-select label="Perfil" labelPlacement="floating" formControlName="perfil">
+          <ion-select-option value="cocinero">Cocinero</ion-select-option>
+          <ion-select-option value="bartender">Bartender</ion-select-option>
+          <ion-select-option value="metre">Metre</ion-select-option>
+          <ion-select-option value="mozo">Mozo</ion-select-option>
+        </ion-select>
+      </ion-item>
+    </ion-list>
+
+    <div class="mb-3 ion-margin-top"> 
+        <label for="foto" class="form-label">Foto de perfil (Obligatorio): </label>
+        <input 
+          class="form-control" 
+          type="file" 
+          accept="image/*"
+          capture="user"
+          (change)="onFileSelected($event)" 
+          name="foto" 
+          id="foto" 
+          formControlName="foto"/>
+    </div>
+    <ion-note color="danger" *ngIf="altaForm.get('foto')?.invalid && altaForm.get('foto')?.touched">
+        Debes seleccionar o tomar una foto.
+    </ion-note>
+
+    <ion-button expand="block" type="submit" color="primary" class="ion-margin-top" [disabled]="altaForm.invalid">
+      Guardar Empleado
+    </ion-button>
+  </form>
+</ion-content>
+
+    <ion-button expand="block" type="submit" color="primary" class="ion-margin-top" [disabled]="altaForm.invalid">
+      Guardar Empleado
+    </ion-button>
+  </form>
+</ion-content>

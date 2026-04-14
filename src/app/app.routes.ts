@@ -49,5 +49,9 @@ export const routes: Routes = [
   {
     path: 'alta-mesas',
     loadComponent: () => import('./paginas/alta-mesas/alta-mesas.page').then( m => m.AltaMesasPage)
+  },  {
+    path: 'alta-empleado',
+    loadComponent: () => import('./paginas/alta-empleado/alta-empleado.page').then( m => m.AltaEmpleadoPage)
   },
+
 ];
