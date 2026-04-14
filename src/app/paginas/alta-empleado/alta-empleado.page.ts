@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
-import { IonicModule, LoadingController, ToastController } from '@ionic/angular';
+import { CommonModule } from '@angular/common'; 
+import { IonicModule, LoadingController, ToastController } from '@ionic/angular'; 
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms'; 
 import { BarcodeScanner } from '@capacitor-mlkit/barcode-scanning';
 import { SupabaseService } from '../../../servicios/supabase.service';
 
@@ -9,12 +9,12 @@ import { SupabaseService } from '../../../servicios/supabase.service';
   selector: 'app-alta-empleado',
   templateUrl: './alta-empleado.page.html',
   styleUrls: ['./alta-empleado.page.scss'],
-  standalone: true,
-  imports: [CommonModule, IonicModule, ReactiveFormsModule]
+  standalone: true, 
+  imports: [CommonModule, IonicModule, ReactiveFormsModule] 
 })
 export class AltaEmpleadoPage implements OnInit {
   altaForm: FormGroup;
-  archivoSeleccionado: File | null = null; // Guardará el objeto File físico
+  archivoSeleccionado: File | null = null; 
 
   constructor(
     private fb: FormBuilder,
@@ -30,13 +30,12 @@ export class AltaEmpleadoPage implements OnInit {
       correo_electronico: ['', [Validators.required, Validators.email]],
       clave: ['', [Validators.required, Validators.minLength(6)]],
       perfil: ['', [Validators.required]],
-      foto: ['', [Validators.required]] // Controlamos que el input no esté vacío
+      foto: ['', [Validators.required]] 
     });
   }
 
   ngOnInit() {}
 
-  // Este es el método que invoca el (change) del HTML
   onFileSelected(event: any) {
     const file: File = event.target.files[0];
     if (file) {
@@ -44,10 +43,8 @@ export class AltaEmpleadoPage implements OnInit {
     }
   }
 
-  // 3. ESCANEAR DNI (QR)
   async escanearDNI() {
     try {
-      // Pedir permisos si es necesario
       const { camera } = await BarcodeScanner.requestPermissions();
       if (camera !== 'granted' && camera !== 'limited') {
          this.mostrarMensaje('Permiso de cámara denegado para escanear');
@@ -58,7 +55,11 @@ export class AltaEmpleadoPage implements OnInit {
       
       if (barcodes.length > 0) {
         const qrData = barcodes[0].rawValue;
-        this.procesarDatosDNI(qrData);
+        if (qrData) {
+          this.procesarDatosDNI(qrData);
+        } else {
+          this.mostrarMensaje('El código QR está vacío');
+        }
       }
     } catch (error) {
       console.error('Error al escanear QR', error);
@@ -66,9 +67,7 @@ export class AltaEmpleadoPage implements OnInit {
     }
   }
 
-  // Procesar el string del DNI Argentino (separado por @)
   private procesarDatosDNI(qrData: string) {
-    // Formato típico DNI PDF417/QR: Tramite@Apellidos@Nombres@Sexo@DNI@Ejemplar@FechaNac@FechaEmision
     const partes = qrData.split('@');
     
     if (partes.length >= 7) {
@@ -83,7 +82,6 @@ export class AltaEmpleadoPage implements OnInit {
     }
   }
 
-  // 4. GUARDAR EMPLEADO
   async guardarEmpleado() {
     if (this.altaForm.invalid) {
       this.altaForm.markAllAsTouched();
@@ -102,7 +100,6 @@ export class AltaEmpleadoPage implements OnInit {
     try {
       const formValues = this.altaForm.value;
 
-      // 1. Crear el usuario en Auth
       const authData = await this.supabaseService.crearUsuarioAuth(
         formValues.correo_electronico, 
         formValues.clave
@@ -110,25 +107,21 @@ export class AltaEmpleadoPage implements OnInit {
 
       if (!authData.user) throw new Error('No se pudo crear el usuario en Auth.');
 
-      // 2. Subir la imagen usando tus nuevos métodos
-      // Armamos un nombre de archivo único usando el ID del usuario y el nombre original
       const filePath = `perfiles/${authData.user.id}_${this.archivoSeleccionado.name}`;
       
       const { error: uploadError } = await this.supabaseService.uploadFile('fotos', filePath, this.archivoSeleccionado);
       if (uploadError) throw uploadError;
 
-      // 3. Obtener la URL pública de la foto recién subida
       const urlFoto = await this.supabaseService.getPublicUrl('fotos', filePath);
 
-      // 4. Insertar en la tabla pública "usuarios"
       await this.supabaseService.insertarPerfilUsuario({
         id: authData.user.id,
         nombres: formValues.nombres,
         apellidos: formValues.apellidos,
         dni_cuil: formValues.cuil,
         correo_electronico: formValues.correo_electronico,
-        perfil: formValues.perfil
-        // Aquí podrías guardar la variable urlFoto si agregas el campo a tu base de datos
+        perfil: formValues.perfil,
+        foto: urlFoto
       });
 
       this.mostrarMensaje('Empleado registrado con éxito.');
@@ -141,6 +134,11 @@ export class AltaEmpleadoPage implements OnInit {
     } finally {
       loading.dismiss();
     }
+  }
+
+  // Utilidad agregada para que no arroje error "TS2339"
+  private capitalizarNombres(texto: string): string {
+    return texto.toLowerCase().replace(/\b\w/g, l => l.toUpperCase());
   }
 
   private async mostrarMensaje(mensaje: string) {

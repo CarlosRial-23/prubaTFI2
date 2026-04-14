@@ -60,8 +60,26 @@ export class SupabaseService {
     return data;
   }
 
-  //bucket: "fotos"
-  //filePath: "perfiles/nombreimagen.png"
+  // --- Funciones añadidas para Alta de Empleado ---
+
+  async crearUsuarioAuth(email: string, clave: string) {
+    const { data, error } = await this.supabase.auth.signUp({
+      email: email,
+      password: clave,
+    });
+    
+    if (error) throw error;
+    return data;
+  }
+
+  async insertarPerfilUsuario(perfilData: any) {
+    const { data, error } = await this.supabase
+      .from('usuarios')
+      .insert([perfilData]);
+      
+    if (error) throw error;
+    return data;
+  }
 
   async uploadFile(bucket: string, filePath: string, file: File) {
     return await this.supabase.storage.from(bucket).upload(filePath, file);
@@ -75,5 +93,4 @@ export class SupabaseService {
   async removeFile(bucket: string, path: string) {
     return await this.supabase.storage.from(bucket).remove([path]);
   }
-
 }
