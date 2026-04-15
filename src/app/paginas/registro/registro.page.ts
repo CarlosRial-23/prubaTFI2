@@ -71,10 +71,11 @@ export class RegistroPage implements OnInit {
     });
 
     if (!response.ok) {
-      this.presentToast('Error al registrar: ese correo ya esta en uso' , 'danger');
+      console.error('Error detallado de Supabase:', response.error);
+      const mensajeError = response.error?.message || 'Error desconocido al registrar';
+      this.presentToast(`Error: ${mensajeError}` , 'danger');
       return;
     }
-
     await this.presentToast('Usuario registrado correctamente', 'success');
     this.router.navigate(['/login']);
   }

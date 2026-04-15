@@ -22,49 +22,37 @@
           <div class="input-group">
             <label class="custom-label">NOMBRES</label>
             <input type="text" formControlName="nombres" placeholder="Ingrese el nombre" class="input-standard" />
-            <span class="error-text" *ngIf="altaForm.get('nombres')?.invalid && altaForm.get('nombres')?.touched">
-              El nombre es requerido y no debe contener números.
-            </span>
+            <span class="error-text">{{ getErrorMessage('nombres') }}</span>
           </div>
 
           <div class="input-group">
             <label class="custom-label">APELLIDOS</label>
             <input type="text" formControlName="apellidos" placeholder="Ingrese el apellido" class="input-standard" />
-            <span class="error-text" *ngIf="altaForm.get('apellidos')?.invalid && altaForm.get('apellidos')?.touched">
-              El apellido es requerido y no debe contener números.
-            </span>
+            <span class="error-text">{{ getErrorMessage('apellidos') }}</span>
           </div>
 
           <div class="input-group">
             <label class="custom-label">DNI</label>
             <input type="tel" formControlName="dni" placeholder="Ingrese el DNI" class="input-standard" maxlength="8" />
-            <span class="error-text" *ngIf="altaForm.get('dni')?.invalid && altaForm.get('dni')?.touched">
-              Ingrese un DNI válido (7 u 8 números).
-            </span>
+            <span class="error-text">{{ getErrorMessage('dni') }}</span>
           </div>
 
           <div class="input-group">
             <label class="custom-label">CUIL</label>
             <input type="tel" formControlName="cuil" placeholder="Ingrese el CUIL" class="input-standard" maxlength="11" />
-            <span class="error-text" *ngIf="altaForm.get('cuil')?.invalid && altaForm.get('cuil')?.touched">
-              Ingrese un CUIL válido (11 números sin guiones).
-            </span>
+            <span class="error-text">{{ getErrorMessage('cuil') }}</span>
           </div>
 
           <div class="input-group">
             <label class="custom-label">CORREO ELECTRÓNICO</label>
             <input type="email" formControlName="correo_electronico" placeholder="Ingrese el correo" class="input-standard" />
-            <span class="error-text" *ngIf="altaForm.get('correo_electronico')?.invalid && altaForm.get('correo_electronico')?.touched">
-              Ingrese un correo electrónico válido.
-            </span>
+            <span class="error-text">{{ getErrorMessage('correo_electronico') }}</span>
           </div>
 
           <div class="input-group">
             <label class="custom-label">CONTRASEÑA</label>
             <input type="password" formControlName="clave" placeholder="••••••••" class="input-standard" />
-            <span class="error-text" *ngIf="altaForm.get('clave')?.invalid && altaForm.get('clave')?.touched">
-              La contraseña debe tener al menos 6 caracteres.
-            </span>
+            <span class="error-text">{{ getErrorMessage('clave') }}</span>
           </div>
 
           <div class="input-group">
@@ -76,22 +64,21 @@
               <option value="metre">Metre</option>
               <option value="mozo">Mozo</option>
             </select>
-            <span class="error-text" *ngIf="altaForm.get('perfil')?.invalid && altaForm.get('perfil')?.touched">
-              Seleccione un perfil válido.
-            </span>
+            <span class="error-text">{{ getErrorMessage('perfil') }}</span>
           </div>
 
           <div class="input-group">
             <label class="custom-label">FOTO DE PERFIL (Obligatorio)</label>
             <input type="file" accept="image/*" capture="user" (change)="onFileSelected($event)" name="foto" id="foto" formControlName="foto" class="input-standard" style="padding-top: 10px;" />
-            <span class="error-text" *ngIf="altaForm.get('foto')?.invalid && altaForm.get('foto')?.touched">
-              Debes seleccionar o tomar una foto.
-            </span>
+            <span class="error-text">{{ getErrorMessage('foto') }}</span>
           </div>
 
           <div class="button-wrapper">
-            <button type="submit" class="btn-registro" [disabled]="altaForm.invalid">
-              GUARDAR EMPLEADO
+            <button type="button" class="btn-registro" (click)="guardarEmpleado()" [disabled]="cargando">
+              
+              <span *ngIf="!cargando">GUARDAR EMPLEADO</span>
+              <ion-spinner *ngIf="cargando" name="crescent" style="color: white;"></ion-spinner>
+              
             </button>
           </div>
         </form>

@@ -24,54 +24,56 @@ export class AuthService {
     });
   }
 
-  // 📝 REGISTRO COMPLETO
   async register(data: {
-    nombres: string;
-    apellidos: string;
-    dni_cuil: string;
-    correo_electronico: string;
-    clave: string;
-    perfil: string;
-  }): Promise<{ ok: boolean; error?: any }> {
+  nombres: string;
+  apellidos: string;
+  dni_cuil: string;
+  correo_electronico: string;
+  clave: string;
+  perfil: string;
+  foto?: string | null; // 📸 Se agrega la propiedad como opcional
+}): Promise<{ ok: boolean; error?: any }> {
 
-    // 1️⃣ Crear usuario en AUTH
-    const { data: authData, error: authError } =
-      await this.supabaseService.client.auth.signUp({
-        email: data.correo_electronico,
-        password: data.clave,
-      });
+  // 1️⃣ Crear usuario en AUTH
+  const { data: authData, error: authError } =
+    await this.supabaseService.client.auth.signUp({
+      email: data.correo_electronico,
+      password: data.clave,
+    });
 
-    if (authError) {
-      return { ok: false, error: authError };
-    }
-
-    const userId = authData.user?.id;
-
-    if (!userId) {
-      return { ok: false, error: 'No se pudo obtener el ID del usuario' };
-    }
-
-    // 2️⃣ Insertar en tabla "usuarios"
-    const { error: dbError } = await this.supabaseService.client
-      .from('usuarios')
-      .insert([
-        {
-          id: userId, // 🔥 importante: vincular con auth
-          nombres: data.nombres,
-          apellidos: data.apellidos,
-          dni_cuil: data.dni_cuil,
-          correo_electronico: data.correo_electronico,
-          perfil: data.perfil
-        }
-      ]);
-
-    if (dbError) {
-      return { ok: false, error: dbError };
-    }
-
-    return { ok: true };
+  if (authError) {
+    return { ok: false, error: authError };
   }
 
+  const userId = authData.user?.id;
+
+  if (!userId) {
+    return { ok: false, error: 'No se pudo obtener el ID del usuario' };
+  }
+
+  // 2️⃣ Insertar en tabla "usuarios"
+  const { error: dbError } = await this.supabaseService.client
+    .from('usuarios')
+    .insert([
+      {
+        id: userId,
+        nombres: data.nombres,
+        apellidos: data.apellidos,
+        dni_cuil: data.dni_cuil,
+        correo_electronico: data.correo_electronico,
+        perfil: data.perfil,
+        // 🔥 Si data.foto es undefined o string vacío, inserta null
+        foto: data.foto || null 
+      }
+    ]);
+
+  if (dbError) {
+    // Opcional: Podrías eliminar el usuario de Auth si falla la inserción en la tabla
+    return { ok: false, error: dbError };
+  }
+
+  return { ok: true };
+}
   // 🔐 LOGIN
   async login(email: string, password: string): Promise<boolean> {
     const { error } = await this.supabaseService.client.auth.signInWithPassword({

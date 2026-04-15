@@ -4,6 +4,7 @@ import { IonicModule, LoadingController, ToastController } from '@ionic/angular'
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms'; 
 import { BarcodeScanner } from '@capacitor-mlkit/barcode-scanning';
 import { SupabaseService } from '../../../servicios/supabase.service';
+import { AuthService } from '../../../servicios/auth.service';
 import { addIcons } from 'ionicons';
 import { qrCodeOutline } from 'ionicons/icons';
 
@@ -17,16 +18,16 @@ import { qrCodeOutline } from 'ionicons/icons';
 export class AltaEmpleadoPage implements OnInit {
   altaForm: FormGroup;
   archivoSeleccionado: File | null = null; 
+  cargando: boolean = false;
 
   constructor(
     private fb: FormBuilder,
     private supabaseService: SupabaseService,
+    private authService: AuthService,
     private loadingCtrl: LoadingController,
-    private toastCtrl: ToastController
-    
+    private toastController: ToastController // Ajustado al nombre de tu otra page
   ) {
-
-    addIcons({ qrCodeOutline });
+    addIcons({ qrCodeOutline }); 
 
     this.altaForm = this.fb.group({
       nombres: ['', [Validators.required, Validators.pattern(/^[a-zA-ZÁÉÍÓÚáéíóúñÑ ]+$/)]],
@@ -53,7 +54,7 @@ export class AltaEmpleadoPage implements OnInit {
     try {
       const { camera } = await BarcodeScanner.requestPermissions();
       if (camera !== 'granted' && camera !== 'limited') {
-         this.mostrarMensaje('Permiso de cámara denegado para escanear');
+         this.presentToast('Permiso de cámara denegado para escanear', 'warning');
          return;
       }
 
@@ -64,12 +65,12 @@ export class AltaEmpleadoPage implements OnInit {
         if (qrData) {
           this.procesarDatosDNI(qrData);
         } else {
-          this.mostrarMensaje('El código QR está vacío');
+          this.presentToast('El código QR está vacío', 'warning');
         }
       }
     } catch (error) {
       console.error('Error al escanear QR', error);
-      this.mostrarMensaje('No se pudo escanear el DNI.');
+      this.presentToast('No se pudo escanear el DNI.', 'danger');
     }
   }
 
@@ -82,77 +83,96 @@ export class AltaEmpleadoPage implements OnInit {
         nombres: this.capitalizarNombres(partes[2]),
         dni: partes[4]
       });
-      this.mostrarMensaje('Datos del DNI cargados correctamente');
+      this.presentToast('Datos del DNI cargados correctamente', 'success');
     } else {
-      this.mostrarMensaje('Formato de código no reconocido');
+      this.presentToast('Formato de código no reconocido', 'warning');
     }
   }
 
   async guardarEmpleado() {
     if (this.altaForm.invalid) {
+      this.presentToast('Por favor, revise los campos marcados en rojo.', 'warning');
       this.altaForm.markAllAsTouched();
-      this.mostrarMensaje('Por favor, completa todos los campos correctamente.');
-      return;
+      return; 
     }
 
     if (!this.archivoSeleccionado) {
-      this.mostrarMensaje('Debes adjuntar la foto del empleado.');
-      return;
+      this.presentToast('Debes adjuntar la foto del empleado.', 'warning');
+      return; 
     }
 
-    const loading = await this.loadingCtrl.create({ message: 'Guardando empleado...' });
-    await loading.present();
+    // 2. ACTIVAMOS EL ESTADO DE CARGA
+    this.cargando = true; 
 
     try {
       const formValues = this.altaForm.value;
 
-      const authData = await this.supabaseService.crearUsuarioAuth(
-        formValues.correo_electronico, 
-        formValues.clave
-      );
-
-      if (!authData.user) throw new Error('No se pudo crear el usuario en Auth.');
-
-      const filePath = `perfiles/${authData.user.id}_${this.archivoSeleccionado.name}`;
+      const extension = this.archivoSeleccionado.name.split('.').pop();
+      const fileName = `${Date.now()}_empleado.${extension}`;
+      const filePath = `perfiles/${fileName}`;
       
       const { error: uploadError } = await this.supabaseService.uploadFile('fotos', filePath, this.archivoSeleccionado);
+      
       if (uploadError) throw uploadError;
 
       const urlFoto = await this.supabaseService.getPublicUrl('fotos', filePath);
 
-      await this.supabaseService.insertarPerfilUsuario({
-        id: authData.user.id,
+      const res = await this.authService.register({
         nombres: formValues.nombres,
         apellidos: formValues.apellidos,
-        dni_cuil: formValues.cuil,
+        dni_cuil: formValues.cuil, 
         correo_electronico: formValues.correo_electronico,
+        clave: formValues.clave,
         perfil: formValues.perfil,
-        foto: urlFoto
+        foto: urlFoto 
       });
 
-      this.mostrarMensaje('Empleado registrado con éxito.');
+      if (!res.ok) {
+        await this.supabaseService.removeFile('fotos', filePath);
+        throw new Error(res.error?.message || 'Error en el registro');
+      }
+
+      this.presentToast('Empleado registrado con éxito.', 'success');
       this.altaForm.reset();
       this.archivoSeleccionado = null;
 
     } catch (error: any) {
-      console.error(error);
-      this.mostrarMensaje('Error al guardar: ' + error.message);
+      console.error('Error al guardar:', error);
+      this.presentToast('Error al guardar: ' + (error.message || 'Intente nuevamente'), 'danger');
     } finally {
-      loading.dismiss();
+      // 3. APAGAMOS EL ESTADO DE CARGA PASE LO QUE PASE
+      this.cargando = false; 
     }
   }
 
-  // Utilidad agregada para que no arroje error "TS2339"
   private capitalizarNombres(texto: string): string {
     return texto.toLowerCase().replace(/\b\w/g, l => l.toUpperCase());
   }
 
-  private async mostrarMensaje(mensaje: string) {
-    const toast = await this.toastCtrl.create({
-      message: mensaje,
+  // --- NUEVA LÓGICA DE MANEJO DE ERRORES Y TOASTS ---
+
+  async presentToast(message: string, color: 'success' | 'danger' | 'warning' = 'success') {
+    const toast = await this.toastController.create({
+      message: message,
       duration: 3000,
-      position: 'bottom'
+      position: 'top',
+      cssClass: `mi-toast-${color}`, 
     });
-    toast.present();
+    await toast.present();
+  }
+
+  getErrorMessage(controlName: string): string {
+    const control = this.altaForm.get(controlName);
+    if (control && control.invalid && (control.touched || control.dirty)) {
+      if (control.hasError('required')) return 'Este campo es obligatorio.';
+      if (control.hasError('minlength')) return `Mínimo ${control.errors?.['minlength'].requiredLength} caracteres.`;
+      if (control.hasError('email')) return 'Formato de correo inválido.';
+      if (control.hasError('pattern')) {
+        if (controlName === 'dni') return 'Debe tener 7 u 8 números.';
+        if (controlName === 'cuil') return 'Debe tener 11 números sin guiones.';
+        return 'Solo se permiten letras.';
+      }
+    }
+    return '';
   }
 }
