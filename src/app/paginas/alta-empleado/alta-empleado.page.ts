@@ -4,6 +4,8 @@ import { IonicModule, LoadingController, ToastController } from '@ionic/angular'
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms'; 
 import { BarcodeScanner } from '@capacitor-mlkit/barcode-scanning';
 import { SupabaseService } from '../../../servicios/supabase.service';
+import { addIcons } from 'ionicons';
+import { qrCodeOutline } from 'ionicons/icons';
 
 @Component({
   selector: 'app-alta-empleado',
@@ -21,7 +23,11 @@ export class AltaEmpleadoPage implements OnInit {
     private supabaseService: SupabaseService,
     private loadingCtrl: LoadingController,
     private toastCtrl: ToastController
+    
   ) {
+
+    addIcons({ qrCodeOutline });
+
     this.altaForm = this.fb.group({
       nombres: ['', [Validators.required, Validators.pattern(/^[a-zA-ZÁÉÍÓÚáéíóúñÑ ]+$/)]],
       apellidos: ['', [Validators.required, Validators.pattern(/^[a-zA-ZÁÉÍÓÚáéíóúñÑ ]+$/)]],

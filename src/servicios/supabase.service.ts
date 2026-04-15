@@ -10,7 +10,14 @@ export class SupabaseService {
   private readonly supabase: SupabaseClient;
 
   constructor() {
-    this.supabase = createClient(this.supabaseUrl, this.supabaseKey);
+    this.supabase = createClient(this.supabaseUrl, this.supabaseKey, {
+      auth: {
+        storage: window.localStorage, // Fuerza el uso del almacenamiento local compatible
+        autoRefreshToken: true,
+        persistSession: true,
+        detectSessionInUrl: false // Desactiva la búsqueda de tokens en la URL (útil solo en web)
+      }
+    });
   }
 
   get client(): SupabaseClient {
