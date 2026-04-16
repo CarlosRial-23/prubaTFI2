@@ -9,41 +9,61 @@
   </div>
 
   <div class="form-wrapper">
-    <form (ngSubmit)="guardarMesa()">
+    <form [formGroup]="mesaForm" (ngSubmit)="guardarMesa()">
       
       <div class="input-group">
         <label>Número de Mesa</label>
-        <input type="number" [(ngModel)]="nuevaMesa.numero" name="numero" 
-               (input)="validarDuplicado()" placeholder="Ingrese el numero de mesa">
-        <span class="error-text" *ngIf="errorDuplicado">Este número ya existe en el salón.</span>
+        <input type="number" formControlName="numero" placeholder="Ingrese el numero de mesa">
+        <span class="error-text" *ngIf="mesaForm.get('numero')?.hasError('required') && mesaForm.get('numero')?.touched">El número es obligatorio.</span>
+        <span class="error-text" *ngIf="mesaForm.get('numero')?.hasError('min') && mesaForm.get('numero')?.touched">El número debe ser mayor a 0.</span>
+        <span class="error-text" *ngIf="mesaForm.get('numero')?.hasError('duplicado') && mesaForm.get('numero')?.touched">Este número ya existe en el salón.</span>
       </div>
 
       <div class="input-group">
         <label>Capacidad de Comensales</label>
-        <input type="number" [(ngModel)]="nuevaMesa.capacidad" name="capacidad" placeholder="Ingrese la cantidad de comensales">
+        <input type="number" formControlName="capacidad" placeholder="Ingrese la cantidad de comensales">
+        <span class="error-text" *ngIf="mesaForm.get('capacidad')?.hasError('required') && mesaForm.get('capacidad')?.touched">La capacidad es obligatoria.</span>
+        <span class="error-text" *ngIf="mesaForm.get('capacidad')?.hasError('min') && mesaForm.get('capacidad')?.touched">Debe haber al menos 1 comensal.</span>
       </div>
 
       <div class="input-group">
         <label>Tipo de Mesa</label>
-        <select [(ngModel)]="nuevaMesa.tipo" name="tipo">
-          <option value="estandar">Estándar</option>
-          <option value="vip">VIP</option>
-          <option value="movilidad_reducida">Movilidad Reducida</option>
+        <select formControlName="tipo">
+          <option value="" disabled selected>Seleccione un tipo</option>
+          <option value="estándar">Estándar</option>
+          <option value="VIP">VIP</option>
+          <option value="movilidad reducida">Movilidad Reducida</option>
         </select>
+        <span class="error-text" *ngIf="mesaForm.get('tipo')?.hasError('required') && mesaForm.get('tipo')?.touched">Seleccione el tipo de mesa.</span>
       </div>
 
-      <div class="photo-section" (click)="tomarFoto()">
-        <div class="photo-placeholder" *ngIf="!nuevaMesa.foto">
+      <div class="photo-section" (click)="tomarFoto()" [class.has-error]="mesaForm.get('foto')?.invalid && mesaForm.get('foto')?.touched">
+        <div class="photo-placeholder" *ngIf="!fotoPreview">
           <ion-icon name="camera-outline"></ion-icon>
           <span>Capturar lugar físico</span>
         </div>
-        <img [src]="nuevaMesa.foto" *ngIf="nuevaMesa.foto" class="preview-img">
+        <img [src]="fotoPreview" *ngIf="fotoPreview" class="preview-img">
       </div>
+      <span class="error-text error-foto" *ngIf="mesaForm.get('foto')?.hasError('required') && mesaForm.get('foto')?.touched">La foto de la mesa es obligatoria.</span>
 
-      <ion-button expand="block" type="submit" [disabled]="errorDuplicado || !nuevaMesa.numero" class="btn-principal">
-        GENERAR MESA Y CODIGO QR
-      </ion-button>
+    <ion-button 
+      expand="block" 
+      (click)="guardarMesa()" 
+      [disabled]="!mesaForm.valid || cargando" 
+      class="btn-principal">
+      <span *ngIf="!cargando">GENERAR MESA Y CÓDIGO QR</span>
+      <ion-spinner *ngIf="cargando" name="crescent"></ion-spinner>
+    </ion-button>
 
     </form>
+
+    <div class="qr-container" *ngIf="qrGenerado">
+      <h3>QR Generado Exitosamente</h3>
+      <div class="qr-box">
+        <qrcode [qrdata]="qrGenerado" [width]="250" [errorCorrectionLevel]="'M'"></qrcode>
+      </div>
+      <p>Mesa asignada al salón.</p>
+    </div>
+
   </div>
 </ion-content>
