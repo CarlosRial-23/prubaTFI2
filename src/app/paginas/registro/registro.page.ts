@@ -23,34 +23,34 @@ export class RegistroPage implements OnInit {
   registroForm!: FormGroup;
 
   constructor(
-    private navCtrl: NavController,
     private fb: FormBuilder,
     private authService: AuthService,
+    private toastController: ToastController,
     private router: Router,
-    private toastController: ToastController 
-  ) {}
-
-  ngOnInit() {
+    private navCtrl: NavController 
+  ) {
     this.registroForm = this.fb.group({
-      nombres: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(20), Validators.pattern(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/)]],
-      apellidos: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(20), Validators.pattern(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/)]],
-      dni_cuil: ['', [Validators.required, Validators.pattern(/^(\d{8}|\d{11})$/)]],
+      nombres: ['', [Validators.required, Validators.pattern(/^[a-zA-ZÁÉÍÓÚáéíóúñÑ ]+$/)]],
+      apellidos: ['', [Validators.required, Validators.pattern(/^[a-zA-ZÁÉÍÓÚáéíóúñÑ ]+$/)]],
+      dni: ['', [Validators.required, Validators.pattern(/^\d{7,8}$/)]], 
+      cuil: ['', [Validators.required, Validators.pattern(/^\d{11}$/)]], 
       correo_electronico: ['', [Validators.required, Validators.email]],
       clave: ['', [Validators.required, Validators.minLength(6)]],
-      perfil: ['', [Validators.required]],
+      perfil: ['cliente', [Validators.required]],
     });
   }
 
+  ngOnInit() {}
+
   async presentToast(message: string, color: 'success' | 'danger' | 'warning' = 'success') {
-  const toast = await this.toastController.create({
-    message: message,
-    duration: 3000,
-    position: 'top',
-    cssClass: `mi-toast-${color}`, 
-    
-  });
-  await toast.present();
-}
+    const toast = await this.toastController.create({
+      message: message,
+      duration: 3000,
+      position: 'top',
+      cssClass: `mi-toast-${color}`, 
+    });
+    await toast.present();
+  }
 
   async onRegister() {
     if (this.registroForm.invalid) {
@@ -64,18 +64,19 @@ export class RegistroPage implements OnInit {
     const response = await this.authService.register({
       nombres: formValues.nombres,
       apellidos: formValues.apellidos,
-      dni_cuil: formValues.dni_cuil,
+      dni: formValues.dni,
+      cuil: formValues.cuil, 
       correo_electronico: formValues.correo_electronico,
       clave: formValues.clave,
       perfil: formValues.perfil,
     });
 
     if (!response.ok) {
-      console.error('Error detallado de Supabase:', response.error);
       const mensajeError = response.error?.message || 'Error desconocido al registrar';
-      this.presentToast(`Error: ${mensajeError}` , 'danger');
+      this.presentToast(`Error: ${mensajeError}`, 'danger');
       return;
     }
+
     await this.presentToast('Usuario registrado correctamente', 'success');
     this.router.navigate(['/login']);
   }
@@ -87,7 +88,8 @@ export class RegistroPage implements OnInit {
       if (control.hasError('minlength')) return `Mínimo ${control.errors?.['minlength'].requiredLength} caracteres.`;
       if (control.hasError('email')) return 'Formato de correo inválido.';
       if (control.hasError('pattern')) {
-        if (controlName === 'dni_cuil') return 'Debe tener 8 u 11 números.';
+        if (controlName === 'dni') return 'Debe tener 7 u 8 números.';
+        if (controlName === 'cuil') return 'Debe tener 11 números sin guiones.';
         return 'Solo se permiten letras.';
       }
     }

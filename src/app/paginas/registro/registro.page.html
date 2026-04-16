@@ -33,14 +33,15 @@
           </div>
 
           <div class="input-group">
-            <label class="custom-label">Documento nacional de identidad</label>
-            <input
-              type="tel"
-              formControlName="dni_cuil"
-              placeholder="Ingese su DNI"
-              class="input-standard"
-            />
-            <span class="error-text">{{ getErrorMessage('dni_cuil') }}</span>
+            <label class="custom-label">DNI</label>
+            <input type="tel" formControlName="dni" placeholder="12345678" class="input-standard" maxlength="8" />
+            <span class="error-text">{{ getErrorMessage('dni') }}</span>
+          </div>
+
+          <div class="input-group">
+            <label class="custom-label">CUIL</label>
+            <input type="tel" formControlName="cuil" placeholder="20123456789" class="input-standard" maxlength="11" />
+            <span class="error-text">{{ getErrorMessage('cuil') }}</span>
           </div>
 
           <div class="input-group">

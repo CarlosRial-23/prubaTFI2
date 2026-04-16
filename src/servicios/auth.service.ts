@@ -24,56 +24,56 @@ export class AuthService {
     });
   }
 
-  async register(data: {
-  nombres: string;
-  apellidos: string;
-  dni_cuil: string;
-  correo_electronico: string;
-  clave: string;
-  perfil: string;
-  foto?: string | null; // 📸 Se agrega la propiedad como opcional
-}): Promise<{ ok: boolean; error?: any }> {
+async register(data: {
+    nombres: string;
+    apellidos: string;
+    dni: string;       // <-- Agregado
+    cuil: string;      // <-- Modificado (antes era dni_cuil)
+    correo_electronico: string;
+    clave: string;
+    perfil: string;
+    foto?: string | null; 
+  }): Promise<{ ok: boolean; error?: any }> {
 
-  // 1️⃣ Crear usuario en AUTH
-  const { data: authData, error: authError } =
-    await this.supabaseService.client.auth.signUp({
-      email: data.correo_electronico,
-      password: data.clave,
-    });
+    // 1️⃣ Crear usuario en AUTH (Aquí se guarda la contraseña)
+    const { data: authData, error: authError } =
+      await this.supabaseService.client.auth.signUp({
+        email: data.correo_electronico,
+        password: data.clave,
+      });
 
-  if (authError) {
-    return { ok: false, error: authError };
+    if (authError) {
+      return { ok: false, error: authError };
+    }
+
+    const userId = authData.user?.id;
+
+    if (!userId) {
+      return { ok: false, error: 'No se pudo obtener el ID del usuario' };
+    }
+
+    // 2️⃣ Insertar en tabla pública "usuarios"
+    const { error: dbError } = await this.supabaseService.client
+      .from('usuarios')
+      .insert([
+        {
+          id: userId,
+          nombres: data.nombres,
+          apellidos: data.apellidos,
+          dni: data.dni,     // <-- Ahora se guarda el DNI
+          cuil: data.cuil,   // <-- Ahora se guarda el CUIL
+          correo_electronico: data.correo_electronico,
+          perfil: data.perfil,
+          foto: data.foto || null 
+        }
+      ]);
+
+    if (dbError) {
+      return { ok: false, error: dbError };
+    }
+
+    return { ok: true };
   }
-
-  const userId = authData.user?.id;
-
-  if (!userId) {
-    return { ok: false, error: 'No se pudo obtener el ID del usuario' };
-  }
-
-  // 2️⃣ Insertar en tabla "usuarios"
-  const { error: dbError } = await this.supabaseService.client
-    .from('usuarios')
-    .insert([
-      {
-        id: userId,
-        nombres: data.nombres,
-        apellidos: data.apellidos,
-        dni_cuil: data.dni_cuil,
-        correo_electronico: data.correo_electronico,
-        perfil: data.perfil,
-        // 🔥 Si data.foto es undefined o string vacío, inserta null
-        foto: data.foto || null 
-      }
-    ]);
-
-  if (dbError) {
-    // Opcional: Podrías eliminar el usuario de Auth si falla la inserción en la tabla
-    return { ok: false, error: dbError };
-  }
-
-  return { ok: true };
-}
   // 🔐 LOGIN
   async login(email: string, password: string): Promise<boolean> {
     const { error } = await this.supabaseService.client.auth.signInWithPassword({

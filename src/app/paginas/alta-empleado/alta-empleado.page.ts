@@ -78,12 +78,20 @@ export class AltaEmpleadoPage implements OnInit {
     const partes = qrData.split('@');
     
     if (partes.length >= 7) {
+      const apellidosScanner = this.capitalizarNombres(partes[1]);
+      const nombresScanner = this.capitalizarNombres(partes[2]);
+      const sexoScanner = partes[3]; // Extraemos 'M' o 'F'
+      const dniScanner = partes[4];
+      const cuilCalculado = this.calcularCUIL(parseInt(dniScanner, 10), sexoScanner);
+
       this.altaForm.patchValue({
-        apellidos: this.capitalizarNombres(partes[1]),
-        nombres: this.capitalizarNombres(partes[2]),
-        dni: partes[4]
+        apellidos: apellidosScanner,
+        nombres: nombresScanner,
+        dni: dniScanner,
+        cuil: cuilCalculado 
       });
-      this.presentToast('Datos del DNI cargados correctamente', 'success');
+      
+      this.presentToast('Datos del DNI y CUIL cargados correctamente', 'success');
     } else {
       this.presentToast('Formato de código no reconocido', 'warning');
     }
@@ -101,7 +109,6 @@ export class AltaEmpleadoPage implements OnInit {
       return; 
     }
 
-    // 2. ACTIVAMOS EL ESTADO DE CARGA
     this.cargando = true; 
 
     try {
@@ -120,7 +127,8 @@ export class AltaEmpleadoPage implements OnInit {
       const res = await this.authService.register({
         nombres: formValues.nombres,
         apellidos: formValues.apellidos,
-        dni_cuil: formValues.cuil, 
+        dni: formValues.dni,     // <-- Pasamos el DNI del formulario
+        cuil: formValues.cuil,   // <-- Pasamos el CUIL del formulario
         correo_electronico: formValues.correo_electronico,
         clave: formValues.clave,
         perfil: formValues.perfil,
@@ -140,7 +148,7 @@ export class AltaEmpleadoPage implements OnInit {
       console.error('Error al guardar:', error);
       this.presentToast('Error al guardar: ' + (error.message || 'Intente nuevamente'), 'danger');
     } finally {
-      // 3. APAGAMOS EL ESTADO DE CARGA PASE LO QUE PASE
+
       this.cargando = false; 
     }
   }
@@ -149,7 +157,33 @@ export class AltaEmpleadoPage implements OnInit {
     return texto.toLowerCase().replace(/\b\w/g, l => l.toUpperCase());
   }
 
-  // --- NUEVA LÓGICA DE MANEJO DE ERRORES Y TOASTS ---
+  private calcularCUIL(dni: number, sexo: string): string {
+    let xy = sexo === 'M' ? 20 : 27;
+
+    const dniStr = dni.toString().padStart(8, '0');
+    let base = xy.toString() + dniStr;
+
+    const multiplicadores = [5, 4, 3, 2, 7, 6, 5, 4, 3, 2];
+    let suma = 0;
+    
+    for (let i = 0; i < multiplicadores.length; i++) {
+      suma += parseInt(base[i]) * multiplicadores[i];
+    }
+
+    const resto = suma % 11;
+    let z: number;
+
+    if (resto === 0) {
+      z = 0;
+    } else if (resto === 1) {
+      xy = 23;
+      z = sexo === 'M' ? 9 : 4;
+    } else {
+      z = 11 - resto;
+    }
+
+    return `${xy}${dniStr}${z}`;
+  }
 
   async presentToast(message: string, color: 'success' | 'danger' | 'warning' = 'success') {
     const toast = await this.toastController.create({
