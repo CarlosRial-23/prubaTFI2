@@ -46,14 +46,14 @@
       </div>
       <span class="error-text error-foto" *ngIf="mesaForm.get('foto')?.hasError('required') && mesaForm.get('foto')?.touched">La foto de la mesa es obligatoria.</span>
 
-    <ion-button 
-      expand="block" 
-      (click)="guardarMesa()" 
-      [disabled]="!mesaForm.valid || cargando" 
-      class="btn-principal">
-      <span *ngIf="!cargando">GENERAR MESA Y CÓDIGO QR</span>
-      <ion-spinner *ngIf="cargando" name="crescent"></ion-spinner>
-    </ion-button>
+    <button 
+        type="button" 
+        class="btn-principal" 
+        (click)="guardarMesa()" 
+        [disabled]="mesaForm.invalid || cargando">
+        <span *ngIf="!cargando">GENERAR MESA Y CÓDIGO QR</span>
+        <ion-spinner *ngIf="cargando" name="crescent" color="light" style="width: 24px; height: 24px;"></ion-spinner>
+      </button>
 
     </form>
 
