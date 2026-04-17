@@ -169,28 +169,30 @@ $blanco-off: #e6eceb;
     }
   }
 
-  .btn-registro {
-    width: 100%;
-    height: 50px;
-    background-color: $verde-btn;
-    color: $blanco-off;
-    border: solid;
-    border-radius: 12px;
-    font-size: 0.95rem;
-    font-weight: 700;
-    letter-spacing: 1px;
-    margin-top: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-    transition: all 0.2s ease;
+   
+.btn-principal {
+  width: 100%;
+  height: 50px;
+  background-color: $verde-btn;
+  color: $blanco-off;
+  border: none;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin-top: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  transition: all 0.2s ease;
 
-    &:active {
-      transform: scale(0.98);
-      background-color: #70c79d;
-    }
+  &:active {
+    transform: scale(0.98);
+    background-color: #466556;
+  }
 
-    &:disabled {
-      opacity: 0.5;
-      transform: none;
+  &:disabled {
+    opacity: 0.5;
+    transform: none;
     }
   }
 }
+
