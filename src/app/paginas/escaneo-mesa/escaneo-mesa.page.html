@@ -1,0 +1,38 @@
+<ion-content [fullscreen]="true" class="scanner-container">
+  
+  <div class="viewport-wrapper">
+    
+    <div class="header-section">
+      <h1 class="font-elegante" style="font-size: 3rem; color: #e6eceb;">Úrsula</h1>
+      <h2 style="color: #769690; letter-spacing: 2px; font-size: 0.8rem; text-transform: uppercase;">Validación de Mesa</h2>
+      <p style="margin-top: 15px; opacity: 0.7;">Escaneá el código QR de tu mesa asignada.</p>
+    </div>
+
+    <div class="scan-area">
+      <div class="scanner-target">
+        <div class="corner top-left"></div>
+        <div class="corner top-right"></div>
+        <div class="corner bottom-left"></div>
+        <div class="corner bottom-right"></div>
+        <div class="scan-line"></div>
+      </div>
+    </div>
+
+    <div class="info-footer">
+      <div class="mesa-info-card" style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 15px; margin-bottom: 20px; display: flex; align-items: center;">
+        <ion-icon name="information-circle-outline" style="color: #f4c430; font-size: 1.5rem; margin-right: 10px;"></ion-icon>
+        <p style="margin: 0; font-size: 0.9rem;">El Metre te asignó la mesa: <strong>{{ nro_mesa }}</strong></p>
+      </div>
+      
+      <ion-button 
+        expand="block" 
+        (click)="iniciarEscaneo()" 
+        style="--background: #e6eceb !important; --color: #325172 !important; font-weight: bold; height: 55px; --border-radius: 16px; font-size: 1rem; --box-shadow: 0 4px 15px rgba(0,0,0,0.4);">
+        <ion-icon name="qr-code-outline" slot="start"></ion-icon>
+        INICIAR ESCANEO
+      </ion-button>
+    </div>
+
+  </div>
+
+</ion-content>

@@ -1,0 +1,80 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar color="">
+    <ion-title class="titulo-ursula">MENÚ DE ÚRSULA</ion-title>
+  </ion-toolbar>
+  
+  <ion-toolbar color="" class="toolbar-segmento">
+    <div class="segmento-wrapper">
+      <button 
+        class="seg-btn" 
+        [class.activo]="categoriaSeleccionada === 'comida'"
+        (click)="filtrar('comida')">
+        COMIDA
+      </button>
+      <button 
+        class="seg-btn" 
+        [class.activo]="categoriaSeleccionada === 'bebida'"
+        (click)="filtrar('bebida')">
+        BEBIDA
+      </button>
+    </div>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content #content>
+  @if (cargando) {
+    <div class="pantalla-carga">
+      <ion-spinner name="crescent" color="light"></ion-spinner>
+    </div>
+  } @else {
+    <div class="contenedor-lista">
+      @for (item of productosFiltrados; track item.id) {
+        <div class="tarjeta-producto">
+          
+          <div class="caja-foto">
+            <swiper-container [pagination]="true" class="swiper-foto">
+              @for (img of item.fotos; track img) {
+                <swiper-slide class="slide-foto">
+                  <img [src]="img" loading="lazy" class="img-fit">
+                </swiper-slide>
+              }
+            </swiper-container>
+          </div>
+
+          <div class="caja-datos">
+            <div class="fila-superior">
+              <span class="nombre-plato">{{ item.nombre | uppercase }}</span>
+              <span class="precio-plato">${{ item.precio }}</span>
+            </div>
+            
+            <p class="descripcion-texto">{{ item.descripcion }}</p>
+
+            <div class="fila-inferior">
+              <div class="tiempo-info">
+                <ion-icon name="time-outline"></ion-icon>
+                <span>{{ item.tiempo_elaboracion }} MIN</span>
+              </div>
+              <button class="boton-pedir" (click)="pedirItem(item)">PEDIR</button>
+            </div>
+          </div>
+
+        </div>
+      }
+
+      @if (productosFiltrados.length === 0) {
+        <div class="sin-resultados">
+          <ion-icon name="restaurant-outline"></ion-icon>
+          <p>No hay productos en esta categoría</p>
+        </div>
+      }
+
+      <div class="espaciador-final"></div>
+    </div>
+  }
+</ion-content>
+
+<div class="fab-contenedor">
+  <button class="fab-btn" (click)="irAlChat()">
+    <ion-icon name="chatbubbles-sharp"></ion-icon>
+  </button>
+</div>

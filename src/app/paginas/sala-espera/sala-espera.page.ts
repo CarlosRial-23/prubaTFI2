@@ -31,7 +31,6 @@ export class SalaEsperaPage implements OnInit, OnDestroy {
 
   async ngOnInit() {
     this.nombreCliente = await this.supabaseService.getNombreUsuario();
-    
     this.escucharAsignacion(); 
   }
 
@@ -55,6 +54,21 @@ export class SalaEsperaPage implements OnInit, OnDestroy {
     }
   }
 
+  /**
+   * FUNCIÓN DE SIMULACIÓN (TEST):
+   * Fuerza la navegación a la pantalla de escaneo de mesa.
+   * Cambia el valor de 'mesa' al número que tengas en tu QR físico para evitar error de validación.
+   */
+  simularAsignacionMesa() {
+    console.log("Simulando asignación del Metre...");
+    this.ngZone.run(() => {
+      this.uiService.mostrarToast('TEST: Mesa 1 asignada (Simulación)', 'success');
+      this.router.navigate(['/escaneo-mesa'], { 
+        queryParams: { mesa: '1', modo: 'test' } 
+      });
+    });
+  }
+
   escucharAsignacion() {
     this.channel = this.supabaseService.client
       .channel('sala-espera')
@@ -66,7 +80,7 @@ export class SalaEsperaPage implements OnInit, OnDestroy {
           if (registro['id_mesa']) { 
             this.ngZone.run(() => {
               this.uiService.mostrarToast(`¡Mesa ${registro['id_mesa']} asignada!`, 'success');
-              this.router.navigate(['/menu-principal'], { 
+              this.router.navigate(['/escaneo-mesa'], { 
                 queryParams: { mesa: registro['id_mesa'] } 
               });
             });
@@ -91,7 +105,7 @@ export class SalaEsperaPage implements OnInit, OnDestroy {
             '#e67e22', 
             '#a4c639', 
             '#1d3557', 
-            '#5e807f' 
+            '#769690' 
           ],
           borderWidth: 0
         }]

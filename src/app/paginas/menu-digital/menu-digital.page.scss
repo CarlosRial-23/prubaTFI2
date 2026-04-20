@@ -1,0 +1,210 @@
+$azul-base: #325172;
+$azul-item: #456880;
+$verde-teal: #769690;
+$blanco-off: #e6eceb;
+
+ion-header {
+  background: $azul-base;
+  
+  ion-toolbar {
+    --background: #{$azul-base}; 
+    --color: #{$blanco-off};
+    --border-style: none;
+  }
+
+  .titulo-ursula {
+    font-weight: 800;
+    font-size: 1rem;
+    text-align: center;
+    letter-spacing: 1px;
+    color: $blanco-off;
+    margin: 0;
+    padding: 10px 0;
+    background: $azul-base; 
+  }
+
+  .segmento-wrapper {
+    display: flex;
+    width: 100%;
+    height: 48px;
+    background: $azul-base; 
+    .seg-btn {
+      flex: 1;
+      background: transparent;
+      border: none;
+      border-bottom: 3px solid transparent; 
+      color: rgba($blanco-off, 0.5);
+      font-weight: 700;
+      font-size: 0.8rem;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      min-height: 48px;
+      -webkit-tap-highlight-color: transparent;
+
+      &.activo {
+        color: $verde-teal;
+        border-bottom-color: $verde-teal;
+      }
+
+      &:active {
+        background: rgba($blanco-off, 0.05);
+      }
+    }
+  }
+}
+
+ion-content {
+  --background: #{$azul-base};
+
+  .contenedor-lista {
+    padding: 12px 12px 0;
+  }
+
+  .tarjeta-producto {
+    background: $azul-item;
+    margin-bottom: 14px;
+    border-radius: 8px;
+    border: 1px solid rgba($blanco-off, 0.1);
+    overflow: hidden;
+    display: block;
+
+    .caja-foto {
+      width: 100%;
+      height: 180px;
+      background: #1a2a3a;
+      display: block;
+      position: relative;
+      overflow: hidden;
+
+      swiper-container {
+        display: block;
+        width: 100%;
+        height: 180px !important;
+        --swiper-pagination-color: #{$verde-teal};
+        --swiper-pagination-bullet-inactive-color: rgba(230, 236, 235, 0.4);
+        
+        &::part(container), &::part(wrapper) {
+          height: 180px !important;
+        }
+      }
+
+      .img-fit {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+    }
+
+    .caja-datos {
+      padding: 12px;
+      display: block;
+
+      .fila-superior {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 10px;
+        margin-bottom: 8px;
+
+        .nombre-plato {
+          color: $blanco-off;
+          font-weight: 700;
+          font-size: 0.95rem;
+          flex: 1;
+          word-break: break-word;
+        }
+
+        .precio-plato {
+          color: $verde-teal;
+          font-weight: 800;
+          font-size: 1rem;
+          white-space: nowrap;
+        }
+      }
+
+      .descripcion-texto {
+        color: rgba($blanco-off, 0.8);
+        font-size: 0.8rem;
+        margin: 0 0 12px 0;
+        line-height: 1.4;
+        display: -webkit-box;
+        -webkit-line-clamp: 2; 
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+
+      .fila-inferior {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-top: 1px solid rgba($blanco-off, 0.1);
+        padding-top: 10px;
+
+        .tiempo-info {
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          color: $verde-teal;
+          font-size: 0.75rem;
+          font-weight: 600;
+        }
+
+        .boton-pedir {
+          background: $verde-teal;
+          color: $azul-base;
+          border: none;
+          border-radius: 4px;
+          padding: 8px 20px;
+          font-size: 0.75rem;
+          font-weight: 800;
+          text-transform: uppercase;
+          -webkit-tap-highlight-color: transparent;
+
+          &:active {
+            transform: scale(0.95);
+            opacity: 0.9;
+          }
+        }
+      }
+    }
+  }
+
+  .espaciador-final {
+    height: 100px; 
+  }
+}
+
+.fab-contenedor {
+  position: fixed;
+  bottom: 25px;
+  right: 20px;
+  z-index: 1000;
+
+  .fab-btn {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: $verde-teal;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5);
+
+    ion-icon {
+      font-size: 28px;
+      color: $azul-base;
+    }
+  }
+}
+
+.pantalla-carga {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: $azul-base;
+  ion-spinner { --color: #{$verde-teal}; }
+}

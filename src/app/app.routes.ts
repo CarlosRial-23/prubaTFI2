@@ -49,9 +49,23 @@ export const routes: Routes = [
   {
     path: 'alta-mesas',
     loadComponent: () => import('./paginas/alta-mesas/alta-mesas.page').then( m => m.AltaMesasPage)
-  },  {
+  },
+  {
     path: 'alta-empleado',
     loadComponent: () => import('./paginas/alta-empleado/alta-empleado.page').then( m => m.AltaEmpleadoPage)
+  },
+  {
+    path: 'menu-digital',
+    loadComponent: () => import('./paginas/menu-digital/menu-digital.page').then( m => m.MenuDigitalPage)
+  },
+  {
+    path: 'escaneo-mesa',
+    loadComponent: () => import('./paginas/escaneo-mesa/escaneo-mesa.page').then( m => m.EscaneoMesaPage)
+  },
+  
+  {
+    path: 'alta-producto',
+    loadComponent: () => import('./paginas/alta-producto/alta-producto.page').then( m => m.AltaProductoPage)
   },
 
 ];

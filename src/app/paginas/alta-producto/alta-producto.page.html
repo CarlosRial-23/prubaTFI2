@@ -1,0 +1,137 @@
+<ion-content [fullscreen]="true" class="admin-container">
+  
+  <div class="header-section">
+    <div class="back-button-custom" routerLink="/dashboard-cocinero">
+      <div class="arrow-icon"></div>
+    </div>
+    <h1>Alta de Producto</h1>
+    <p>Añadir nuevo producto al menú</p>
+  </div>
+
+  <div class="form-wrapper">
+    <form [formGroup]="productoForm" (ngSubmit)="guardarProducto()">
+      
+      <div class="input-group">
+        <label>Nombre del Producto</label>
+        <input type="text" formControlName="nombre" placeholder="Ej: Milanesa a la Napolitana/ Coca Cola">
+        
+        @if (productoForm.get('nombre')?.hasError('required') && productoForm.get('nombre')?.touched) {
+          <span class="error-text">El nombre es obligatorio.</span>
+        }
+        @if (productoForm.get('nombre')?.hasError('minlength') && productoForm.get('nombre')?.touched) {
+          <span class="error-text">Debe tener al menos 3 caracteres.</span>
+        }
+        @if (productoForm.get('nombre')?.hasError('duplicado') && productoForm.get('nombre')?.touched) {
+          <span class="error-text">Este producto ya existe en el menú.</span>
+        }
+      </div>
+
+      <div class="input-group">
+        <label>Descripción</label>
+        <input type="text" formControlName="descripcion" placeholder="Ingredientes y detalles">
+        
+        @if (productoForm.get('descripcion')?.hasError('required') && productoForm.get('descripcion')?.touched) {
+          <span class="error-text">La descripción es obligatoria.</span>
+        }
+        @if (productoForm.get('descripcion')?.hasError('minlength') && productoForm.get('descripcion')?.touched) {
+          <span class="error-text">Debe ser más descriptivo (mín. 10 caracteres).</span>
+        }
+      </div>
+
+      <div class="input-group">
+        <label>Tiempo de Elaboración (Minutos)</label>
+        <input type="number" formControlName="tiempo_elaboracion" placeholder="Ej: 30">
+        
+        @if (productoForm.get('tiempo_elaboracion')?.hasError('required') && productoForm.get('tiempo_elaboracion')?.touched) {
+          <span class="error-text">El tiempo es obligatorio.</span>
+        }
+        @if (productoForm.get('tiempo_elaboracion')?.hasError('min') && productoForm.get('tiempo_elaboracion')?.touched) {
+          <span class="error-text">El tiempo debe ser mayor a 0.</span>
+        }
+      </div>
+
+      <div class="input-group">
+        <label>Precio ($)</label>
+        <input type="number" formControlName="precio" placeholder="Ej: 4500">
+        
+        @if (productoForm.get('precio')?.hasError('required') && productoForm.get('precio')?.touched) {
+          <span class="error-text">El precio es obligatorio.</span>
+        }
+        @if (productoForm.get('precio')?.hasError('min') && productoForm.get('precio')?.touched) {
+          <span class="error-text">El precio debe ser mayor a 0.</span>
+        }
+      </div>
+
+      <div class="input-group">
+        <label>Categoría</label>
+        <select formControlName="categoria">
+          <option value="" disabled selected>Seleccione una categoría</option>
+          <option value="comida">Comida</option>
+          <option value="bebida">Bebida</option>
+        </select>
+        
+        @if (productoForm.get('categoria')?.hasError('required') && productoForm.get('categoria')?.touched) {
+          <span class="error-text">Seleccione la categoría.</span>
+        }
+      </div>
+
+      <label class="photos-label">Fotos del producto (Obligatorias 3)</label>
+      
+      <div class="photos-grid">
+        <div class="photo-section" (click)="tomarFoto(0)" [class.has-error]="productoForm.get('foto1')?.invalid && productoForm.get('foto1')?.touched">
+          @if (!fotosPreview[0]) {
+            <div class="photo-placeholder">
+              <ion-icon name="camera-outline"></ion-icon>
+              <span>Foto 1</span>
+            </div>
+          } @else {
+            <img [src]="fotosPreview[0]" class="preview-img">
+          }
+        </div>
+
+        <div class="photo-section" (click)="tomarFoto(1)" [class.has-error]="productoForm.get('foto2')?.invalid && productoForm.get('foto2')?.touched">
+          @if (!fotosPreview[1]) {
+            <div class="photo-placeholder">
+              <ion-icon name="camera-outline"></ion-icon>
+              <span>Foto 2</span>
+            </div>
+          } @else {
+            <img [src]="fotosPreview[1]" class="preview-img">
+          }
+        </div>
+
+        <div class="photo-section" (click)="tomarFoto(2)" [class.has-error]="productoForm.get('foto3')?.invalid && productoForm.get('foto3')?.touched">
+          @if (!fotosPreview[2]) {
+            <div class="photo-placeholder">
+              <ion-icon name="camera-outline"></ion-icon>
+              <span>Foto 3</span>
+            </div>
+          } @else {
+            <img [src]="fotosPreview[2]" class="preview-img">
+          }
+        </div>
+      </div>
+      
+      @if ((productoForm.get('foto1')?.invalid || productoForm.get('foto2')?.invalid || productoForm.get('foto3')?.invalid) && (productoForm.get('foto1')?.touched || productoForm.get('foto2')?.touched || productoForm.get('foto3')?.touched)) {
+        <span class="error-text error-foto">
+          Debe adjuntar exactamente 3 fotos.
+        </span>
+      }
+
+      <button 
+        type="button" 
+        class="btn-principal" 
+        (click)="guardarProducto()" 
+        [disabled]="cargando">
+        
+        @if (!cargando) {
+          <span>CREAR PRODUCTO</span>
+        } @else {
+          <ion-spinner name="crescent" color="light" style="width: 24px; height: 24px;"></ion-spinner>
+        }
+        
+      </button>
+
+    </form>
+  </div>
+</ion-content>

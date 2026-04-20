@@ -13,7 +13,6 @@
       <div class="welcome-text">
         <h2>Hola, {{ nombreCliente }}.</h2>
         <p>Tu mesa está siendo preparada.</p>
-        <p></p>
         <p>Mirá lo que prefieren otros clientes hoy:</p>
       </div>
 
@@ -26,7 +25,15 @@
 
     <div class="waiting-footer">
       <div class="custom-loader"></div>
-      <p>Esperando señal del Metre...</p>
+      <p>Esperando la orden del Metre...</p>
+      
+      <ion-button 
+        class="btn-simulacion"
+        expand="block" 
+        (click)="simularAsignacionMesa()">
+        <ion-icon name="flask-outline" slot="start"></ion-icon>
+        FORZAR ASIGNACION
+      </ion-button>
     </div>
 
   </div>

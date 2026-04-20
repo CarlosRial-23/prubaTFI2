@@ -90,4 +90,7 @@ export class LoginPage implements OnInit {
   irAltaMesas() {
     this.router.navigate(['/alta-mesas']);
   }
+  irAltaProducto() {
+    this.router.navigate(['/alta-producto']);
+  }
 }
