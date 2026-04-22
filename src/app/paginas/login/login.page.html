@@ -1,4 +1,4 @@
-<ion-content [fullscreen]="true">
+<ion-content [fullscreen]="true" scroll-y="false">
   <div class="viewport">
     <div class="main-card">
       <div class="hero-image">
@@ -8,50 +8,113 @@
         </div>
       </div>
 
-      <div class="form-content">
+      <div class="form-content scrollable-form">
         <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
           <div class="input-group">
             <label class="custom-label">CORREO ELECTRÓNICO</label>
             <input
               type="email"
               formControlName="email"
-              placeholder="Ingrese su correo electronico"
+              placeholder="Ingrese su correo electrónico"
               class="input-standard"
             />
+            <span class="error-text">{{ getErrorMessage('email') }}</span>
           </div>
 
           <div class="input-group">
             <label class="custom-label">CONTRASEÑA</label>
-            <input
-              type="password"
-              formControlName="password"
-              placeholder="••••••••"
-              class="input-standard"
-            />
+            <div class="password-container">
+              <input
+                [type]="showPassword ? 'text' : 'password'"
+                formControlName="password"
+                placeholder="••••••••"
+                class="input-standard"
+              />
+              <ion-icon 
+                [name]="showPassword ? 'eye-off-outline' : 'eye-outline'" 
+                class="password-toggle"
+                (click)="togglePassword()">
+              </ion-icon>
+            </div>
+            <span class="error-text">{{ getErrorMessage('password') }}</span>
           </div>
 
-          <button type="submit" class="btn-registro">INICIAR SESIÓN</button>
+          <div class="button-wrapper">
+            <button type="submit" class="btn-registro" [disabled]="loginForm.invalid">
+              INICIAR SESIÓN
+            </button>
+          </div>
         </form>
 
         <div class="login-redirect">
           <p>
             ¿No tienes cuenta?
-            <span class="register-link" (click)="irAlRegistro()">Regístrate</span>
+            <span class="link-text" (click)="irAlRegistro()">Regístrate</span>
           </p>
-          <p>
-            REGISTRAR EMPLEADOS SOLO TEST
-            <span class="register-link" (click)="irAltaEmpleados()">Alta Empleados</span>
-          </p>
-          <p>
-            ALTA MESAS SOLO TEST
-            <span class="register-link" (click)="irAltaMesas()">Alta Mesas</span>
-          </p>
-          <p>
-            ALTA PRODUCTOS SOLO TEST
-            <span class="register-link" (click)="irAltaProducto()">Alta Productos</span>
+          <p class="dev-access">
+            <span class="link-dev" (click)="accesoDirectoMetre()">
+              MODO TEST: Dashboard Metre
+            </span>
           </p>
         </div>
       </div>
     </div>
   </div>
+
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end" class="fab-acceso-rapido">
+    <ion-fab-button class="fab-main">
+      <ion-icon name="flash"></ion-icon>
+    </ion-fab-button>
+    
+    <ion-fab-list side="top">
+      <div class="fab-item" (click)="fillUser('dueño')">
+        <span class="fab-label">Dueño</span>
+        <ion-fab-button size="small">
+          <ion-icon name="key-outline"></ion-icon>
+        </ion-fab-button>
+      </div>
+
+      <div class="fab-item" (click)="fillUser('supervisor')">
+        <span class="fab-label">Supervisor</span>
+        <ion-fab-button size="small">
+          <ion-icon name="briefcase-outline"></ion-icon>
+        </ion-fab-button>
+      </div>
+
+      <div class="fab-item" (click)="fillUser('metre')">
+        <span class="fab-label">Metre</span>
+        <ion-fab-button size="small">
+          <ion-icon name="shield-checkmark-outline"></ion-icon>
+        </ion-fab-button>
+      </div>
+
+      <div class="fab-item" (click)="fillUser('mozo')">
+        <span class="fab-label">Mozo</span>
+        <ion-fab-button size="small">
+          <ion-icon name="restaurant-outline"></ion-icon>
+        </ion-fab-button>
+      </div>
+
+      <div class="fab-item" (click)="fillUser('cocinero')">
+        <span class="fab-label">Cocinero</span>
+        <ion-fab-button size="small">
+          <ion-icon name="fast-food-outline"></ion-icon>
+        </ion-fab-button>
+      </div>
+
+      <div class="fab-item" (click)="fillUser('cantinero')">
+        <span class="fab-label">Cantinero</span>
+        <ion-fab-button size="small">
+          <ion-icon name="wine-outline"></ion-icon>
+        </ion-fab-button>
+      </div>
+
+      <div class="fab-item" (click)="fillUser('cliente')">
+        <span class="fab-label">Cliente</span>
+        <ion-fab-button size="small">
+          <ion-icon name="person-outline"></ion-icon>
+        </ion-fab-button>
+      </div>
+    </ion-fab-list>
+  </ion-fab>
 </ion-content>

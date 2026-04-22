@@ -41,7 +41,7 @@ export class IngresoQrPage implements OnInit {
             
             try {
               await this.supabaseService.registrarIngreso(); 
-              this.router.navigate(['/sala-espera']);
+              this.router.navigate(['/seleccion-comensales']);
             } catch (dbError) {
               console.error('Error de base de datos:', dbError);
               this.uiService.mostrarToast('Error al conectar con Supabase', 'danger');

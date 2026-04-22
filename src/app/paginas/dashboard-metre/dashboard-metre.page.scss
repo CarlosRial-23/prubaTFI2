@@ -1,0 +1,199 @@
+$azul-base: #325172;
+$azul-item: #456880;
+$verde-teal: #769690;
+$blanco: #e6eceb;
+
+ion-header {
+  background: $azul-base;
+  ion-toolbar {
+    --background: #{$azul-base};
+    --border-style: none;
+    .titulo-ursula { color: $blanco; font-weight: 800; font-size: 0.9rem; text-align: center; }
+  }
+}
+
+ion-content {
+  --background: #{$azul-base};
+
+  .tarjeta-cliente {
+    background: $azul-item;
+    padding: 8px;
+    margin-bottom: 8px;
+    border-radius: 4px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid rgba($blanco, 0.1);
+    cursor: pointer;
+
+    &.seleccionado {
+      border-color: $verde-teal;
+      background: rgba($verde-teal, 0.15);
+    }
+
+    .info { flex: 1; padding: 5px; }
+    .nombre { color: $blanco; font-weight: 700; font-size: 0.85rem; }
+    .sub-info { color: rgba($blanco, 0.6); font-size: 0.78rem; }
+
+    ion-button {
+      --padding-start: 12px;
+      --padding-end: 12px;
+      z-index: 20;
+      margin: 0;
+    }
+  }
+
+  .grilla-mesas {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+
+    .item-mesa {
+      background: $azul-item;
+      padding: 10px 4px;
+      border-radius: 4px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      border: 2px solid transparent;
+      position: relative;
+      transition: opacity 0.2s ease, filter 0.2s ease, border-color 0.2s ease;
+
+      .nro   { color: $blanco; font-size: 0.78rem; font-weight: 800; }
+      .tipo  { color: rgba($blanco, 0.55); font-size: 0.65rem; margin: 2px 0; }
+      .cap   { color: rgba($blanco, 0.7); font-size: 0.7rem; }
+      .status { color: #5dbb9a; font-size: 0.65rem; font-weight: 700; margin-top: 4px; }
+
+      .btn-desocupar {
+        position: absolute; top: -5px; right: -5px;
+        background: #ff4d4d; color: white;
+        border: none; border-radius: 50%;
+        width: 28px; height: 28px;
+        display: flex; align-items: center; justify-content: center;
+        z-index: 30;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+        cursor: pointer;
+      }
+
+      .click-area {
+        display: flex; flex-direction: column;
+        width: 100%; height: 100%;
+        cursor: pointer;
+      }
+
+      &.sin-seleccion {
+        opacity: 0.4;
+        cursor: not-allowed;
+        .click-area { pointer-events: none; }
+      }
+
+      &.ocupada {
+        opacity: 0.45;
+        .status { color: #ff4d4d; }
+        .click-area { cursor: not-allowed; }
+      }
+
+      &.insuficiente {
+        opacity: 0.18;
+        filter: grayscale(1);
+        cursor: not-allowed;
+        .click-area { pointer-events: none; }
+      }
+
+      &.elegida {
+        border-color: $verde-teal;
+        background: rgba($verde-teal, 0.12);
+        opacity: 1;
+      }
+    }
+  }
+
+  .barra-confirmar {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: #1a2a3a; padding: 15px;
+    border-top: 3px solid $verde-teal; z-index: 1000;
+
+    .resumen p {
+      color: rgba($blanco, 0.8);
+      font-size: 0.82rem;
+      margin: 0 0 10px;
+      text-align: center;
+      strong { color: $blanco; }
+    }
+
+    .btn-confirmar {
+      width: 100%; background: $verde-teal;
+      padding: 12px; border-radius: 4px;
+      font-weight: 800; color: $azul-base;
+      border: none; cursor: pointer;
+      font-size: 0.9rem; letter-spacing: 0.5px;
+    }
+  }
+
+  .espaciador { height: 140px; }
+}
+
+// overlay de confirmacion de eliminar o confirmacion de desocupar mesa
+.overlay-confirmacion {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  z-index: 2000;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  animation: fadeIn 0.15s ease;
+
+  .sheet-confirmacion {
+    background: #1e3248;
+    border-radius: 16px 16px 0 0;
+    padding: 28px 24px 36px;
+    width: 100%;
+    max-width: 480px;
+    text-align: center;
+    animation: slideUp 0.2s ease;
+
+    .sheet-icono {
+      width: 56px; height: 56px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 16px;
+      font-size: 24px;
+      &.peligro { background: rgba(255, 77, 77, 0.18); color: #ff4d4d; }
+      &.aviso   { background: rgba(118, 150, 144, 0.2); color: $verde-teal; }
+    }
+
+    .sheet-titulo {
+      color: $blanco; font-size: 1.1rem; font-weight: 800;
+      margin: 0 0 8px; letter-spacing: 0.5px;
+    }
+
+    .sheet-mensaje {
+      color: rgba($blanco, 0.65); font-size: 0.85rem;
+      margin: 0 0 28px; line-height: 1.5;
+    }
+
+    .sheet-botones {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+
+      .btn-sheet {
+        padding: 13px 8px; border-radius: 8px;
+        font-size: 0.8rem; font-weight: 800; letter-spacing: 0.5px;
+        border: none; cursor: pointer;
+
+        &.cancelar {
+          background: rgba($blanco, 0.08);
+          color: rgba($blanco, 0.6);
+        }
+        &.confirmar {
+          background: $verde-teal;
+          color: $azul-base;
+          &.rojo { background: #ff4d4d; color: #fff; }
+        }
+      }
+    }
+  }
+}
+
+@keyframes fadeIn  { from { opacity: 0 } to { opacity: 1 } }
+@keyframes slideUp { from { transform: translateY(60px) } to { transform: translateY(0) } }

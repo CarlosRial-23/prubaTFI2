@@ -54,11 +54,6 @@ export class SalaEsperaPage implements OnInit, OnDestroy {
     }
   }
 
-  /**
-   * FUNCIÓN DE SIMULACIÓN (TEST):
-   * Fuerza la navegación a la pantalla de escaneo de mesa.
-   * Cambia el valor de 'mesa' al número que tengas en tu QR físico para evitar error de validación.
-   */
   simularAsignacionMesa() {
     console.log("Simulando asignación del Metre...");
     this.ngZone.run(() => {

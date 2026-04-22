@@ -1,0 +1,37 @@
+<ion-content>
+  <div class="container-seleccion">
+    <div class="header-info">
+      <h1 class="font-elegante">¿Cuántos son?</h1>
+      <p>Seleccioná la cantidad de personas para asignarte la mejor mesa.</p>
+    </div>
+
+    <div class="grilla-numeros">
+      @for (n of [1,2,3,4,5,6,7,8]; track n) {
+        <button class="btn-numero" 
+                [class.active]="cantidad === n" 
+                (click)="seleccionar(n)">
+          {{ n }}
+        </button>
+      }
+    </div>
+
+    <div class="input-extra">
+      <ion-item lines="none" class="item-custom">
+        <ion-label position="stacked">Más de 8 personas:</ion-label>
+        <ion-input 
+          type="number" 
+          placeholder="Ej: 12" 
+          (ionInput)="onInputExtra($event)">
+        </ion-input>
+      </ion-item>
+    </div>
+
+    <div class="footer-accion">
+      <button class="btn-confirmar" 
+              [disabled]="cantidad === 0" 
+              (click)="confirmar()">
+        INGRESAR A LA LISTA
+      </button>
+    </div>
+  </div>
+</ion-content>

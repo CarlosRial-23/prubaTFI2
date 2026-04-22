@@ -66,6 +66,14 @@ export const routes: Routes = [
   {
     path: 'alta-producto',
     loadComponent: () => import('./paginas/alta-producto/alta-producto.page').then( m => m.AltaProductoPage)
+  },  {
+    path: 'dashboard-metre',
+    loadComponent: () => import('./paginas/dashboard-metre/dashboard-metre.page').then( m => m.DashboardMetrePage)
   },
+  {
+    path: 'seleccion-comensales',
+    loadComponent: () => import('./paginas/seleccion-comensales/seleccion-comensales.page').then( m => m.SeleccionComensalesPage)
+  },
+
 
 ];

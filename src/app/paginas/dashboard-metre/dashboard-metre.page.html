@@ -1,0 +1,77 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-title class="titulo-ursula">GESTIÓN DE METRE</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="contenedor-principal" style="padding: 15px;">
+
+    <div class="seccion-bloque" style="margin-bottom: 25px;">
+      <div class="lista-items">
+        @for (cliente of clientesEnEspera; track cliente.cliente_id) {
+          <div class="tarjeta-cliente"
+               [class.seleccionado]="clienteSeleccionado?.cliente_id === cliente.cliente_id">
+            <div class="info" (click)="seleccionarCliente(cliente)">
+              <span class="nombre">{{ cliente.nombre_cliente | uppercase }}</span>
+              <span class="sub-info">, COMENSALES: {{ cliente.cantidad_comensales }}</span>
+            </div>
+            <ion-button fill="clear" color="danger" (click)="pedirConfirmacion($event, 'cliente', cliente)">
+              <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
+            </ion-button>
+          </div>
+        }
+      </div>
+    </div>
+
+    <div class="grilla-mesas">
+      @for (mesa of mesas; track mesa.nro_mesa) {
+        <div class="item-mesa"
+             [class.ocupada]="mesa.estado !== 'libre'"
+             [class.elegida]="mesaSeleccionada?.nro_mesa === mesa.nro_mesa"
+             [class.insuficiente]="clienteSeleccionado && mesa.estado === 'libre' && mesa.capacidad < clienteSeleccionado.cantidad_comensales"
+             [class.sin-seleccion]="!clienteSeleccionado && mesa.estado === 'libre'">
+
+          @if (mesa.estado !== 'libre') {
+            <button class="btn-desocupar" (click)="pedirConfirmacion($event, 'mesa', mesa)">
+              <ion-icon name="log-out-outline"></ion-icon>
+            </button>
+          }
+
+          <div class="click-area" (click)="seleccionarMesa(mesa)">
+            <span class="nro">MESA {{ mesa.nro_mesa }}</span>
+            <span class="tipo">{{ mesa.tipo | uppercase }}</span>
+            <span class="cap">{{ mesa.capacidad }} PERS.</span>
+            <span class="status">{{ mesa.estado | uppercase }}</span>
+          </div>
+        </div>
+      }
+    </div>
+
+    <div class="espaciador"></div>
+  </div>
+
+  <div class="barra-confirmar" *ngIf="clienteSeleccionado && mesaSeleccionada">
+    <div class="resumen">
+      <p>Asignar <strong>{{ clienteSeleccionado.nombre_cliente }}</strong> a <strong>Mesa {{ mesaSeleccionada.nro_mesa }}</strong></p>
+    </div>
+    <button class="btn-confirmar" (click)="confirmarAsignacion()">CONFIRMAR ASIGNACIÓN</button>
+  </div>
+
+  <div class="overlay-confirmacion" *ngIf="confirmacionVisible" (click)="cancelarConfirmacion()">
+    <div class="sheet-confirmacion" (click)="$event.stopPropagation()">
+      <div class="sheet-icono"
+           [class.peligro]="confirmacion.tipo === 'cliente'"
+           [class.aviso]="confirmacion.tipo === 'mesa'">
+        <ion-icon [name]="confirmacion.tipo === 'cliente' ? 'trash-outline' : 'log-out-outline'"></ion-icon>
+      </div>
+      <h3 class="sheet-titulo">{{ confirmacion.titulo }}</h3>
+      <p class="sheet-mensaje">{{ confirmacion.mensaje }}</p>
+      <div class="sheet-botones">
+        <button class="btn-sheet cancelar" (click)="cancelarConfirmacion()">NO, VOLVER</button>
+        <button class="btn-sheet confirmar" [class.rojo]="confirmacion.tipo === 'cliente'" (click)="ejecutarConfirmacion()">SÍ, CONFIRMAR</button>
+      </div>
+    </div>
+  </div>
+
+</ion-content>

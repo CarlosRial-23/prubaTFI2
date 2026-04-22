@@ -39,7 +39,6 @@ Este cuadro detalla los requerimientos funcionales base del proyecto.
 
 | ID | Funcionalidad (Objetivo) | Responsable | Sprint| Inicio | Fin | Estado |
 | :--- | :--- | :---: | :--- | :---: | :---: | :---: |
-| **Desarrollo** | Desarrollo de Sprint 01| Nicolas M. | `Sprint 01` | 08/04 | 13/04 | Completo |
 | **F1** | Alta de empleado (Escaneo DNI y Foto) | Carlos R. | `Sprint 01` | 11/04 | 16/04 | Completo |
 | **F2** | Alta de nuevo plato (3 fotos y validación) | Carlos R. | `Sprint 01` | 11/04 | 21/04| Pendiente |
 | **F3** | Alta de nueva bebida (3 fotos y validación) | Carlos R. | `Sprint 01` | 11/04 | 21/04 | Pendiente |
@@ -51,7 +50,6 @@ Este cuadro detalla los requerimientos funcionales base del proyecto.
 | **F9** | Cliente anónimo y lista de espera | Julian M. | `Sprint 01` | 11/04 | 21/04 | Pendiente |
 | **F10** | Asignación de mesa por parte del Metre | Julian M. | `Sprint 01` |11/04 | 21/04 | Pendiente |
 | **F11** | Consulta al Mozo (Chat tiempo real) | Nicolas M. | `Sprint 01` |11/04 | 21/04 | Pendiente |
-| **Desarrollo** | Desarrollo de Sprint 02 | Nicolas M. | `Sprint 02` | 19/04 | 21/04 |Pendiente |
 | **F12** | Realización pedido y tiempo estimado | Por definir | Por definir | -- | -- | Pendiente |
 | **F13** | Rechazo/Modificación pedido por Mozo | Por definir | Por definir | -- | -- | Pendiente |
 | **F14** | Confirmación y derivación Cocina/Bar | Por definir | Por definir | -- | -- | Pendiente |
@@ -312,7 +310,7 @@ Sprint 2 (gestión de pedidos): pendiente
 
 ---
 
-## Seguimiento de Tareas Inntegrante 1 Julian Maldonado
+## Seguimiento de Tareas Integrante 1 Julian Maldonado
 Cada pantalla agrupa las funcionalidades tecnicas detalladas en el cuadro anterior.
 
 | ID | Pantallas | Refs Funcionales | Responsable/ s | Rama (Branch) | Inicio | Fin | Estado |
@@ -320,36 +318,34 @@ Cada pantalla agrupa las funcionalidades tecnicas detalladas en el cuadro anteri
 | **P-A** | Splash Screen (Animada) | -- | Julian | `main` | 2026-04-06 | 2026-04-07 | Realizado |
 | **P-B** | Login de Acceso Rápido | -- | Julian | `main` | 2026-04-07 | 2026-04-09 | Realizado |
 | **P-C** | Registro de Cliente | **F5** | Julian | `main` | 2026-04-07 | 2026-04-09 | Realizado |
-| **P-D** | Espera de Aprobación | **F6** | Por definir | `---`  | -- | -- | Pendiente |
-| **P-E** | Home Ingreso (QR Puerta) | **F6, F9** | Por definir | `main` | 2026-04-09 | 2026-04-13 | Realizado |
-| **P-F** | Sala de Espera / Juegos | **F15, F20** | Por definir | `---` | -- | -- | Pendiente |
-| **P-G** | Validación de Mesa (QR) | **F21** | Por definir | `---` | -- | -- | Pendiente |
-| **P-H** | Menú Digital / Pedidos | **F12, F13, F14** | Por definir | `---` | -- | -- | Pendiente |
-| **P-I** | Chat con el Mozo | **F11** | Por definir | `---` | -- | -- | Pendiente |
+| **P-D** | Espera de Aprobación | **F6** | Julian | `---`  | -- | -- | Pendiente |
+| **P-E** | Home Ingreso (QR Puerta) | **F6, F9** | Julian | `main` | 2026-04-09 | 2026-04-13 | Realizado |
+| **P-F** | Sala de Espera / Juegos | **F15, F20** | Julian | `---` | -- | -- | Pendiente |
+| **P-G** | Validación de Mesa (QR) | **F21** | Julian | `---` | -- | -- | Pendiente |
+| **P-H** | Menú Digital / Pedidos | **F12, F13, F14** | Julian| `---` | -- | -- | Pendiente |
+| **P-I** | Chat con el Mozo | **F11** | Julian | `---` | -- | -- | Pendiente |
 | **P-J** | Dashboard Administrador | -- | Julian | `main` | 2026-04-14 | -- | En proceso |
-| **P-K** | Aprobación de Clientes | **F7, F8** | Por definir | `---` | -- | -- | Pendiente |
-| **P-L** | Alta de Empleados | **F1** | Carlos | `test` | 2026-04-14 | 2026-04-15 | Realizado |
-| **P-M** | Alta de Mesas | **F4** | Carlos | `test` | 2026-04-15 | 2026-04-17 | Realizado |
-| **P-N** | Dashboard Metre | **F9** | Por definir | `---` | -- | -- | Pendiente |
-| **P-O** | Lista de Espera Detallada | **F9, F10** | Por definir | `---` | -- | -- | Pendiente |
-| **P-P** | Mapa Salón (Asignación) | **F10, F22** | Por definir | `---` | -- | -- | Pendiente |
-| **P-R** | Dashboard Especialista | **F18** | Por definir | `---` | -- | -- | Pendiente |
-| **P-S** | Mis Productos / Comandas | **F16, F17** | Por definir | `---` | -- | -- | Pendiente |
-| **P-T** | Alta de Producto | **F2, F3** | Por definir | `---` | -- | -- | Pendiente |
-
-
+| **P-K** | Aprobación de Clientes | **F7, F8** | Julian | `---` | -- | -- | Pendiente |
+| **P-N** | Dashboard Metre | **F9** | Julian | `---` | -- | -- | Pendiente |
+| **P-O** | Lista de Espera Detallada | **F9, F10** | Julian | `---` | -- | -- | Pendiente |
+| **P-P** | Mapa Salón (Asignación) | **F10, F22** | Julian | `---` | -- | -- | Pendiente |
+| **P-R** | Dashboard Especialista | **F18** | Julian | `---` | -- | -- | Pendiente |
+| **P-S** | Mis Productos / Comandas | **F16, F17** | Julian | `---` | -- | -- | Pendiente |
+| **P-T** | Alta de Producto | **F2, F3** | Julian | `---` | -- | -- | Pendiente |
+| **P-T** | Gestion de Lista de espera | **F2, F3** | Julian | `---` | -- | -- | Pendiente |
+| **P-T** | Gestion de Mesas | **F2, F3** | Julian | `---` | -- | -- | Pendiente |
 
 
 ---
-## Seguimiento de Tareas Inntegrante 2 Carlos Rial Maldonado
+## Seguimiento de Tareas Integrante 2 Carlos Rial Maldonado
 
 | ID | Detalle| Refs Funcionales | Responsable/ s | Sprint | Inicio | Fin | Estado |
 | :--- | :--- | :---: | :---: | :--- | :---: | :---: | :---: |
-| **Desarrollo** | Exploracion de Tecnologias de Escaneo de QR | **F2, F3** |  Carlos Rial | `Sprint 1` | 11/04 | 16/04 | Completo |
-| **Desarrollo** | Exploracion de Tecnologias de Generacion de QR | **F2, F3** |  Carlos Rial | `Sprint 1` | 11/04 | 16/04 | Completo |
-| **Desarrollo** | Exploracion de Tecnologias de Almacenamiento | **F2, F3** |  Carlos Rial | `Sprint 1` | 11/04 | 16/04 | Completo |
-| **Desarrollo** | Exploracion de Tecnologias de Camara | **F2, F3** |  Carlos Rial | `Sprint 1` | 11/04 | 16/04 | Completo |
-| **Desarrollo** | Modelado de datos en supabase | **F2, F3** |  Carlos Rial | `Sprint 1` | 11/04 | 16/04 | Completo |
+| **Desarrollo 01** | Exploracion de Tecnologias de Escaneo de QR | **F2, F3** |  Carlos Rial | `Sprint 1` | 11/04 | 16/04 | Completo |
+| **D02** | Exploracion de Tecnologias de Generacion de QR | **F2, F3** |  Carlos Rial | `Sprint 1` | 11/04 | 16/04 | Completo |
+| **D03** | Exploracion de Tecnologias de Almacenamiento | **F2, F3** |  Carlos Rial | `Sprint 1` | 11/04 | 16/04 | Completo |
+| **D04** | Exploracion de Tecnologias de Camara | **F2, F3** |  Carlos Rial | `Sprint 1` | 11/04 | 16/04 | Completo |
+| **D05** | Modelado de datos en supabase | **F2, F3** |  Carlos Rial | `Sprint 1` | 11/04 | 16/04 | Completo |
 | **F1** | Alta de empleado (Escaneo DNI y Foto) | **F2, F3** |  Por definir | `---` | 11/04 | 16/04 | Completo |
 | **F1** | Alta de Clientes (Escaneo DNI y Foto) | **F2, F3** |  Por definir | `---` | 11/04 | 16/04 | Completo |
 | **F4** | Alta de mesa (Foto, Capacidad y QR) | Carlos R. | `Sprint 01` |11/04| 16/04 | Completo |
@@ -357,6 +353,23 @@ Cada pantalla agrupa las funcionalidades tecnicas detalladas en el cuadro anteri
 | **F3** | Alta de nueva bebida (3 fotos y validación) | Carlos R. | `Sprint 01` | 11/04 | 21/04 | Pendiente |
 | **F3** | Alta de Menu| Carlos R. | `Sprint 01` | 11/04 | 21/04 | Pendiente |
 
+---
+## Seguimiento de Tareas Integrante 3 Nicolas Moreyra
+
+| ID | Detalle| Refs Funcionales | Responsable/ s | Sprint | Inicio | Fin | Estado |
+| :--- | :--- | :---: | :---: | :--- | :---: | :---: | :---: |
+| **Desarrollo 01** | Desarrollo de la metodologia de Sprints 01 | **F2, F3** |  Nicolas M | `Sprint 1` | 08/04 | 12/04 | Completo |
+| **D02** | Modelado de datos en supabase | **F2, F3** |  Nicolas M  | `Sprint 1` | 08/04 | 12/04 | Completo |
+| **D03** | Exploracion de Tecnologias de Notificaciones por mail | **F2, F3** |  Nicolas M  | `Sprint 1` | 13/04 | 14/04 | Completo |
+| **P01** | Prueba de Tecnologias Resend, Stmp gmail + Deno, EmailJS | **F2, F3** |  Nicolas M  | `Sprint 1` | 14/04 | 15/04 | Completo |
+| **D04** | Exploracion de Tecnologias de Notificaciones Push | **F2, F3** |  Nicolas M  | `Sprint 1` | 15/04 | 16/04 | Completo |
+| **P02** | Prueba de Tecnologias Firebase | **F2, F3** |   Nicolas M | `Sprint 1` | 16/04 | 17/04 | Completo |
+| **F1** | Notificaciones Mail  | **F2, F3** |  Por definir | `---` | 11/04 | 16/04 | Completo |
+| **F2** | Notificaciones Push | **F2, F3** |  Por definir | `---` | 17/04 | 19/04 | Pendiente |
+| **F3** | Sala de chat | **F2, F3** |  Por definir | `---` | 19/04 | 21/04 | Pendiente  |
+| **D05** | Desarrollo de la metodologia de Sprints 02 | **F2, F3** |  Nicolas M | `Sprint 1` | 19/04 | 21/04 | Completo |
+
+---
 
 ## Mapa de Códigos QR
 
