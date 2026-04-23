@@ -1,4 +1,4 @@
-import { Component, OnInit, CUSTOM_ELEMENTS_SCHEMA, ViewChild } from '@angular/core';
+import { Component, OnInit, CUSTOM_ELEMENTS_SCHEMA, ViewChild, Injector, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule, IonContent } from '@ionic/angular';
 import { SupabaseService } from '../../../servicios/supabase.service';
@@ -18,6 +18,7 @@ register();
 })
 export class MenuDigitalPage implements OnInit {
   @ViewChild(IonContent) content!: IonContent;
+  private injector = inject(Injector);
   productos: any[] = [];
   productosFiltrados: any[] = [];
   categoriaSeleccionada: string = 'comida';
@@ -36,21 +37,31 @@ export class MenuDigitalPage implements OnInit {
   private numeroDeMesaActual = 1; 
 
   async irAlChat() {
-    const modal = await this.modalController.create({
-      component: Chat,
-      // Aquí le pasamos el número de mesa al @Input() del componente Chat
-      componentProps: {
-        numero_mesa: this.numeroDeMesaActual,
-        esMozo: false // Cambia a true si este botón lo toca el mozo
-      },
-      cssClass: 'modal-chat-personalizado', // Opcional: por si quieres darle estilos CSS al tamaño del modal
-      breakpoints: [0, 0.5, 0.8, 1], // Opcional: si quieres que sea un modal deslizable (bottom sheet)
-      initialBreakpoint: 0.8
-    });
+    console.log('1. Botón de chat presionado correctamente.');
 
-    await modal.present();
+    try {
+      const modal = await this.modalController.create({
+        component: Chat,
+        // PASAMOS EL INJECTOR AQUÍ (Soluciona el congelamiento del modal)
+        injector: this.injector, 
+        
+        componentProps: {
+          numero_mesa: this.numeroDeMesaActual,
+          esMozo: false
+        },
+        cssClass: 'modal-chat-personalizado',
+        breakpoints: [0, 0.5, 0.8, 1],
+        initialBreakpoint: 0.8
+      });
+
+      console.log('2. Modal creado, intentando mostrar...');
+      await modal.present();
+      console.log('3. Modal mostrado con éxito.');
+
+    } catch (error) {
+      console.error('🚨 ERROR AL ABRIR EL MODAL:', error);
+    }
   }
-
   async cargarMenu() {
     this.cargando = true;
     const { data } = await this.supabase.client.from('productos').select('*').eq('disponible', true);

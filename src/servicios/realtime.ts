@@ -1,4 +1,4 @@
-import { inject, Injectable, OnInit } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { SupabaseService } from './supabase.service';
 import Mensaje from '../app/paginas/interfaces/mensaje';
 
@@ -7,12 +7,15 @@ import Mensaje from '../app/paginas/interfaces/mensaje';
 })
 export class Realtime {
   private sup = inject(SupabaseService);
-  public canal = this.sup.supabase.channel('table-db-changes');
+  
+  // CORRECCIÓN 1: Cambiado .supabase por .client
+  public canal = this.sup.client.channel('table-db-changes');
 
   constructor() {}
 
   async traerPorMesa(numero_mesa: number): Promise<Mensaje[]> {
-    const { data, error } = await this.sup.supabase
+    // CORRECCIÓN 2: Cambiado .supabase por .client
+    const { data, error } = await this.sup.client
       .from('chat')
       .select('*')
       .eq('numero_mesa', numero_mesa)
@@ -26,7 +29,8 @@ export class Realtime {
   }
 
   async crear(mensaje: string, usuario: string, numero_mesa: number): Promise<void> {
-    const { error } = await this.sup.supabase
+    // CORRECCIÓN 3: Cambiado .supabase por .client
+    const { error } = await this.sup.client
       .from('chat')
       .insert({ mensaje, usuario, numero_mesa });
       

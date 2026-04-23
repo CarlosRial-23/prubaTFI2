@@ -2,11 +2,10 @@
 import { Component, inject, signal, Input, OnInit, OnDestroy } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ModalController } from '@ionic/angular'; 
 import Mensaje from '../interfaces/mensaje';
 import { Realtime } from '../../../servicios/realtime';
 import { AuthService } from '../../../servicios/auth.service';
-import { ModalController } from '@ionic/angular'; // <-- Importar el controlador
-
 
 @Component({
   selector: 'app-chat',
@@ -17,8 +16,8 @@ import { ModalController } from '@ionic/angular'; // <-- Importar el controlador
 })
 export class Chat implements OnInit, OnDestroy {
   // Recibimos el número de mesa y si el usuario actual es un mozo (opcional para vista)
-  @Input({ required: true }) numero_mesa!: number; 
-  @Input() esMozo: boolean = false; 
+  @Input() numero_mesa!: number; 
+  @Input() esMozo: boolean = false;
 
   realtime = inject(Realtime);
   protected authService = inject(AuthService);
@@ -30,14 +29,16 @@ export class Chat implements OnInit, OnDestroy {
   
   async ngOnInit() {
     try {
+      console.log('Inicializando componente Chat para la mesa:', this.numero_mesa);
+      
       const usuario = await this.authService.getUsuario();
-    
-    // Extraemos el email como string. Usamos 'Invitado' como respaldo si es null
-    this.usuarioActual = usuario?.user_metadata?.['apellido'];
+      // Extraemos el apellido como string. Usamos 'Invitado' como respaldo si es null
+      this.usuarioActual = usuario?.user_metadata?.['apellido'] || 'Invitado';
 
       // 1. Cargar mensajes iniciales de esta mesa
       const mensajesIniciales = await this.realtime.traerPorMesa(this.numero_mesa);
       this.mensajes.set(mensajesIniciales);
+      
     } catch (error) {
       console.error('Error al cargar mensajes o usuario:', error);
     }
@@ -69,10 +70,10 @@ export class Chat implements OnInit, OnDestroy {
       const usuario = await this.authService.getUsuario();
       
       // Aplicamos la misma lógica para enviar el mensaje con el apellido
-      const nombreUsuario = usuario?.user_metadata?.['apellido'];
+      const nombreUsuario = usuario?.user_metadata?.['apellido'] || 'Invitado';
 
       await this.realtime.crear(this.msj, nombreUsuario, this.numero_mesa);
-      this.msj = '';
+      this.msj = ''; // Limpiamos el input después de enviar
     } catch (error) {
       console.error('Error al enviar mensaje:', error);
     }
@@ -80,8 +81,11 @@ export class Chat implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     // Es buena práctica desuscribirse al destruir el componente
-    this.realtime.canal.unsubscribe();
+    if (this.realtime && this.realtime.canal) {
+      this.realtime.canal.unsubscribe();
+    }
   }
+
   cerrarChat() {
     this.modalCtrl.dismiss();
   }
