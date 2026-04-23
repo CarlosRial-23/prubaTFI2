@@ -7,8 +7,8 @@ import { createClient, SupabaseClient } from '@supabase/supabase-js';
 export class SupabaseService {
   private readonly supabaseUrl = 'https://wojlvifztpwotgkqqqfm.supabase.co';
   private readonly supabaseKey = 'sb_publishable_mUGYV5uWqho95p0FrD-XRw_vpu5qxkm';
-  private readonly supabase: SupabaseClient;
-
+  public supabase: SupabaseClient;
+  
   constructor() {
     this.supabase = createClient(this.supabaseUrl, this.supabaseKey, {
       auth: {

@@ -7,6 +7,7 @@ import { SupabaseService } from '../../../servicios/supabase.service';
 import { AuthService } from '../../../servicios/auth.service';
 import { addIcons } from 'ionicons';
 import { qrCodeOutline } from 'ionicons/icons';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-alta-empleado',
@@ -25,7 +26,8 @@ export class AltaEmpleadoPage implements OnInit {
     private supabaseService: SupabaseService,
     private authService: AuthService,
     private loadingCtrl: LoadingController,
-    private toastController: ToastController // Ajustado al nombre de tu otra page
+    private toastController: ToastController, // Ajustado al nombre de tu otra page
+    private router: Router,
   ) {
     addIcons({ qrCodeOutline }); 
 
@@ -143,6 +145,7 @@ export class AltaEmpleadoPage implements OnInit {
       this.presentToast('Empleado registrado con éxito.', 'success');
       this.altaForm.reset();
       this.archivoSeleccionado = null;
+      this.router.navigate(['/login']);
 
     } catch (error: any) {
       console.error('Error al guardar:', error);

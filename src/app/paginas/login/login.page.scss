@@ -17,6 +17,12 @@ ion-content {
   --padding-bottom: 0;
 }
 
+ion-icon {
+  --background: #{blanco-off} !important;
+  font-size: 30px;
+  color: #{blanco-off};
+}
+
 .viewport {
   display: flex;
   justify-content: center;
@@ -184,9 +190,9 @@ ion-content {
   }
 }
 
-/* --- ESTILOS FAB ADAPTADOS AL DARK THEME --- */
 .fab-acceso-rapido {
-  margin-right: 10px;
+  /* Se aumenta de 10px a 20px para separar los labels del borde de la pantalla */
+  margin-right: 40px;
   margin-bottom: 10px;
 
   /* Botón principal (rayo) */
@@ -205,39 +211,26 @@ ion-content {
   .fab-item {
     display: flex;
     align-items: center;
-    justify-content: flex-start;
-    margin-bottom: 8px;
+    /* Asegura que el contenido se alinee a la derecha para que el botón mande */
+    justify-content: flex-end;
+    margin-bottom: 15px;
+    cursor: pointer;
+    /* Evita que el contenedor desborde si el texto es muy largo */
+    width: max-content;
+    align-self: flex-end;
 
     .fab-label {
       background: $azul-card;
       color: $blanco-off;
-      padding: 4px 10px;
-      border-radius: 6px;
-      font-size: 0.7rem;
-      margin-right: 8px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 0.75rem;
+      margin-right: 12px; /* Espacio entre el texto y el botón circular */
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
       pointer-events: none;
       border: 1px solid rgba($gris-medio, 0.4);
-    }
-  }
-
-  .fab-item {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    margin-bottom: 8px;
-    cursor: pointer; /* <-- Agrega esta línea */
-
-    .fab-label {
-      background: $azul-card;
-      color: $blanco-off;
-      padding: 4px 10px;
-      border-radius: 6px;
-      font-size: 0.7rem;
-      margin-right: 8px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-      pointer-events: none; /* Esto evita que el span bloquee el click del div */
-      border: 1px solid rgba($gris-medio, 0.4);
+      /* Previene que el texto se divida en varias líneas */
+      white-space: nowrap;
     }
   }
 }

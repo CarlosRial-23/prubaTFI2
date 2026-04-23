@@ -40,6 +40,9 @@ async register(data: {
       await this.supabaseService.client.auth.signUp({
         email: data.correo_electronico,
         password: data.clave,
+        options: {
+          data: { perfil: data.perfil } // Esto guarda el perfil en los metadatos de AUTH
+        }
       });
 
     if (authError) {

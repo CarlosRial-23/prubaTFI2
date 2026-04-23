@@ -1,0 +1,65 @@
+<ion-content [fullscreen]="true">
+  <div class="viewport">
+    <div class="main-card">
+      <h2 class="titulo-elegante">Alta de Cliente</h2>
+
+      <div class="foto-wrapper">
+        <div class="foto-container" (click)="tomarFoto()" [class.error-border]="!fotoPersonal && clienteForm.touched">
+          @if (fotoPersonal) {
+            <img [src]="fotoPersonal" class="img-preview">
+          } @else {
+            <div class="placeholder">
+              <ion-icon name="camera-outline"></ion-icon>
+              <p>Tomar Foto Personal</p>
+            </div>
+          }
+        </div>
+      </div>
+
+      <div class="form-content">
+        <form [formGroup]="clienteForm">
+          
+          <button type="button" class="btn-secundario" (click)="escanearDNI()">
+            <ion-icon name="qr-code-outline" style="font-size: 1.2rem; margin-right: 8px;"></ion-icon>
+            QR DNI
+          </button>
+          <div class="input-group">
+            <label class="custom-label">NOMBRES</label>
+            <input formControlName="nombres" class="input-standard" placeholder="Juan">
+            <span class="error-text">{{ getErrorMessage('nombres') }}</span>
+          </div>
+
+          <div class="input-group">
+            <label class="custom-label">APELLIDOS</label>
+            <input formControlName="apellidos" class="input-standard" placeholder="Pérez">
+            <span class="error-text">{{ getErrorMessage('apellidos') }}</span>
+          </div>
+
+          <div class="input-group-row">
+            <div class="input-group flex-grow">
+              <label class="custom-label">DNI</label>
+              <input formControlName="dni" type="text" inputmode="numeric" class="input-standard" placeholder="12345678">
+            </div>
+          </div>
+          <span class="error-text">{{ getErrorMessage('dni') }}</span>
+
+          <div class="input-group">
+            <label class="custom-label">CORREO ELECTRÓNICO</label>
+            <input formControlName="correo" type="email" class="input-standard" placeholder="email@ejemplo.com">
+            <span class="error-text">{{ getErrorMessage('correo') }}</span>
+          </div>
+
+          <div class="input-group">
+            <label class="custom-label">CONTRASEÑA</label>
+            <input formControlName="clave" type="password" class="input-standard" placeholder="••••••">
+            <span class="error-text">{{ getErrorMessage('clave') }}</span>
+          </div>
+          
+          <button class="btn-registro" (click)="guardarCliente()" [disabled]="clienteForm.invalid || !fotoPersonal">
+            GUARDAR CLIENTE
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</ion-content>
