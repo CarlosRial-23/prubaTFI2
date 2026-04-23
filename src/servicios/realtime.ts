@@ -7,22 +7,29 @@ import Mensaje from '../app/paginas/interfaces/mensaje';
 })
 export class Realtime {
   private sup = inject(SupabaseService);
-
-  // channel: Qué canal de información quiero escuchar. Está el table-db-changes y el schema-db-changes y cualquiera que creemos nosotros.
   public canal = this.sup.supabase.channel('table-db-changes');
 
   constructor() {}
 
-  async traerTodosFijo(): Promise<Mensaje[]> {
-    const { data, error } = await this.sup.supabase.from('chat').select('*');
+  async traerPorMesa(numero_mesa: number): Promise<Mensaje[]> {
+    const { data, error } = await this.sup.supabase
+      .from('chat')
+      .select('*')
+      .eq('numero_mesa', numero_mesa)
+      .order('created_at', { ascending: true }); // Orden cronológico vital para un chat
 
     if (error) {
+      console.error('Error obteniendo mensajes:', error);
       return [];
     }
     return data as Mensaje[];
   }
 
-  async crear(mensaje: string, usuario: string): Promise<void> {
-    await this.sup.supabase.from('chat').insert({mensaje:mensaje, usuario:usuario});
+  async crear(mensaje: string, usuario: string, numero_mesa: number): Promise<void> {
+    const { error } = await this.sup.supabase
+      .from('chat')
+      .insert({ mensaje, usuario, numero_mesa });
+      
+    if (error) throw error;
   }
 }

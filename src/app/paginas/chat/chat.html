@@ -1,30 +1,25 @@
 <div class="chat-wrapper">
+  
+  <div class="chat-header">
+    <h3>Mesa {{ numero_mesa }}</h3>
+    <p>Consulta al mozo</p>
+  </div>
+
   <div class="chat-messages">
     @for (msj of mensajes(); track $index) {
       @if (msj.usuario === usuarioActual) {
-        <!-- Mensaje propio: a la derecha -->
         <div class="chat-message own">
           <p>
             <span class="timestamp">{{ msj.created_at | date:'dd/MM/yyyy HH:mm' }}</span>
-            <span class="username">{{ msj.usuario }}</span>
-            <span class="colon">:</span>
-            <span class="message-text">{{ msj.mensaje }}</span>
-          </p>
+            </p>
         </div>
       } @else {
-        <!-- Mensaje de otro: a la izquierda -->
         <div class="chat-message other">
-          <p>
-            <span class="timestamp">{{ msj.created_at | date:'dd/MM/yyyy HH:mm' }}</span>
-            <span class="username">{{ msj.usuario }}</span>
-            <span class="colon">:</span>
-            <span class="message-text">{{ msj.mensaje }}</span>
-          </p>
-        </div>
+           </div>
       }
     } @empty {
       <div class="no-messages">
-        <p>Aún no hay mensajes. ¡Sé el primero en chatear!</p>
+        <p>No hay consultas. ¡Escribe un mensaje!</p>
       </div>
     }
   </div>
@@ -32,7 +27,7 @@
   <div class="chat-input">
     <input 
       [(ngModel)]="msj" 
-      placeholder="Escribe un mensaje..." 
+      placeholder="Escribe tu consulta..." 
       (keyup.enter)="enviarMensaje()" />
     <button (click)="enviarMensaje()">Enviar</button>
   </div>

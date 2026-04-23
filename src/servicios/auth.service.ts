@@ -41,7 +41,10 @@ async register(data: {
         email: data.correo_electronico,
         password: data.clave,
         options: {
-          data: { perfil: data.perfil } // Esto guarda el perfil en los metadatos de AUTH
+          data: { 
+            perfil: data.perfil,
+            apellido: data.apellidos,
+           }
         }
       });
 
