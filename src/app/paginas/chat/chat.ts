@@ -2,10 +2,11 @@
 import { Component, inject, signal, Input, OnInit, OnDestroy } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
 import Mensaje from '../interfaces/mensaje';
 import { Realtime } from '../../../servicios/realtime';
 import { AuthService } from '../../../servicios/auth.service';
+import { ModalController } from '@ionic/angular'; // <-- Importar el controlador
+
 
 @Component({
   selector: 'app-chat',
@@ -21,11 +22,12 @@ export class Chat implements OnInit, OnDestroy {
 
   realtime = inject(Realtime);
   protected authService = inject(AuthService);
+  private modalCtrl = inject(ModalController);
 
   mensajes = signal<Mensaje[]>([]);
   usuarioActual: string = '';
   msj = '';
-
+  
   async ngOnInit() {
     try {
       const usuario = await this.authService.getUsuario();
@@ -79,5 +81,8 @@ export class Chat implements OnInit, OnDestroy {
   ngOnDestroy() {
     // Es buena práctica desuscribirse al destruir el componente
     this.realtime.canal.unsubscribe();
+  }
+  cerrarChat() {
+    this.modalCtrl.dismiss();
   }
 }

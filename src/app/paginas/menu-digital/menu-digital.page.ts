@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { IonicModule, IonContent } from '@ionic/angular';
 import { SupabaseService } from '../../../servicios/supabase.service';
 import { register } from 'swiper/element/bundle';
+import { ModalController } from '@ionic/angular';
+import { Chat } from '../chat/chat';
 
 register();
 
@@ -16,16 +18,37 @@ register();
 })
 export class MenuDigitalPage implements OnInit {
   @ViewChild(IonContent) content!: IonContent;
-  
   productos: any[] = [];
   productosFiltrados: any[] = [];
   categoriaSeleccionada: string = 'comida';
   cargando: boolean = true;
 
-  constructor(private supabase: SupabaseService) {}
+  constructor(
+    private supabase: SupabaseService,
+    private modalController: ModalController,
+  ) {}
 
   async ngOnInit() {
     await this.cargarMenu();
+  }
+
+  //FALTA LÓGICA PARA VER MESA ASIGNADA
+  private numeroDeMesaActual = 1; 
+
+  async irAlChat() {
+    const modal = await this.modalController.create({
+      component: Chat,
+      // Aquí le pasamos el número de mesa al @Input() del componente Chat
+      componentProps: {
+        numero_mesa: this.numeroDeMesaActual,
+        esMozo: false // Cambia a true si este botón lo toca el mozo
+      },
+      cssClass: 'modal-chat-personalizado', // Opcional: por si quieres darle estilos CSS al tamaño del modal
+      breakpoints: [0, 0.5, 0.8, 1], // Opcional: si quieres que sea un modal deslizable (bottom sheet)
+      initialBreakpoint: 0.8
+    });
+
+    await modal.present();
   }
 
   async cargarMenu() {
@@ -52,5 +75,4 @@ export class MenuDigitalPage implements OnInit {
     this.productosFiltrados = this.productos.filter(p => p.categoria === cat);
   }
 
-  irAlChat() {}
 }
