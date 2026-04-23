@@ -152,4 +152,7 @@ export class LoginPage implements OnInit {
   irAltaCliente() {
     this.router.navigate(['/alta-cliente']);
   }
+  irChat() {
+    this.router.navigate(['/chat']);
+  }
 }

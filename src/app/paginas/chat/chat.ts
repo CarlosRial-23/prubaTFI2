@@ -1,8 +1,8 @@
-// src/app/paginas/chat/chat.ts
-import { Component, inject, signal, Input, OnInit, OnDestroy } from '@angular/core';
+import { Component, inject, signal, OnInit, OnDestroy } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ModalController } from '@ionic/angular'; 
+import { ActivatedRoute } from '@angular/router'; // <-- Importamos para recibir params
+import { Location } from '@angular/common';       // <-- Importamos para volver atrás
 import Mensaje from '../interfaces/mensaje';
 import { Realtime } from '../../../servicios/realtime';
 import { AuthService } from '../../../servicios/auth.service';
@@ -15,13 +15,14 @@ import { AuthService } from '../../../servicios/auth.service';
   styleUrls: ['./chat.css']
 })
 export class Chat implements OnInit, OnDestroy {
-  // Recibimos el número de mesa y si el usuario actual es un mozo (opcional para vista)
-  @Input() numero_mesa!: number; 
-  @Input() esMozo: boolean = false;
+  // Ya no son @Input()
+  numero_mesa!: number; 
+  esMozo: boolean = false;
 
   realtime = inject(Realtime);
   protected authService = inject(AuthService);
-  private modalCtrl = inject(ModalController);
+  private route = inject(ActivatedRoute); // <-- Inyectamos ActivatedRoute
+  private location = inject(Location);    // <-- Inyectamos Location
 
   mensajes = signal<Mensaje[]>([]);
   usuarioActual: string = '';
@@ -29,13 +30,18 @@ export class Chat implements OnInit, OnDestroy {
   
   async ngOnInit() {
     try {
+      // 1. Recibir los parámetros pasados por la URL
+      this.route.queryParams.subscribe(params => {
+        this.numero_mesa = Number(params['numero_mesa']) || 0;
+        this.esMozo = params['esMozo'] === 'true' || params['esMozo'] === true;
+      });
+
       console.log('Inicializando componente Chat para la mesa:', this.numero_mesa);
       
       const usuario = await this.authService.getUsuario();
-      // Extraemos el apellido como string. Usamos 'Invitado' como respaldo si es null
       this.usuarioActual = usuario?.user_metadata?.['apellido'] || 'Invitado';
 
-      // 1. Cargar mensajes iniciales de esta mesa
+      // 2. Cargar mensajes iniciales de esta mesa
       const mensajesIniciales = await this.realtime.traerPorMesa(this.numero_mesa);
       this.mensajes.set(mensajesIniciales);
       
@@ -43,18 +49,17 @@ export class Chat implements OnInit, OnDestroy {
       console.error('Error al cargar mensajes o usuario:', error);
     }
 
-    // 2. Escuchar nuevos mensajes en tiempo real
+    // 3. Escuchar nuevos mensajes en tiempo real
     this.realtime.canal
       .on(
         'postgres_changes',
         {
-          event: 'INSERT', // Mejor escuchar solo INSERT para chats
+          event: 'INSERT',
           schema: 'public',
           table: 'chat',
         },
         (payload) => {
           const nuevoMensaje = payload.new as Mensaje;
-          // IMPORTANTÍSIMO: Filtrar para mostrar solo si es de la sala/mesa actual
           if (nuevoMensaje.numero_mesa === this.numero_mesa) {
              this.mensajes.update((msgs) => [...msgs, nuevoMensaje]);
           }
@@ -68,25 +73,22 @@ export class Chat implements OnInit, OnDestroy {
 
     try {
       const usuario = await this.authService.getUsuario();
-      
-      // Aplicamos la misma lógica para enviar el mensaje con el apellido
       const nombreUsuario = usuario?.user_metadata?.['apellido'] || 'Invitado';
 
       await this.realtime.crear(this.msj, nombreUsuario, this.numero_mesa);
-      this.msj = ''; // Limpiamos el input después de enviar
+      this.msj = '';
     } catch (error) {
       console.error('Error al enviar mensaje:', error);
     }
   }
 
   ngOnDestroy() {
-    // Es buena práctica desuscribirse al destruir el componente
     if (this.realtime && this.realtime.canal) {
       this.realtime.canal.unsubscribe();
     }
   }
 
   cerrarChat() {
-    this.modalCtrl.dismiss();
+    this.location.back();
   }
 }

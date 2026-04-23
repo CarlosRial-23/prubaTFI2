@@ -66,7 +66,8 @@ export const routes: Routes = [
   {
     path: 'alta-producto',
     loadComponent: () => import('./paginas/alta-producto/alta-producto.page').then( m => m.AltaProductoPage)
-  },  {
+  },
+  {
     path: 'dashboard-metre',
     loadComponent: () => import('./paginas/dashboard-metre/dashboard-metre.page').then( m => m.DashboardMetrePage)
   },
@@ -78,6 +79,11 @@ export const routes: Routes = [
     path: 'alta-cliente',
     loadComponent: () => import('./paginas/alta-cliente/alta-cliente.page').then( m => m.AltaClientePage)
   },
+
+  {
+    path: 'chat',
+    loadComponent: () => import('./paginas/chat/chat').then( m => m.Chat)
+  }
 
 
 ];
