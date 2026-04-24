@@ -43,6 +43,7 @@ async register(data: {
         options: {
           data: { 
             perfil: data.perfil,
+            nombre: data.nombres,
             apellido: data.apellidos,
            }
         }

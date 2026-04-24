@@ -2,6 +2,7 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { IonicModule, NavController, ToastController } from '@ionic/angular';
+import { AuthService } from '../../../servicios/auth.service';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { addIcons } from 'ionicons';
 import { cameraOutline } from 'ionicons/icons';
@@ -26,6 +27,7 @@ export class AltaProductoPage implements OnInit {
   constructor(
     private fb: FormBuilder,
     private supabaseService: SupabaseService,
+    private authService: AuthService,
     private navCtrl: NavController,
     private toastController: ToastController,
     private cdr: ChangeDetectorRef
@@ -37,7 +39,7 @@ export class AltaProductoPage implements OnInit {
       descripcion: ['', [Validators.required, Validators.minLength(10)]],
       tiempo_elaboracion: ['', [Validators.required, Validators.min(0)]],
       precio: ['', [Validators.required, Validators.min(1)]],
-      categoria: ['', [Validators.required]],
+      //categoria: ['', [Validators.required]],
       foto1: [null, Validators.required],
       foto2: [null, Validators.required],
       foto3: [null, Validators.required]
@@ -110,7 +112,9 @@ export class AltaProductoPage implements OnInit {
     const urlsFotos: string[] = [];
     const timestamp = Date.now();
     const nombreNormalizado = formValues.nombre.replace(/\s+/g, '_').toLowerCase();
-
+    const perfil = this.authService.usuarioActual()?.user_metadata?.["perfil"];
+    let categoriaPerfil = "";
+    
     try {
       // Subir las 3 fotos iterando
       for (let i = 1; i <= 3; i++) {
@@ -124,6 +128,12 @@ export class AltaProductoPage implements OnInit {
         urlsFotos.push(fotoUrl);
       }
 
+      if(perfil === "cocinero"){
+        categoriaPerfil = "comida";
+      }
+      if(perfil === "cantinero"){
+        categoriaPerfil = "bebida";
+      }
       // Insertar en la BD
       const { error: dbError } = await this.supabaseService.client
         .from('productos')
@@ -132,7 +142,7 @@ export class AltaProductoPage implements OnInit {
           descripcion: formValues.descripcion.trim(),
           precio: Number(formValues.precio),
           tiempo_elaboracion: Number(formValues.tiempo_elaboracion),
-          categoria: formValues.categoria,
+          categoria: categoriaPerfil,
           fotos: urlsFotos, // El array de 3 URLs
           disponible: true
         }]);
@@ -155,7 +165,6 @@ export class AltaProductoPage implements OnInit {
 
   resetearFormulario() {
     this.productoForm.reset();
-    this.productoForm.patchValue({ categoria: '' }); // Para devolver el placeholder al select
     this.fotosPreview = [null, null, null];
     this.cdr.detectChanges();
   }

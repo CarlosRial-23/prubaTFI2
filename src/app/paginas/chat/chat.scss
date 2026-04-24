@@ -1,0 +1,145 @@
+/* Fondo sutil para que las burbujas blancas/color resalten */
+.chat-bg {
+  --background: #f4f6f8;
+}
+
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 10px;
+}
+
+/* Animación fluida al recibir un nuevo mensaje */
+.mensaje-wrapper {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 16px;
+  width: 100%;
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.mensaje-mio {
+  align-items: flex-end;
+  padding-left: 15%; /* Evita que cruce toda la pantalla */
+}
+
+.mensaje-otro {
+  align-items: flex-start;
+  padding-right: 15%;
+}
+
+/* Diseño base de la burbuja */
+.mensaje-burbuja {
+  padding: 12px 16px;
+  border-radius: 16px;
+  position: relative;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.06); /* Sombra estilo app Ursula */
+  font-family: var(--font-family-body); /* Inter */
+}
+
+/* --- ESTILOS: MIS MENSAJES --- */
+.mensaje-mio .mensaje-burbuja {
+  background-color: var(--ion-color-primary, #3880ff);
+  color: var(--ion-color-primary-contrast, #ffffff);
+  border-bottom-right-radius: 2px; /* Esquina asimétrica */
+}
+
+.mensaje-mio .nombre {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.mensaje-mio .fecha {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* --- ESTILOS: OTROS MENSAJES --- */
+.mensaje-otro .mensaje-burbuja {
+  background-color: #ffffff;
+  color: #333333;
+  border-bottom-left-radius: 2px; /* Esquina asimétrica */
+  border: 1px solid rgba(0, 0, 0, 0.03);
+}
+
+.mensaje-otro .nombre {
+  color: var(
+    --ion-color-primary,
+    #3880ff
+  ); /* El nombre del otro toma el color primario */
+}
+
+.mensaje-otro .fecha {
+  color: #888888;
+}
+
+/* --- CABECERA Y TEXTO DEL MENSAJE --- */
+.mensaje-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 6px;
+  gap: 12px;
+}
+
+.nombre {
+  font-family: var(--font-family-title); /* Montserrat */
+  font-weight: 700;
+  font-size: 0.8rem;
+  letter-spacing: 0.3px;
+}
+
+.fecha {
+  font-size: 0.7rem;
+}
+
+.texto-mensaje {
+  font-size: 0.95rem;
+  line-height: 1.4;
+  word-wrap: break-word;
+}
+
+/* --- PIE DE PÁGINA (ÁREA DE ESCRITURA) --- */
+.footer-toolbar {
+  --background: #ffffff;
+  --border-width: 0;
+  padding: 8px 12px;
+  box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.03);
+}
+
+.input-item {
+  --background: #f0f2f5;
+  --border-radius: 25px;
+  --padding-start: 16px;
+  --inner-padding-end: 8px;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+
+  ion-input {
+    font-family: var(--font-family-body);
+    font-size: 0.95rem;
+    --placeholder-color: #888888; /* Oscurecí un poquito el placeholder para mejor contraste previo */
+
+    /* ESTAS DOS LÍNEAS HACEN QUE EL TEXTO ESCRITO SEA AZUL */
+    --color: var(--ion-color-primary, #3880ff);
+    color: var(--ion-color-primary, #3880ff);
+    font-weight: 500; /* Le da un poquito más de cuerpo al texto para que se lea mejor */
+  }
+
+  .btn-enviar {
+    margin: 0;
+    --color: var(--ion-color-primary);
+
+    ion-icon {
+      font-size: 1.4rem;
+    }
+  }
+}

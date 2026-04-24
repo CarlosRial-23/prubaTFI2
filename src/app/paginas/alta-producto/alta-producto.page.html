@@ -62,19 +62,6 @@
         }
       </div>
 
-      <div class="input-group">
-        <label>Categoría</label>
-        <select formControlName="categoria">
-          <option value="" disabled selected>Seleccione una categoría</option>
-          <option value="comida">Comida</option>
-          <option value="bebida">Bebida</option>
-        </select>
-        
-        @if (productoForm.get('categoria')?.hasError('required') && productoForm.get('categoria')?.touched) {
-          <span class="error-text">Seleccione la categoría.</span>
-        }
-      </div>
-
       <label class="photos-label">Fotos del producto (Obligatorias 3)</label>
       
       <div class="photos-grid">

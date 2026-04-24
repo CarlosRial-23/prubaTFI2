@@ -1,90 +1,107 @@
 import { Component, inject, signal, OnInit, OnDestroy } from '@angular/core';
-import { DatePipe } from '@angular/common';
+import { CommonModule, DatePipe, Location } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router'; // <-- Importamos para recibir params
-import { Location } from '@angular/common';       // <-- Importamos para volver atrás
+import { IonicModule } from '@ionic/angular';
+import { ActivatedRoute } from '@angular/router';
 import Mensaje from '../interfaces/mensaje';
 import { Realtime } from '../../../servicios/realtime';
 import { AuthService } from '../../../servicios/auth.service';
+import { SupabaseService } from '../../../servicios/supabase.service';
 
 @Component({
   selector: 'app-chat',
   standalone: true,
-  imports: [FormsModule, DatePipe],
+  imports: [CommonModule, FormsModule, IonicModule, DatePipe],
   templateUrl: './chat.html',
-  styleUrls: ['./chat.css']
+  styleUrls: ['./chat.scss']
 })
 export class Chat implements OnInit, OnDestroy {
-  // Ya no son @Input()
-  numero_mesa!: number; 
+  numero_mesa!: number;
   esMozo: boolean = false;
 
   realtime = inject(Realtime);
   protected authService = inject(AuthService);
-  private route = inject(ActivatedRoute); // <-- Inyectamos ActivatedRoute
-  private location = inject(Location);    // <-- Inyectamos Location
+  private supabase = inject(SupabaseService);
+  private route = inject(ActivatedRoute);
+  private location = inject(Location);
 
   mensajes = signal<Mensaje[]>([]);
   usuarioActual: string = '';
   msj = '';
   
+  private suscripcionChat: any;
+
   async ngOnInit() {
     try {
-      // 1. Recibir los parámetros pasados por la URL
       this.route.queryParams.subscribe(params => {
         this.numero_mesa = Number(params['numero_mesa']) || 0;
         this.esMozo = params['esMozo'] === 'true' || params['esMozo'] === true;
       });
 
-      console.log('Inicializando componente Chat para la mesa:', this.numero_mesa);
+      const usuarioAuth = await this.authService.getUsuario();
       
-      const usuario = await this.authService.getUsuario();
-      this.usuarioActual = usuario?.user_metadata?.['apellido'] || 'Invitado';
+      if (usuarioAuth) {
+        const { data, error } = await this.supabase.client
+          .from('usuarios')
+          .select('apellidos, nombres') 
+          .eq('id', usuarioAuth.id)
+          .single();
 
-      // 2. Cargar mensajes iniciales de esta mesa
-      const mensajesIniciales = await this.realtime.traerPorMesa(this.numero_mesa);
-      this.mensajes.set(mensajesIniciales);
-      
+        if (error) {
+          console.error('Error al consultar tabla usuarios:', error.message);
+        }
+
+        if (data) {
+          // --- NUEVA LÓGICA DE CONCATENACIÓN ---
+          // Limpiamos los espacios extra por si acaso y los unimos
+          const nombresStr = data.nombres ? data.nombres.trim() : '';
+          const apellidoStr = data.apellidos ? data.apellidos.trim() : '';
+          
+          const nombresCompleto = `${nombresStr} ${apellidoStr}`.trim();
+
+          // Asignamos el nombres completo. Si está vacío, usamos el email.
+          this.usuarioActual = nombresCompleto || usuarioAuth.email?.split('@')[0] || 'Usuario';
+          // -------------------------------------
+        } else {
+          this.usuarioActual = usuarioAuth.email?.split('@')[0] || 'Cliente';
+        }
+      } else {
+        this.usuarioActual = 'Invitado';
+      }
+
     } catch (error) {
-      console.error('Error al cargar mensajes o usuario:', error);
+      console.error('Error al inicializar chat:', error);
+      this.usuarioActual = 'Error';
     }
 
-    // 3. Escuchar nuevos mensajes en tiempo real
-    this.realtime.canal
-      .on(
-        'postgres_changes',
-        {
-          event: 'INSERT',
-          schema: 'public',
-          table: 'chat',
-        },
-        (payload) => {
-          const nuevoMensaje = payload.new as Mensaje;
-          if (nuevoMensaje.numero_mesa === this.numero_mesa) {
-             this.mensajes.update((msgs) => [...msgs, nuevoMensaje]);
-          }
+    const mensajesIniciales = await this.realtime.traerPorMesa(this.numero_mesa);
+    this.mensajes.set(mensajesIniciales);
+
+    this.suscripcionChat = this.supabase.client.channel('chat_mesa_' + this.numero_mesa);
+    
+    this.suscripcionChat
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'chat' }, (payload: any) => {
+        const nuevoMensaje = payload.new as Mensaje;
+        if (nuevoMensaje.numero_mesa === this.numero_mesa) {
+          this.mensajes.update((msgs) => [...msgs, nuevoMensaje]);
         }
-      )
+      })
       .subscribe();
   }
 
   async enviarMensaje() {
     if (!this.msj.trim()) return;
-
     try {
-      const usuario = await this.authService.getUsuario();
-      const nombreUsuario = usuario?.user_metadata?.['apellido'] || 'Invitado';
-
-      await this.realtime.crear(this.msj, nombreUsuario, this.numero_mesa);
+      await this.realtime.crear(this.msj, this.usuarioActual, this.numero_mesa);
       this.msj = '';
     } catch (error) {
-      console.error('Error al enviar mensaje:', error);
+      console.error('Error al enviar:', error);
     }
   }
 
   ngOnDestroy() {
-    if (this.realtime && this.realtime.canal) {
-      this.realtime.canal.unsubscribe();
+    if (this.suscripcionChat) {
+      this.supabase.client.removeChannel(this.suscripcionChat);
     }
   }
 

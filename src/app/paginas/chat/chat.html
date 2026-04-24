@@ -1,34 +1,47 @@
-<div class="chat-wrapper">
-  
-  <div class="chat-header">
-    <h3>Mesa {{ numero_mesa }}</h3>
-    <p>Consulta al mozo</p>
-  </div>
+<ion-header class="ion-no-border">
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-button (click)="cerrarChat()">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Mesa {{ numero_mesa }}</ion-title>
+  </ion-toolbar>
+</ion-header>
 
-  <div class="chat-messages">
-    @for (msj of mensajes(); track $index) {
-      @if (msj.usuario === usuarioActual) {
-        <div class="chat-message own">
-          <p>
-            <span class="timestamp">{{ msj.created_at | date:'dd/MM/yyyy HH:mm' }}</span>
-            </p>
+<ion-content class="ion-padding chat-bg">
+  <div class="chat-container">
+    
+    <div *ngFor="let mensaje of mensajes()"
+         [ngClass]="{'mensaje-mio': mensaje.usuario === usuarioActual,
+                     'mensaje-otro': mensaje.usuario !== usuarioActual}"
+         class="mensaje-wrapper">
+
+      <div class="mensaje-burbuja">
+        <div class="mensaje-header">
+          <span class="nombre">{{ mensaje.usuario }}</span>
+          <span class="fecha">{{ mensaje.created_at | date:'HH:mm' }}</span>
         </div>
-      } @else {
-        <div class="chat-message other">
-           </div>
-      }
-    } @empty {
-      <div class="no-messages">
-        <p>No hay consultas. ¡Escribe un mensaje!</p>
+        <div class="texto-mensaje">{{ mensaje.mensaje }}</div>
       </div>
-    }
-  </div>
 
-  <!-- <div class="chat-input">
-    <input 
-      [(ngModel)]="msj" 
-      placeholder="Escribe tu consulta..." 
-      (keyup.enter)="enviarMensaje()" />
-    <button (click)="enviarMensaje()">Enviar</button>
-  </div> -->
-</div>
+    </div>
+
+  </div>
+</ion-content>
+
+<ion-footer class="ion-no-border">
+  <ion-toolbar class="footer-toolbar">
+    <ion-item lines="none" class="input-item">
+      <ion-input 
+        [(ngModel)]="msj" 
+        (keyup.enter)="enviarMensaje()" 
+        placeholder="Escribe un mensaje..."
+      ></ion-input>
+      
+      <ion-button slot="end" fill="clear" class="btn-enviar" (click)="enviarMensaje()" [disabled]="!msj.trim()">
+        <ion-icon name="send"></ion-icon>
+      </ion-button>
+    </ion-item>
+  </ion-toolbar>
+</ion-footer>
