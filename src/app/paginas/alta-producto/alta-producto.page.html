@@ -121,4 +121,13 @@
 
     </form>
   </div>
+
+  <ion-action-sheet
+    [isOpen]="isActionSheetOpen"
+    header="SELECCIONAR FOTO"
+    cssClass="modal-fotos-custom"
+    [buttons]="actionSheetButtons"
+    (didDismiss)="onActionSheetDismiss()">
+  </ion-action-sheet>
+
 </ion-content>

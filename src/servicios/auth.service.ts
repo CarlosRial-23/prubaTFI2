@@ -82,19 +82,19 @@ async register(data: {
     return { ok: true };
   }
   // 🔐 LOGIN
-  async login(email: string, password: string): Promise<boolean> {
-    const { error } = await this.supabaseService.client.auth.signInWithPassword({
+  async login(email: string, password: string): Promise<{ ok: boolean, perfil?: string }> {
+    const { data, error } = await this.supabaseService.client.auth.signInWithPassword({
       email,
       password
     });
 
     if (error) {
       console.error(error.message);
-      return false;
+      return { ok: false };
     }
 
-    this.router.navigate(['/bienvenida']);
-    return true;
+    const perfil = data.user?.user_metadata?.['perfil'];
+    return { ok: true, perfil };
   }
 
   // 🚪 LOGOUT

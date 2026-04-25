@@ -109,39 +109,36 @@ export class LoginPage implements OnInit {
     const { email, password } = this.loginForm.value;
 
     try {
-    // 1. Intentamos el login
-    const ok = await this.authService.login(email, password);
+      // 1. Intentamos el login
+      const resultado = await this.authService.login(email, password);
 
-    if (ok) {
-      // 2. Obtenemos el perfil de los metadatos del usuario actual
-      const perfil = this.authService.usuarioActual()?.user_metadata['perfil'];
-      
-      // 3. Mostramos el Toast con el perfil
-      this.presentToast(`Bienvenido! Perfil: ${perfil?.toUpperCase() || 'No definido'}`, 'success');
+      if (resultado.ok) {
+        // 2. Extraemos el perfil que nos devolvió el servicio
+        const perfil = resultado.perfil;
+        
+        // 3. Mostramos el Toast con el perfil
+        this.presentToast(`Bienvenido! Perfil: ${perfil?.toUpperCase() || 'No definido'}`, 'success');
 
-      switch (perfil) {
-        case 'metre':
-          this.router.navigate(['/dashboard-metre']);
-          break;
-
-        case 'cocinero':
-          this.router.navigate(['/alta-producto']);
-          break;
-        case 'cantinero':
-          this.router.navigate(['/alta-producto']);
-          break;
-
-        default:
-          this.router.navigate(['/ingreso-qr']);
-          break;
+        // 4. Hacemos el ruteo aquí mismo en el componente
+        switch (perfil) {
+          case 'metre':
+            this.router.navigate(['/dashboard-metre']);
+            break;
+          case 'cocinero':
+          case 'cantinero': // Puedes agrupar casos que van al mismo lugar
+            this.router.navigate(['/alta-producto']);
+            break;
+          default:
+            this.router.navigate(['/ingreso-qr']);
+            break;
+        }
+        
+      } else {
+        this.presentToast('Correo o contraseña incorrectos', 'danger');
       }
-      
-    } else {
-      this.presentToast('Correo o contraseña incorrectos', 'danger');
+    } catch (e) {
+      this.presentToast('Error de conexión con el servidor', 'danger');
     }
-  } catch (e) {
-    this.presentToast('Error de conexión con el servidor', 'danger');
-  }
   }
 
   irAlRegistro() { this.router.navigate(['/registro']); }

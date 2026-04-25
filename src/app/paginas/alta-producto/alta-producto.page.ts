@@ -24,6 +24,29 @@ export class AltaProductoPage implements OnInit {
   fotosPreview: (string | null)[] = [null, null, null];
   cargando: boolean = false;
 
+  // --- VARIABLES PARA EL ACTION SHEET DECLARATIVO ---
+  isActionSheetOpen = false;
+  fotoIndexActual = 0;
+  
+  actionSheetButtons = [
+    {
+      text: 'CÁMARA',
+      handler: () => {
+        this.abrirCamara(this.fotoIndexActual, CameraSource.Camera);
+      }
+    },
+    {
+      text: 'GALERÍA',
+      handler: () => {
+        this.abrirCamara(this.fotoIndexActual, CameraSource.Photos);
+      }
+    },
+    {
+      text: 'CANCELAR',
+      role: 'cancel'
+    }
+  ];
+
   constructor(
     private fb: FormBuilder,
     private supabaseService: SupabaseService,
@@ -39,7 +62,6 @@ export class AltaProductoPage implements OnInit {
       descripcion: ['', [Validators.required, Validators.minLength(10)]],
       tiempo_elaboracion: ['', [Validators.required, Validators.min(0)]],
       precio: ['', [Validators.required, Validators.min(1)]],
-      //categoria: ['', [Validators.required]],
       foto1: [null, Validators.required],
       foto2: [null, Validators.required],
       foto3: [null, Validators.required]
@@ -47,7 +69,6 @@ export class AltaProductoPage implements OnInit {
   }
 
   async ngOnInit() {
-    
     const { data } = await this.supabaseService.client.from('productos').select('nombre');
     if (data) {
       this.productosExistentes = data.map((p: any) => p.nombre.toLowerCase().trim());
@@ -65,18 +86,24 @@ export class AltaProductoPage implements OnInit {
     return null;
   }
 
-  async tomarFoto(index: number) {
+  // --- MÉTODOS DEL ACTION SHEET DECLARATIVO ---
+  tomarFoto(index: number) {
+    this.fotoIndexActual = index;
+    this.isActionSheetOpen = true; // Abre el modal nativo
+  }
+
+  onActionSheetDismiss() {
+    this.isActionSheetOpen = false; // Se llama al cerrar o cancelar
+  }
+
+  // --- LÓGICA DE CAPTURA DE IMAGEN ---
+  async abrirCamara(index: number, source: CameraSource) {
     try {
       const image = await Camera.getPhoto({
         quality: 90,
         allowEditing: false,
         resultType: CameraResultType.Uri, 
-        source: CameraSource.Prompt, 
-        
-        promptLabelHeader: 'Seleccionar Foto',
-        promptLabelPicture: 'Tomar foto con la cámara',
-        promptLabelPhoto: 'Elegir de la galería',
-        promptLabelCancel: 'Cancelar'
+        source: source // Cámara o Galería según el botón tocado
       });
 
       if (image && image.webPath) {
@@ -94,10 +121,11 @@ export class AltaProductoPage implements OnInit {
         this.cdr.detectChanges(); // Forzar actualización visual
       }
     } catch (error) {
-      this.presentToast('Selección de imagen cancelada', 'warning');
+      console.warn('Selección cancelada');
     }
   }
 
+  // --- GUARDADO EN BD ---
   async guardarProducto() {
     if (this.productoForm.invalid) {
       this.presentToast('Por favor, complete correctamente todos los campos y fotos.', 'warning');
@@ -128,12 +156,9 @@ export class AltaProductoPage implements OnInit {
         urlsFotos.push(fotoUrl);
       }
 
-      if(perfil === "cocinero"){
-        categoriaPerfil = "comida";
-      }
-      if(perfil === "cantinero"){
-        categoriaPerfil = "bebida";
-      }
+      if(perfil === "cocinero") categoriaPerfil = "comida";
+      if(perfil === "cantinero") categoriaPerfil = "bebida";
+
       // Insertar en la BD
       const { error: dbError } = await this.supabaseService.client
         .from('productos')
@@ -143,15 +168,14 @@ export class AltaProductoPage implements OnInit {
           precio: Number(formValues.precio),
           tiempo_elaboracion: Number(formValues.tiempo_elaboracion),
           categoria: categoriaPerfil,
-          fotos: urlsFotos, // El array de 3 URLs
+          fotos: urlsFotos, 
           disponible: true
         }]);
 
       if (dbError) throw dbError;
 
-      this.presentToast('producto guardado exitosamente', 'success');
+      this.presentToast('Producto guardado exitosamente', 'success');
       
-      // Actualizar duplicados y limpiar
       this.productosExistentes.push(formValues.nombre.toLowerCase().trim());
       this.resetearFormulario();
 

@@ -108,3 +108,50 @@ ion-toast.mi-toast-warning {
   --color: #ffffff;
   --border-radius: 10px;
 }
+
+/* Estilo personalizado para el menú de Seleccionar Foto */
+.modal-fotos-custom {
+  /* Fondo del menú (opcional, usa el azul de tu app para que combine) */
+  z-index: 99999 !important;
+
+  .action-sheet-group {
+    background: #325172 !important; /* var(--azul-card) */
+    padding-bottom: 20px !important;
+  }
+
+  /* Título: Agrandado y centrado */
+  .action-sheet-title {
+    font-size: 1.5rem !important;
+    text-align: center !important;
+    color: #e6eceb !important; /* var(--off-white) */
+    font-weight: bold !important;
+    margin-bottom: 10px !important;
+  }
+
+  /* Botones: Copia exacta del estilo de .btn-principal */
+  .action-sheet-button {
+    width: 90% !important;
+    height: 50px !important;
+    background-color: #374f43 !important; /* $verde-btn */
+    color: #e6eceb !important; /* $blanco-off */
+    border: none !important;
+    border-radius: 12px !important;
+    font-size: 0.95rem !important;
+    font-weight: 700 !important;
+    letter-spacing: 1px !important;
+    margin: 10px auto !important; /* Margen y centrado en la pantalla */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3) !important;
+  }
+
+  /* Centrar el texto dentro de los botones */
+  .action-sheet-button-inner {
+    justify-content: center !important;
+  }
+
+  /* (Opcional) Un estilo distinto si le agregas un botón de "Cancelar" */
+  .action-sheet-cancel {
+    background-color: transparent !important;
+    border: 2px solid #769690 !important; /* var(--teal-ursula) */
+    box-shadow: none !important;
+  }
+}
