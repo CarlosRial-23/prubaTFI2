@@ -1,13 +1,12 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
-import { IonicModule, NavController, ToastController } from '@ionic/angular';
+import { RouterModule } from '@angular/router'; // Necesario para el routerLink del botón de volver
 import { AuthService } from '../../../servicios/auth.service';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { addIcons } from 'ionicons';
 import { cameraOutline } from 'ionicons/icons';
-
-// Servicios
+import { ToastController, IonContent, IonIcon, IonSpinner, IonActionSheet } from '@ionic/angular/standalone';
 import { SupabaseService } from '../../../servicios/supabase.service';
 
 @Component({
@@ -15,7 +14,15 @@ import { SupabaseService } from '../../../servicios/supabase.service';
   templateUrl: './alta-producto.page.html',
   styleUrls: ['./alta-producto.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, ReactiveFormsModule]
+  imports: [
+    CommonModule, 
+    ReactiveFormsModule,
+    RouterModule,
+    IonContent, 
+    IonIcon, 
+    IonSpinner, 
+    IonActionSheet // <-- Ahora Angular sí sabe qué es un ActionSheet
+  ]
 })
 export class AltaProductoPage implements OnInit {
 
@@ -51,7 +58,6 @@ export class AltaProductoPage implements OnInit {
     private fb: FormBuilder,
     private supabaseService: SupabaseService,
     private authService: AuthService,
-    private navCtrl: NavController,
     private toastController: ToastController,
     private cdr: ChangeDetectorRef
   ) {
@@ -86,17 +92,15 @@ export class AltaProductoPage implements OnInit {
     return null;
   }
 
-  // --- MÉTODOS DEL ACTION SHEET DECLARATIVO ---
-  tomarFoto(index: number) {
+ tomarFoto(index: number) {
     this.fotoIndexActual = index;
-    this.isActionSheetOpen = true; // Abre el modal nativo
+    this.isActionSheetOpen = true; 
   }
 
   onActionSheetDismiss() {
     this.isActionSheetOpen = false; // Se llama al cerrar o cancelar
   }
 
-  // --- LÓGICA DE CAPTURA DE IMAGEN ---
   async abrirCamara(index: number, source: CameraSource) {
     try {
       const image = await Camera.getPhoto({
@@ -125,7 +129,6 @@ export class AltaProductoPage implements OnInit {
     }
   }
 
-  // --- GUARDADO EN BD ---
   async guardarProducto() {
     if (this.productoForm.invalid) {
       this.presentToast('Por favor, complete correctamente todos los campos y fotos.', 'warning');

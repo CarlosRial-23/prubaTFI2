@@ -1,9 +1,6 @@
 <ion-content [fullscreen]="true" class="admin-container">
   
   <div class="header-section">
-    <div class="back-button-custom" routerLink="/dashboard-cocinero">
-      <div class="arrow-icon"></div>
-    </div>
     <h1>Alta de Producto</h1>
     <p>Añadir nuevo producto al menú</p>
   </div>
@@ -62,7 +59,7 @@
         }
       </div>
 
-      <label class="photos-label">Fotos del producto (Obligatorias 3)</label>
+      <label class="photos-label">Fotos del producto (Obligatorias)</label>
       
       <div class="photos-grid">
         <div class="photo-section" (click)="tomarFoto(0)" [class.has-error]="productoForm.get('foto1')?.invalid && productoForm.get('foto1')?.touched">

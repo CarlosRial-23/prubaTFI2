@@ -109,25 +109,26 @@ export class LoginPage implements OnInit {
     const { email, password } = this.loginForm.value;
 
     try {
-      // 1. Intentamos el login
       const resultado = await this.authService.login(email, password);
 
       if (resultado.ok) {
-        // 2. Extraemos el perfil que nos devolvió el servicio
+        
         const perfil = resultado.perfil;
         
-        // 3. Mostramos el Toast con el perfil
         this.presentToast(`Bienvenido! Perfil: ${perfil?.toUpperCase() || 'No definido'}`, 'success');
 
-        // 4. Hacemos el ruteo aquí mismo en el componente
         switch (perfil) {
           case 'metre':
             this.router.navigate(['/dashboard-metre']);
             break;
           case 'cocinero':
-          case 'cantinero': // Puedes agrupar casos que van al mismo lugar
+          case 'cantinero': 
             this.router.navigate(['/alta-producto']);
             break;
+          case 'duenio':
+          case 'supervisor':
+            this.router.navigate(['/alta-empleado']);
+          break;
           default:
             this.router.navigate(['/ingreso-qr']);
             break;
@@ -141,15 +142,15 @@ export class LoginPage implements OnInit {
     }
   }
 
-  irAlRegistro() { this.router.navigate(['/registro']); }
+  irAlRegistro() { this.router.navigate(['/alta-cliente']); }
   
-  irAltaEmpleados() {
-    this.router.navigate(['/alta-empleado']);
-  }
-  irAltaCliente() {
-    this.router.navigate(['/alta-cliente']);
-  }
-  irChat() {
-    this.router.navigate(['/chat']);
-  }
+  // irAltaEmpleados() {
+  //   this.router.navigate(['/alta-empleado']);
+  // }
+  // irAltaCliente() {
+  //   this.router.navigate(['/alta-cliente']);
+  // }
+  // irChat() {
+  //   this.router.navigate(['/chat']);
+  // }
 }
