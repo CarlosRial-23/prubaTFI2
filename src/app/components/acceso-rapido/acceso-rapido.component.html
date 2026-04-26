@@ -1,17 +1,15 @@
-<ion-fab slot="fixed" vertical="bottom" horizontal="end" class="fab-acceso-rapido" #fab>
+<ion-fab vertical="bottom" horizontal="end" class="fab-acceso-rapido" #fab>
   <ion-fab-button class="fab-main">
     <ion-icon name="flash"></ion-icon>
   </ion-fab-button>
 
   <ion-fab-list side="top">
-    <div
+    <ion-fab-button
       *ngFor="let perfil of perfiles"
-      class="fab-item"
+      class="fab-secundario"
+      [attr.data-label]="perfil.nombre"
       (click)="seleccionar(perfil); fab.activated = false">
-      <span class="fab-label">{{ perfil.nombre | titlecase }}</span>
-      <ion-fab-button size="small">
-        <ion-icon [name]="perfil.icono || 'person-outline'"></ion-icon>
-      </ion-fab-button>
-    </div>
+      <ion-icon [name]="perfil.icono || 'person-outline'"></ion-icon>
+    </ion-fab-button>
   </ion-fab-list>
 </ion-fab>

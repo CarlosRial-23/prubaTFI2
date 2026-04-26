@@ -18,9 +18,9 @@ ion-content {
 }
 
 ion-icon {
-  --background: #{blanco-off} !important;
+  --background: #{$blanco-off} !important; /* Faltaba el símbolo del $ */
   font-size: 30px;
-  color: #{blanco-off};
+  color: #{$blanco-off}; /* Faltaba el símbolo del $ */
 }
 
 .viewport {
