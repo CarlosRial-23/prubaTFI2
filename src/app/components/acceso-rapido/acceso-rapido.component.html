@@ -1,4 +1,4 @@
-<ion-fab slot="fixed" vertical="bottom" horizontal="end" #fab>
+<ion-fab slot="fixed" vertical="bottom" horizontal="end" class="fab-acceso-rapido" #fab>
   <ion-fab-button class="fab-main">
     <ion-icon name="flash"></ion-icon>
   </ion-fab-button>
@@ -9,6 +9,9 @@
       class="fab-item"
       (click)="seleccionar(perfil); fab.activated = false">
       <span class="fab-label">{{ perfil.nombre | titlecase }}</span>
+      <ion-fab-button size="small">
+        <ion-icon [name]="perfil.icono || 'person-outline'"></ion-icon>
+      </ion-fab-button>
     </div>
   </ion-fab-list>
 </ion-fab>

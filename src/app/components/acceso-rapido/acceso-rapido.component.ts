@@ -4,7 +4,17 @@ import { IonFab, IonFabButton, IonFabList, IonIcon } from '@ionic/angular/standa
 import { PerfilesTestService } from '../../servicios/perfil.service';
 import { PerfilTestModel } from '../../models/perfil-test.model';
 import { addIcons } from 'ionicons';
-import { flash } from 'ionicons/icons';
+// Se importan todos los íconos necesarios para los diferentes roles
+import { 
+  flash, 
+  keyOutline, 
+  briefcaseOutline, 
+  shieldCheckmarkOutline, 
+  restaurantOutline, 
+  fastFoodOutline, 
+  wineOutline, 
+  personOutline 
+} from 'ionicons/icons';
 
 @Component({
   selector: 'app-acceso-rapido',
@@ -20,7 +30,17 @@ export class AccesoRapidoComponent implements OnInit {
   @Output() perfilSeleccionado = new EventEmitter<PerfilTestModel>();
 
   constructor(private perfilesService: PerfilesTestService) {
-    addIcons({ flash });
+    // Se registran los íconos para que Ionic pueda utilizarlos cuando se llamen desde el HTML
+    addIcons({ 
+      flash,
+      keyOutline,
+      briefcaseOutline,
+      shieldCheckmarkOutline,
+      restaurantOutline,
+      fastFoodOutline,
+      wineOutline,
+      personOutline
+    });
   }
 
   async ngOnInit() {

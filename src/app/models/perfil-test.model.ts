@@ -3,4 +3,5 @@ export interface PerfilTestModel {
   nombre: string; // 'dueño', 'metre', etc.
   email: string;
   password: string;
+  icono: string;
 }
