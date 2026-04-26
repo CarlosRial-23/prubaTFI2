@@ -90,6 +90,10 @@ export const routes: Routes = [
   {
     path: 'chat',
     loadComponent: () => import('./paginas/chat/chat').then( m => m.Chat)
+  },
+  {
+    path: 'carrito-pedido',
+    loadComponent: () => import('./paginas/carrito-pedido/carrito-pedido.page').then( m => m.CarritoPedidoPage)
   }
 
 

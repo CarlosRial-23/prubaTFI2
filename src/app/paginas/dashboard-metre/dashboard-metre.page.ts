@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
-import { SupabaseService } from '../../../servicios/supabase.service';
+import { SupabaseService } from '../../servicios/supabase.service';
 import { Haptics, ImpactStyle, NotificationType } from '@capacitor/haptics';
 import { addIcons } from 'ionicons';
 import { trashOutline, logOutOutline, peopleSharp, gridSharp, hourglassOutline } from 'ionicons/icons';

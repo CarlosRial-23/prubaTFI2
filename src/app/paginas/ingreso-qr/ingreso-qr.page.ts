@@ -5,7 +5,7 @@ import { IonicModule } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { BarcodeScanner } from '@capacitor-mlkit/barcode-scanning';
 import { UiService } from '../../services/ui';
-import { SupabaseService } from '../../../servicios/supabase.service'; 
+import { SupabaseService } from '../../servicios/supabase.service'; 
 
 @Component({
   selector: 'app-ingreso-qr',

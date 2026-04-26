@@ -1,54 +1,47 @@
-<ion-content [fullscreen]="true" class="aprobacion-container">
-  
-  <div class="header-section">
-    <div class="back-button-custom" routerLink="/dashboard-admin">
-      <div class="arrow-icon"></div>
-    </div>
+<ion-header class="ion-no-border">
+  <ion-toolbar color="">
+    <ion-title class="titulo-ursula">APROBACIÓN DE CLIENTES</ion-title>
+  </ion-toolbar>
+</ion-header>
 
-    <h1>Aprobación</h1>
-    <p>Gestionar acceso de nuevos clientes</p>
-  </div>
+<ion-content>
+  <div class="contenedor-lista">
+    @for (cliente of clientes; track cliente.id) {
+      <div class="tarjeta-producto">
+        <div class="caja-foto">
+          <!-- Usamos el mismo estilo de imagen que el menú -->
+          <img [src]="cliente.foto || 'assets/avatar-placeholder.png'" class="img-fit">
+        </div>
 
-  <div class="list-wrapper">
-    <ion-list lines="none" *ngIf="clientes.length > 0; else emptyState">
-      
-      <ion-item-sliding *ngFor="let cliente of clientes">
-        <ion-item class="cliente-item">
-          <ion-avatar slot="start">
-            <img [src]="cliente.foto_url || 'assets/avatar-placeholder.png'" alt="avatar">
-          </ion-avatar>
-          <ion-label>
-            <h2>{{ cliente.nombre }}</h2>
-            <p>{{ cliente.email }}</p>
-          </ion-label>
-          
-          <div slot="end" class="direct-actions">
-            <ion-button fill="clear" color="success" (click)="aprobar(cliente)">
-              <ion-icon name="checkmark-circle"></ion-icon>
-            </ion-button>
-            <ion-button fill="clear" color="danger" (click)="confirmarRechazo(cliente)">
-              <ion-icon name="close-circle"></ion-icon>
-            </ion-button>
+        <div class="caja-datos">
+          <div class="fila-superior">
+            <span class="nombre-plato">{{ cliente.nombres | uppercase }}</span>
+            <span class="estado-pendiente">PENDIENTE</span>
           </div>
-        </ion-item>
+          
+          <p class="descripcion-texto">
+            <strong>Email:</strong> {{ cliente.correo_electronico }}<br>
+            <strong>DNI:</strong> {{ cliente.dni || 'No especificado' }}
+          </p>
 
-        <ion-item-options side="end">
-          <ion-item-option color="success" (click)="aprobar(cliente)">
-            <ion-icon name="checkmark-outline" slot="icon-only"></ion-icon>
-          </ion-item-option>
-          <ion-item-option color="danger" (click)="confirmarRechazo(cliente)">
-            <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
-          </ion-item-option>
-        </ion-item-options>
-      </ion-item-sliding>
-
-    </ion-list>
-
-    <ng-template #emptyState>
-      <div class="empty-state">
-        <ion-icon name="shield-checkmark-outline"></ion-icon>
-        <p>No hay clientes pendientes de aprobación.</p>
+          <div class="fila-inferior">
+            <button class="boton-rechazar" (click)="confirmarRechazo(cliente)">
+              RECHAZAR
+            </button>
+            <button class="boton-pedir" (click)="aprobar(cliente)">
+              APROBAR
+            </button>
+          </div>
+        </div>
       </div>
-    </ng-template>
+    }
+
+    @if (clientes.length === 0) {
+      <div class="sin-resultados">
+        <ion-icon name="people-outline"></ion-icon>
+        <p>No hay clientes pendientes de aprobación</p>
+      </div>
+    }
+    <div class="espaciador-final"></div>
   </div>
 </ion-content>

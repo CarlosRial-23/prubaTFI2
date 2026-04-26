@@ -32,7 +32,8 @@ async register(data: {
     correo_electronico: string;
     clave: string;
     perfil: string;
-    foto?: string | null; 
+    foto?: string | null;
+    fcm_token?: string; 
   }): Promise<{ ok: boolean; error?: any }> {
 
     // 1️⃣ Crear usuario en AUTH (Aquí se guarda la contraseña)
@@ -71,7 +72,9 @@ async register(data: {
           cuil: data.cuil,   // <-- Ahora se guarda el CUIL
           correo_electronico: data.correo_electronico,
           perfil: data.perfil,
-          foto: data.foto || null 
+          foto: data.foto || null,
+          fcm_token: data.fcm_token || null,
+          estado: 'pendiente',
         }
       ]);
 

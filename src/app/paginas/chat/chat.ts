@@ -3,10 +3,10 @@ import { CommonModule, DatePipe, Location } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { ActivatedRoute } from '@angular/router';
-import Mensaje from '../interfaces/mensaje';
-import { Realtime } from '../../../servicios/realtime';
-import { AuthService } from '../../../servicios/auth.service';
-import { SupabaseService } from '../../../servicios/supabase.service';
+import Mensaje from '../../models/mensaje';
+import { Realtime } from '../../servicios/realtime';
+import { AuthService } from '../../servicios/auth.service';
+import { SupabaseService } from '../../servicios/supabase.service';
 
 @Component({
   selector: 'app-chat',

@@ -4,7 +4,7 @@ import { IonicModule, ToastController } from '@ionic/angular';
 import { Router, ActivatedRoute } from '@angular/router';
 import { BarcodeScanner } from '@capacitor-mlkit/barcode-scanning';
 import { Haptics, ImpactStyle, NotificationType } from '@capacitor/haptics';
-import { SupabaseService } from '../../../servicios/supabase.service';
+import { SupabaseService } from '../../servicios/supabase.service';
 
 @Component({
   selector: 'app-escaneo-mesa',

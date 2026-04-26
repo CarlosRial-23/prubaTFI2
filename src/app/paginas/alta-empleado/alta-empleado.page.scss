@@ -5,128 +5,94 @@ $celeste: #769690;
 $verde-btn: #374f43;
 $blanco-off: #e6eceb;
 
-:host {
-  --ion-background-color: #{$azul-card} !important;
-  display: block;
-  height: 100%;
-}
-
-ion-content {
-  --background: #{$azul-card} !important;
-  --padding-top: 0;
-  --padding-bottom: 0;
-}
-
 .viewport {
   display: flex;
   justify-content: center;
-  align-items: flex-start; /* flex-start permite que la card crezca hacia abajo sin cortarse arriba */
-  width: 100%;
+  padding: 20px 0;
+  background-color: $azul-fondo;
   min-height: 100%;
-  background-color: $azul-card;
-  padding: 40px 20px; /* Espaciado general para evitar bordes */
-  box-sizing: border-box;
 }
 
 .main-card {
-  width: 100%;
-  height: auto;
-  min-height: 600px;
-  max-width: 400px;
-  background-color: $azul-card !important;
-  border-radius: 40px;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  border: 1px solid rgba($gris-medio, 0.4);
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
-  margin: 0 auto;
-}
-
-.hero-image {
-  height: 160px;
-  background: url("../../../assets/imagenes/ursula-fondo.png") center/cover
-    no-repeat;
-  position: relative;
+  width: 92%;
+  max-width: 450px;
   background-color: $azul-card;
+  border-radius: 30px;
+  padding: 25px;
+  border: 1px solid rgba($gris-medio, 0.4);
+}
 
-  .overlay {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(to bottom, transparent, $azul-card);
+.titulo-elegante {
+  color: $blanco-off;
+  text-align: center;
+  font-weight: 800;
+  margin-bottom: 20px;
+}
+
+/* Estilo de Foto Centrada */
+.foto-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 25px;
+
+  .foto-container {
+    width: 180px;
+    height: 180px;
+    background: $azul-fondo;
+    border: 2px dashed $celeste;
+    border-radius: 20px;
     display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    padding: 15px 25px;
-  }
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
 
-  h1 {
-    color: $blanco-off;
-    font-size: 1.8rem;
-    margin: 0;
-    font-weight: 800;
-  }
+    &.error-border {
+      border-color: #ff6b6b;
+    }
 
-  .sub-elegante {
-    color: $azul-fondo;
-    font-size: 0.7rem;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    font-weight: 700;
+    .img-preview {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .placeholder {
+      text-align: center;
+      color: $celeste;
+      ion-icon {
+        font-size: 3rem;
+      }
+      p {
+        font-size: 0.7rem;
+        margin: 0;
+      }
+    }
   }
 }
 
-.form-content {
-  padding: 10px 25px 30px;
-  display: flex;
-  flex-direction: column;
-  overflow-y: visible;
-
-  .input-group {
+/* Resto de estilos del formulario */
+.input-group {
+  margin-bottom: 12px;
+  .custom-label {
+    display: block;
+    color: $celeste;
+    font-size: 0.65rem;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .input-standard {
     width: 100%;
-    margin-bottom: 15px;
-
-    .custom-label {
-      display: block;
-      color: $celeste;
-      font-size: 0.65rem;
-      font-weight: 600;
-      letter-spacing: 1.2px;
-      margin-bottom: 4px;
-    }
-
-    .input-standard {
-      width: 100%;
-      height: 45px;
-      background-color: $azul-fondo;
-      color: $blanco-off;
-      border: 1px solid $gris-medio;
-      border-radius: 12px;
-      padding: 0 15px;
-      font-size: 0.95rem;
-      outline: none;
-      box-sizing: border-box;
-
-      &::placeholder {
-        color: rgba($celeste, 0.3);
-      }
-      &:focus {
-        border-color: $celeste;
-      }
-    }
-
-    // Ajuste específico para centrar el texto del input tipo archivo
-    input[type="file"].input-standard {
-      padding-top: 10px;
-    }
+    height: 45px;
+    background-color: $azul-fondo;
+    color: $blanco-off;
+    border: 1px solid $gris-medio;
+    border-radius: 12px;
+    padding: 0 15px;
   }
 }
 
 .error-text {
   color: #ff6b6b;
   font-size: 0.65rem;
-  margin-top: 4px;
-  display: block;
 }
 
 .btn-registro {
@@ -134,24 +100,9 @@ ion-content {
   height: 50px;
   background-color: $verde-btn;
   color: $blanco-off;
-  border: none;
   border-radius: 12px;
-  font-size: 0.95rem;
   font-weight: 700;
-  letter-spacing: 1px;
-  margin-top: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-  transition: all 0.2s ease;
-
-  &:active {
-    transform: scale(0.98);
-    background-color: #466556;
-  }
-
-  &:disabled {
-    opacity: 0.5;
-    transform: none;
-  }
+  margin-top: 15px;
 }
 
 .btn-secundario {
@@ -159,18 +110,9 @@ ion-content {
   height: 45px;
   background-color: $celeste;
   color: $azul-fondo;
-  border: none;
   border-radius: 12px;
-  font-size: 0.9rem;
   font-weight: 700;
-  letter-spacing: 1px;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-  transition: all 0.2s ease;
-
-  &:active {
-    transform: scale(0.98);
-  }
 }

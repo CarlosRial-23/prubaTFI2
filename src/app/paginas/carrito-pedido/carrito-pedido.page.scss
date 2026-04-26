@@ -1,0 +1,62 @@
+$azul-base: #325172;
+$azul-item: #456880;
+$verde-teal: #769690;
+$blanco-off: #e6eceb;
+
+ion-header {
+  ion-toolbar { --background: #{$azul-base}; --color: #{$blanco-off}; }
+  .titulo-ursula { font-weight: 800; font-size: 1.1rem; }
+}
+
+ion-content {
+  --background: #{$azul-base};
+
+  .estado-vacio {
+    display: flex; flex-direction: column; align-items: center; justify-content: center; height: 80%;
+    color: rgba($blanco-off, 0.6); text-align: center;
+    ion-icon { font-size: 80px; color: rgba($blanco-off, 0.3); margin-bottom: 20px; }
+    h3 { color: $blanco-off; font-weight: 700; }
+    .btn-volver-menu { margin-top: 20px; --background: #{$verde-teal}; --color: #{$azul-base}; font-weight: bold; }
+  }
+
+  .contenedor-lista { padding: 15px; }
+
+  .tarjeta-item {
+    background: $azul-item; border-radius: 12px; padding: 15px; margin-bottom: 12px;
+    border: 1px solid rgba($blanco-off, 0.1);
+    .info-principal {
+      display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;
+      .nombre-plato { color: $blanco-off; font-weight: 700; font-size: 1rem; margin: 0; }
+      .cantidad-badge { background: rgba($blanco-off, 0.15); color: $blanco-off; padding: 4px 10px; border-radius: 20px; font-weight: bold; }
+    }
+    .info-secundaria {
+      display: flex; justify-content: space-between; align-items: flex-end;
+      .precio-unitario { color: rgba($blanco-off, 0.7); font-size: 0.85rem; }
+      .acciones {
+        display: flex; align-items: center; gap: 15px;
+        .subtotal { color: $verde-teal; font-weight: 800; font-size: 1.1rem; margin: 0; }
+        .btn-basura { margin: 0; --padding-start: 0; --padding-end: 0; }
+      }
+    }
+  }
+}
+
+.footer-navy {
+  background: darken($azul-base, 8%); 
+  border-top: 1px solid rgba($blanco-off, 0.1); 
+  padding: 20px 15px 10px;
+  
+  ion-toolbar {
+    --background: transparent;
+  }
+
+  .resumen-container {
+    margin-bottom: 15px;
+    .fila-resumen {
+      display: flex; justify-content: space-between; margin-bottom: 8px; color: rgba($blanco-off, 0.8);
+      &.total { font-size: 1.3rem; font-weight: 800; color: $blanco-off; margin-bottom: 0; border-top: 1px solid rgba($blanco-off, 0.1); padding-top: 12px; margin-top: 10px; }
+      .valor-tiempo, .valor-total { color: $verde-teal; font-weight: bold; }
+    }
+  }
+  .btn-confirmar { --background: #{$verde-teal}; --color: #{$azul-base}; font-weight: 800; height: 50px; }
+}

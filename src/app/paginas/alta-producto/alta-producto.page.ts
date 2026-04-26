@@ -2,12 +2,12 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { RouterModule } from '@angular/router'; // Necesario para el routerLink del botón de volver
-import { AuthService } from '../../../servicios/auth.service';
+import { AuthService } from '../../servicios/auth.service';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { addIcons } from 'ionicons';
 import { cameraOutline } from 'ionicons/icons';
 import { ToastController, IonContent, IonIcon, IonSpinner, IonActionSheet } from '@ionic/angular/standalone';
-import { SupabaseService } from '../../../servicios/supabase.service';
+import { SupabaseService } from '../../servicios/supabase.service';
 
 @Component({
   selector: 'app-alta-producto',

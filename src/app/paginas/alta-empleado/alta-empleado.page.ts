@@ -3,11 +3,14 @@ import { CommonModule } from '@angular/common';
 import { IonicModule, LoadingController, ToastController } from '@ionic/angular'; 
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms'; 
 import { BarcodeScanner } from '@capacitor-mlkit/barcode-scanning';
-import { SupabaseService } from '../../../servicios/supabase.service';
-import { AuthService } from '../../../servicios/auth.service';
+import { Camera, CameraResultType, CameraSource } from '@capacitor/camera'; // Importado para la foto
+import { Haptics, ImpactStyle } from '@capacitor/haptics'; // Importado para feedback
+import { SupabaseService } from '../../servicios/supabase.service';
+import { AuthService } from '../../servicios/auth.service';
 import { addIcons } from 'ionicons';
-import { qrCodeOutline } from 'ionicons/icons';
+import { qrCodeOutline, cameraOutline } from 'ionicons/icons'; // Añadido cameraOutline
 import { Router } from '@angular/router';
+import { PushNotifications } from '@capacitor/push-notifications';
 
 @Component({
   selector: 'app-alta-empleado',
@@ -18,18 +21,17 @@ import { Router } from '@angular/router';
 })
 export class AltaEmpleadoPage implements OnInit {
   altaForm: FormGroup;
-  archivoSeleccionado: File | null = null; 
+  fotoPersonal: string | null = null; // Cambio a string para manejar DataUrl de la cámara
   cargando: boolean = false;
 
   constructor(
     private fb: FormBuilder,
     private supabaseService: SupabaseService,
     private authService: AuthService,
-    private loadingCtrl: LoadingController,
-    private toastController: ToastController, // Ajustado al nombre de tu otra page
+    private toastController: ToastController,
     private router: Router,
   ) {
-    addIcons({ qrCodeOutline }); 
+    addIcons({ qrCodeOutline, cameraOutline }); 
 
     this.altaForm = this.fb.group({
       nombres: ['', [Validators.required, Validators.pattern(/^[a-zA-ZÁÉÍÓÚáéíóúñÑ ]+$/)]],
@@ -39,16 +41,24 @@ export class AltaEmpleadoPage implements OnInit {
       correo_electronico: ['', [Validators.required, Validators.email]],
       clave: ['', [Validators.required, Validators.minLength(6)]],
       perfil: ['', [Validators.required]],
-      foto: ['', [Validators.required]] 
+      foto: ['', [Validators.required]] // Se mantiene para validación lógica
     });
   }
 
   ngOnInit() {}
 
-  onFileSelected(event: any) {
-    const file: File = event.target.files[0];
-    if (file) {
-      this.archivoSeleccionado = file;
+  async tomarFoto() {
+    try {
+      const image = await Camera.getPhoto({
+        quality: 90,
+        resultType: CameraResultType.DataUrl,
+        source: CameraSource.Camera 
+      });
+      this.fotoPersonal = image.dataUrl || null;
+      this.altaForm.patchValue({ foto: this.fotoPersonal }); // Valida el campo foto en el form
+      await Haptics.impact({ style: ImpactStyle.Light });
+    } catch (e) { 
+      console.log("Cámara cancelada"); 
     }
   }
 
@@ -56,7 +66,7 @@ export class AltaEmpleadoPage implements OnInit {
     try {
       const { camera } = await BarcodeScanner.requestPermissions();
       if (camera !== 'granted' && camera !== 'limited') {
-         this.presentToast('Permiso de cámara denegado para escanear', 'warning');
+         this.presentToast('Permiso de cámara denegado', 'warning');
          return;
       }
 
@@ -66,23 +76,19 @@ export class AltaEmpleadoPage implements OnInit {
         const qrData = barcodes[0].rawValue;
         if (qrData) {
           this.procesarDatosDNI(qrData);
-        } else {
-          this.presentToast('El código QR está vacío', 'warning');
         }
       }
     } catch (error) {
-      console.error('Error al escanear QR', error);
       this.presentToast('No se pudo escanear el DNI.', 'danger');
     }
   }
 
   private procesarDatosDNI(qrData: string) {
     const partes = qrData.split('@');
-    
     if (partes.length >= 7) {
       const apellidosScanner = this.capitalizarNombres(partes[1]);
       const nombresScanner = this.capitalizarNombres(partes[2]);
-      const sexoScanner = partes[3]; // Extraemos 'M' o 'F'
+      const sexoScanner = partes[3];
       const dniScanner = partes[4];
       const cuilCalculado = this.calcularCUIL(parseInt(dniScanner, 10), sexoScanner);
 
@@ -92,22 +98,14 @@ export class AltaEmpleadoPage implements OnInit {
         dni: dniScanner,
         cuil: cuilCalculado 
       });
-      
-      this.presentToast('Datos del DNI y CUIL cargados correctamente', 'success');
-    } else {
-      this.presentToast('Formato de código no reconocido', 'warning');
+      this.presentToast('Datos cargados correctamente', 'success');
     }
   }
 
   async guardarEmpleado() {
-    if (this.altaForm.invalid) {
-      this.presentToast('Por favor, revise los campos marcados en rojo.', 'warning');
+    if (this.altaForm.invalid || !this.fotoPersonal) {
+      this.presentToast('Por favor, revise los campos y la foto.', 'warning');
       this.altaForm.markAllAsTouched();
-      return; 
-    }
-
-    if (!this.archivoSeleccionado) {
-      this.presentToast('Debes adjuntar la foto del empleado.', 'warning');
       return; 
     }
 
@@ -115,25 +113,21 @@ export class AltaEmpleadoPage implements OnInit {
 
     try {
       const formValues = this.altaForm.value;
-
-      const extension = this.archivoSeleccionado.name.split('.').pop();
-      const fileName = `${Date.now()}_empleado.${extension}`;
+      const fileName = `${Date.now()}_empleado.jpeg`;
       const filePath = `perfiles/${fileName}`;
       
-      const { error: uploadError } = await this.supabaseService.uploadFile('fotos', filePath, this.archivoSeleccionado);
-      
+      // Conversión de la captura de cámara a archivo para Supabase
+      const respuesta = await fetch(this.fotoPersonal);
+      const blob = await respuesta.blob();
+      const archivoSubir = new File([blob], fileName, { type: 'image/jpeg' });
+
+      const { error: uploadError } = await this.supabaseService.uploadFile('fotos', filePath, archivoSubir);
       if (uploadError) throw uploadError;
 
       const urlFoto = await this.supabaseService.getPublicUrl('fotos', filePath);
 
       const res = await this.authService.register({
-        nombres: formValues.nombres,
-        apellidos: formValues.apellidos,
-        dni: formValues.dni,     // <-- Pasamos el DNI del formulario
-        cuil: formValues.cuil,   // <-- Pasamos el CUIL del formulario
-        correo_electronico: formValues.correo_electronico,
-        clave: formValues.clave,
-        perfil: formValues.perfil,
+        ...formValues,
         foto: urlFoto 
       });
 
@@ -143,57 +137,36 @@ export class AltaEmpleadoPage implements OnInit {
       }
 
       this.presentToast('Empleado registrado con éxito.', 'success');
-      this.altaForm.reset();
-      this.archivoSeleccionado = null;
       this.router.navigate(['/login']);
 
     } catch (error: any) {
-      console.error('Error al guardar:', error);
       this.presentToast('Error al guardar: ' + (error.message || 'Intente nuevamente'), 'danger');
     } finally {
-
       this.cargando = false; 
     }
   }
 
+  // Métodos auxiliares se mantienen igual
   private capitalizarNombres(texto: string): string {
     return texto.toLowerCase().replace(/\b\w/g, l => l.toUpperCase());
   }
 
   private calcularCUIL(dni: number, sexo: string): string {
     let xy = sexo === 'M' ? 20 : 27;
-
     const dniStr = dni.toString().padStart(8, '0');
     let base = xy.toString() + dniStr;
-
     const multiplicadores = [5, 4, 3, 2, 7, 6, 5, 4, 3, 2];
     let suma = 0;
-    
-    for (let i = 0; i < multiplicadores.length; i++) {
-      suma += parseInt(base[i]) * multiplicadores[i];
-    }
-
+    for (let i = 0; i < multiplicadores.length; i++) suma += parseInt(base[i]) * multiplicadores[i];
     const resto = suma % 11;
-    let z: number;
-
-    if (resto === 0) {
-      z = 0;
-    } else if (resto === 1) {
-      xy = 23;
-      z = sexo === 'M' ? 9 : 4;
-    } else {
-      z = 11 - resto;
-    }
-
+    let z = resto === 0 ? 0 : (resto === 1 ? (sexo === 'M' ? 9 : 4) : 11 - resto);
+    if (resto === 1) xy = 23;
     return `${xy}${dniStr}${z}`;
   }
 
-  async presentToast(message: string, color: 'success' | 'danger' | 'warning' = 'success') {
+  async presentToast(message: string, color: string) {
     const toast = await this.toastController.create({
-      message: message,
-      duration: 3000,
-      position: 'top',
-      cssClass: `mi-toast-${color}`, 
+      message, duration: 2000, color, position: 'top', cssClass: 'ursula-toast'
     });
     await toast.present();
   }
@@ -205,9 +178,9 @@ export class AltaEmpleadoPage implements OnInit {
       if (control.hasError('minlength')) return `Mínimo ${control.errors?.['minlength'].requiredLength} caracteres.`;
       if (control.hasError('email')) return 'Formato de correo inválido.';
       if (control.hasError('pattern')) {
-        if (controlName === 'dni') return 'Debe tener 7 u 8 números.';
-        if (controlName === 'cuil') return 'Debe tener 11 números sin guiones.';
-        return 'Solo se permiten letras.';
+        if (controlName === 'dni') return '7 u 8 números.';
+        if (controlName === 'cuil') return '11 números.';
+        return 'Solo letras.';
       }
     }
     return '';

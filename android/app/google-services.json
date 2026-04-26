@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "953381600553",
+    "project_id": "pushursula-b2e8d",
+    "storage_bucket": "pushursula-b2e8d.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:953381600553:android:03e1208a6bb3601a810b38",
+        "android_client_info": {
+          "package_name": "com.pushnotification.ursula"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAAZ7KyeXK5WkFpbcaGFOAP-K_ms3hcEGQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:953381600553:android:db548b07c4068463810b38",
+        "android_client_info": {
+          "package_name": "io.ionic.starter"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAAZ7KyeXK5WkFpbcaGFOAP-K_ms3hcEGQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

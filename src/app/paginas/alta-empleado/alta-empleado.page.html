@@ -1,16 +1,23 @@
 <ion-content [fullscreen]="true">
   <div class="viewport">
     <div class="main-card">
-      
-      <div class="hero-image">
-        <div class="overlay">
-          <h1 class="font-elegante">Alta de Empleado</h1>
-          <p class="sub-elegante">Registra un nuevo integrante</p>
+      <h2 class="titulo-elegante">Alta de Empleado</h2>
+
+      <div class="foto-wrapper">
+        <div class="foto-container" (click)="tomarFoto()" [class.error-border]="altaForm.get('foto')?.touched && !fotoPersonal">
+          @if (fotoPersonal) {
+            <img [src]="fotoPersonal" class="img-preview">
+          } @else {
+            <div class="placeholder">
+              <ion-icon name="camera-outline"></ion-icon>
+              <p>Tomar Foto Personal</p>
+            </div>
+          }
         </div>
       </div>
 
       <div class="form-content scrollable-form">
-        <form [formGroup]="altaForm" (ngSubmit)="guardarEmpleado()">
+        <form [formGroup]="altaForm">
 
           <div class="button-wrapper" style="margin-bottom: 20px;">
             <button type="button" class="btn-secundario" (click)="escanearDNI()">
@@ -67,18 +74,10 @@
             <span class="error-text">{{ getErrorMessage('perfil') }}</span>
           </div>
 
-          <div class="input-group">
-            <label class="custom-label">FOTO DE PERFIL (Obligatorio)</label>
-            <input type="file" accept="image/*" capture="user" (change)="onFileSelected($event)" name="foto" id="foto" formControlName="foto" class="input-standard" style="padding-top: 10px;" />
-            <span class="error-text">{{ getErrorMessage('foto') }}</span>
-          </div>
-
           <div class="button-wrapper">
             <button type="button" class="btn-registro" (click)="guardarEmpleado()" [disabled]="cargando">
-              
               <span *ngIf="!cargando">GUARDAR EMPLEADO</span>
               <ion-spinner *ngIf="cargando" name="crescent" style="color: white;"></ion-spinner>
-              
             </button>
           </div>
         </form>

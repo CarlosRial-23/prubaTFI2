@@ -30,17 +30,22 @@
                 placeholder="••••••••"
                 class="input-standard"
               />
-              <ion-icon 
-                [name]="showPassword ? 'eye-off-outline' : 'eye-outline'" 
+              <ion-icon
+                [name]="showPassword ? 'eye-off-outline' : 'eye-outline'"
                 class="password-toggle"
-                (click)="togglePassword()">
+                (click)="togglePassword()"
+              >
               </ion-icon>
             </div>
             <span class="error-text">{{ getErrorMessage('password') }}</span>
           </div>
 
           <div class="button-wrapper">
-            <button type="submit" class="btn-registro" [disabled]="loginForm.invalid">
+            <button
+              type="submit"
+              class="btn-registro"
+              [disabled]="loginForm.invalid"
+            >
               INICIAR SESIÓN
             </button>
           </div>
@@ -51,6 +56,18 @@
             ¿No tienes cuenta?
             <span class="link-text" (click)="irAlRegistro()">Regístrate</span>
           </p>
+          <!-- <p>
+            TEST CHAT
+            <span class="link-text" (click)="irChat()">Ir pantalla chat</span>
+          </p> -->
+
+          <p>
+            APROBACIÓN CLIENTES
+            <span class="link-text" (click)="irAprobacionClientes()">
+              Ir aprobación clientes
+            </span>
+          </p>
+
           <p class="dev-access">
             <span class="link-dev" (click)="accesoDirectoMetre()">
               MODO TEST: Dashboard Metre
@@ -61,60 +78,19 @@
     </div>
   </div>
 
-  <ion-fab slot="fixed" vertical="bottom" horizontal="end" class="fab-acceso-rapido" #fab>
-  <ion-fab-button class="fab-main">
-    <ion-icon name="flash"></ion-icon>
-  </ion-fab-button>
-  
-  <ion-fab-list side="top">
-    <div class="fab-item" (click)="fillUser('dueño'); fab.activated = false">
-      <span class="fab-label">Dueño</span>
-      <ion-fab-button size="small">
-        <ion-icon name="key-outline"></ion-icon>
-      </ion-fab-button>
-    </div>
-
-    <div class="fab-item" (click)="fillUser('supervisor'); fab.activated = false">
-      <span class="fab-label">Supervisor</span>
-      <ion-fab-button size="small">
-        <ion-icon name="briefcase-outline"></ion-icon>
-      </ion-fab-button>
-    </div>
-
-    <div class="fab-item" (click)="fillUser('metre'); fab.activated = false">
-      <span class="fab-label">Metre</span>
-      <ion-fab-button size="small">
-        <ion-icon name="shield-checkmark-outline"></ion-icon>
-      </ion-fab-button>
-    </div>
-
-    <div class="fab-item" (click)="fillUser('mozo'); fab.activated = false">
-      <span class="fab-label">Mozo</span>
-      <ion-fab-button size="small">
-        <ion-icon name="restaurant-outline"></ion-icon>
-      </ion-fab-button>
-    </div>
-
-    <div class="fab-item" (click)="fillUser('cocinero'); fab.activated = false">
-      <span class="fab-label">Cocinero</span>
-      <ion-fab-button size="small">
-        <ion-icon name="fast-food-outline"></ion-icon>
-      </ion-fab-button>
-    </div>
-
-    <div class="fab-item" (click)="fillUser('cantinero'); fab.activated = false">
-      <span class="fab-label">Cantinero</span>
-      <ion-fab-button size="small">
-        <ion-icon name="wine-outline"></ion-icon>
-      </ion-fab-button>
-    </div>
-
-    <div class="fab-item" (click)="fillUser('cliente'); fab.activated = false">
-      <span class="fab-label">Cliente</span>
-      <ion-fab-button size="small">
-        <ion-icon name="person-outline"></ion-icon>
-      </ion-fab-button>
-    </div>
-  </ion-fab-list>
-</ion-fab>
+  <ion-fab
+    slot="fixed"
+    vertical="bottom"
+    horizontal="end"
+    class="fab-acceso-rapido"
+    #fab
+  >
+    <ion-fab-button class="fab-main">
+      <ion-icon name="flash"></ion-icon>
+    </ion-fab-button>
+    <!-- Antes: 50 líneas de HTML repetido -->
+    <!-- Ahora: 1 línea -->
+    <app-acceso-rapido (perfilSeleccionado)="fillUser($event)">
+    </app-acceso-rapido>
+  </ion-fab>
 </ion-content>

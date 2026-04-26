@@ -1,9 +1,12 @@
 import { Component, OnInit, CUSTOM_ELEMENTS_SCHEMA, ViewChild, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule, IonContent } from '@ionic/angular';
-import { Router } from '@angular/router'; // <-- Importamos Router
-import { SupabaseService } from '../../../servicios/supabase.service';
+import { Router } from '@angular/router'; 
+import { SupabaseService } from '../../servicios/supabase.service';
+import { CarritoService } from '../../servicios/carrito'; 
 import { register } from 'swiper/element/bundle';
+import { addIcons } from 'ionicons';
+import { timeOutline, chatbubblesSharp, cartOutline } from 'ionicons/icons';
 
 register();
 
@@ -17,23 +20,25 @@ register();
 })
 export class MenuDigitalPage implements OnInit {
   @ViewChild(IonContent) content!: IonContent;
-  private router = inject(Router); // <-- Inyectamos el Router
+  private router = inject(Router);
+  
+  public carritoService = inject(CarritoService); 
   
   productos: any[] = [];
   productosFiltrados: any[] = [];
   categoriaSeleccionada: string = 'comida';
   cargando: boolean = true;
 
-  //FALTA LÓGICA PARA VER MESA ASIGNADA
   private numeroDeMesaActual = 1; 
 
-  constructor(private supabase: SupabaseService) {}
+  constructor(private supabase: SupabaseService) {
+    addIcons({ timeOutline, chatbubblesSharp, cartOutline });
+  }
 
   async ngOnInit() {
     await this.cargarMenu();
   }
 
-  // Refactorizado para usar enrutamiento en lugar de Modal
   irAlChat() {
     console.log('Navegando a la página de chat...');
     this.router.navigate(['/chat'], {
@@ -42,6 +47,10 @@ export class MenuDigitalPage implements OnInit {
         esMozo: false
       }
     });
+  }
+
+  irAlCarrito() {
+    this.router.navigate(['/carrito-pedido']);
   }
 
   async cargarMenu() {
@@ -59,7 +68,8 @@ export class MenuDigitalPage implements OnInit {
   }
 
   pedirItem(item: any) {
-    console.log('Pedido:', item);
+    this.carritoService.agregarItem(item);
+    console.log('Agregado al carrito:', item.nombre);
   }
 
   filtrar(cat: string) {

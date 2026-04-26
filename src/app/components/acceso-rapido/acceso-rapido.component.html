@@ -1,0 +1,14 @@
+<ion-fab slot="fixed" vertical="bottom" horizontal="end" #fab>
+  <ion-fab-button class="fab-main">
+    <ion-icon name="flash"></ion-icon>
+  </ion-fab-button>
+
+  <ion-fab-list side="top">
+    <div
+      *ngFor="let perfil of perfiles"
+      class="fab-item"
+      (click)="seleccionar(perfil); fab.activated = false">
+      <span class="fab-label">{{ perfil.nombre | titlecase }}</span>
+    </div>
+  </ion-fab-list>
+</ion-fab>

@@ -5,18 +5,8 @@
   
   <ion-toolbar color="" class="toolbar-segmento">
     <div class="segmento-wrapper">
-      <button 
-        class="seg-btn" 
-        [class.activo]="categoriaSeleccionada === 'comida'"
-        (click)="filtrar('comida')">
-        COMIDA
-      </button>
-      <button 
-        class="seg-btn" 
-        [class.activo]="categoriaSeleccionada === 'bebida'"
-        (click)="filtrar('bebida')">
-        BEBIDA
-      </button>
+      <button class="seg-btn" [class.activo]="categoriaSeleccionada === 'comida'" (click)="filtrar('comida')">COMIDA</button>
+      <button class="seg-btn" [class.activo]="categoriaSeleccionada === 'bebida'" (click)="filtrar('bebida')">BEBIDA</button>
     </div>
   </ion-toolbar>
 </ion-header>
@@ -30,7 +20,6 @@
     <div class="contenedor-lista">
       @for (item of productosFiltrados; track item.id) {
         <div class="tarjeta-producto">
-          
           <div class="caja-foto">
             <swiper-container [pagination]="true" class="swiper-foto">
               @for (img of item.fotos; track img) {
@@ -40,15 +29,12 @@
               }
             </swiper-container>
           </div>
-
           <div class="caja-datos">
             <div class="fila-superior">
               <span class="nombre-plato">{{ item.nombre | uppercase }}</span>
               <span class="precio-plato">${{ item.precio }}</span>
             </div>
-            
             <p class="descripcion-texto">{{ item.descripcion }}</p>
-
             <div class="fila-inferior">
               <div class="tiempo-info">
                 <ion-icon name="time-outline"></ion-icon>
@@ -57,7 +43,6 @@
               <button class="boton-pedir" (click)="pedirItem(item)">PEDIR</button>
             </div>
           </div>
-
         </div>
       }
 
@@ -67,14 +52,28 @@
           <p>No hay productos en esta categoría</p>
         </div>
       }
-
       <div class="espaciador-final"></div>
     </div>
   }
-  <ion-fab slot="fixed" vertical="bottom" horizontal="end">
-    <ion-fab-button (click)="irAlChat()">
+
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end" class="fab-chat-container">
+    <ion-fab-button class="fab-chat" (click)="irAlChat()">
       <ion-icon name="chatbubbles-sharp"></ion-icon>
     </ion-fab-button>
   </ion-fab>
 </ion-content>
 
+@if (carritoService.cantidadProductos() > 0) {
+  <ion-footer class="ion-no-border banner-carrito-animado">
+    <div class="banner-clickable" (click)="irAlCarrito()">
+      <div class="info-izquierda">
+        <div class="badge-contador">{{ carritoService.cantidadProductos() }}</div>
+        <div class="textos">
+          <span class="ver-carrito">Ver Carrito</span>
+          <span class="total-plata">Total: ${{ carritoService.total() }}</span>
+        </div>
+      </div>
+      <ion-icon name="chevron-forward-outline" class="icono-flecha"></ion-icon>
+    </div>
+  </ion-footer>
+}

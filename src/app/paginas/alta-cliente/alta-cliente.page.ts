@@ -1,6 +1,6 @@
 import { Component, OnInit, inject} from '@angular/core';
-import { SupabaseService } from '../../../servicios/supabase.service'; // Asegura esta ruta
-import { AuthService } from '../../../servicios/auth.service'; // Asegura esta ruta
+import { SupabaseService } from '../../servicios/supabase.service'; // Asegura esta ruta
+import { AuthService } from '../../servicios/auth.service'; // Asegura esta ruta
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { IonicModule, ToastController, LoadingController } from '@ionic/angular';
@@ -10,6 +10,7 @@ import { Haptics, ImpactStyle } from '@capacitor/haptics';
 import { Router } from '@angular/router';
 import { addIcons } from 'ionicons';
 import { qrCodeOutline, cameraOutline } from 'ionicons/icons';
+import { PushNotifications } from '@capacitor/push-notifications';
 
 @Component({
   selector: 'app-alta-cliente',
@@ -19,7 +20,7 @@ import { qrCodeOutline, cameraOutline } from 'ionicons/icons';
   imports: [IonicModule, CommonModule, FormsModule, ReactiveFormsModule]
 })
 export class AltaClientePage implements OnInit {
-  clienteForm!: FormGroup;
+    clienteForm!: FormGroup;
   fotoPersonal: string | null = null;
   cargando: boolean = false;
   
@@ -35,7 +36,7 @@ export class AltaClientePage implements OnInit {
   }
 
   ngOnInit() {
-    this.clienteForm = this.fb.group({
+      this.clienteForm = this.fb.group({
       nombres: ['', [Validators.required, Validators.pattern(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$/)]],
       apellidos: ['', [Validators.required, Validators.pattern(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$/)]],
       dni: ['', [Validators.required, Validators.pattern(/^[0-9]{7,8}$/)]],
@@ -43,7 +44,36 @@ export class AltaClientePage implements OnInit {
       clave: ['', [Validators.required, Validators.minLength(6)]],
       perfil: ['cliente', [Validators.required]]
     });
+    
   }
+  
+  async obtenerTokenFCM(): Promise<string> {
+  return new Promise((resolve, reject) => {
+
+    PushNotifications.removeAllListeners(); // 🔥 importante
+
+    PushNotifications.requestPermissions().then((permStatus) => {
+
+      if (permStatus.receive !== 'granted') {
+        reject('Permiso denegado');
+        return;
+      }
+
+      PushNotifications.addListener('registration', (token) => {
+        console.log('TOKEN FCM:', token.value);
+        resolve(token.value);
+      });
+
+      PushNotifications.addListener('registrationError', (err) => {
+        reject(err);
+      });
+
+      PushNotifications.register();
+
+    }).catch(reject);
+
+  });
+}
 
   // Método de mensajes de error idéntico a alta-empleado
   getErrorMessage(controlName: string): string {
@@ -131,6 +161,13 @@ export class AltaClientePage implements OnInit {
 
     try {
       const formValues = this.clienteForm.value;
+      let fcmToken: string | undefined;
+
+try {
+  fcmToken = await this.obtenerTokenFCM();
+} catch (e) {
+  console.warn('FCM no disponible:', e);
+}
 
       // 2. Nombramos el archivo (forzamos .jpeg porque viene de la cámara)
       const fileName = `${Date.now()}_cliente.jpeg`;
@@ -159,7 +196,8 @@ export class AltaClientePage implements OnInit {
         correo_electronico: formValues.correo,
         clave: formValues.clave,
         perfil: "cliente",
-        foto: urlFoto 
+        foto: urlFoto,
+        fcm_token: fcmToken
       });
 
       // 6. Rollback: Si la base de datos falla, borramos la foto del bucket
@@ -187,4 +225,7 @@ export class AltaClientePage implements OnInit {
     });
     await toast.present();
   }
+
+  
+
 }

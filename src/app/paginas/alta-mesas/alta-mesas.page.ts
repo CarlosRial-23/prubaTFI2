@@ -6,8 +6,8 @@ import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { QRCodeComponent } from 'angularx-qrcode';
 
 // Tus servicios homologados
-import { SupabaseService } from '../../../servicios/supabase.service';
-import { AuthService } from '../../../servicios/auth.service';
+import { SupabaseService } from '../../servicios/supabase.service';
+import { AuthService } from '../../servicios/auth.service';
 
 @Component({
   selector: 'app-alta-mesas',

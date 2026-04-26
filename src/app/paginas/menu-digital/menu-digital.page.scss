@@ -2,6 +2,7 @@ $azul-base: #325172;
 $azul-item: #456880;
 $verde-teal: #769690;
 $blanco-off: #e6eceb;
+$verde-oscuro: #374f43;
 
 ion-header {
   background: $azul-base;
@@ -176,26 +177,24 @@ ion-content {
   }
 }
 
-.fab-contenedor {
-  position: fixed;
-  bottom: 25px;
-  right: 20px;
-  z-index: 1000;
+ion-fab {
+  margin-bottom: 15px; 
+  margin-right: 5px;
 
-  .fab-btn {
+  ion-fab-button.fab-chat {
+    --background: #{$verde-oscuro};
+    --color: #{$blanco-off}; 
+    --box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5);
+    
     width: 60px;
     height: 60px;
-    border-radius: 50%;
-    background: $verde-teal;
-    border: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5);
 
     ion-icon {
       font-size: 28px;
-      color: $azul-base;
+    }
+
+    &:active {
+      --background: #2a3d34; 
     }
   }
 }
@@ -207,4 +206,53 @@ ion-content {
   align-items: center;
   background: $azul-base;
   ion-spinner { --color: #{$verde-teal}; }
+}
+
+.fab-chat-container { margin-bottom: 75px; }
+
+ion-fab {
+  margin-right: 5px;
+  ion-fab-button.fab-chat {
+    --background: #374f43;
+    --color: #e6eceb; 
+    --box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5);
+    width: 60px; height: 60px;
+    ion-icon { font-size: 28px; }
+  }
+}
+
+.banner-carrito-animado {
+  background: transparent;
+  position: fixed; bottom: 0; width: 100%; z-index: 9999;
+  padding: 10px 15px 15px;
+  animation: slideUp 0.3s ease-out forwards;
+
+  .banner-clickable {
+    background: #769690;
+    border-radius: 12px; padding: 12px 18px;
+    display: flex; justify-content: space-between; align-items: center;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3); cursor: pointer;
+
+    &:active { transform: scale(0.98); background: #62827c; }
+
+    .info-izquierda {
+      display: flex; align-items: center; gap: 12px;
+
+      .badge-contador {
+        background: #325172; color: white; font-weight: 900; font-size: 1rem;
+        width: 35px; height: 35px; display: flex; align-items: center;
+        justify-content: center; border-radius: 50%; border: 2px solid white;
+      }
+      .textos {
+        display: flex; flex-direction: column;
+        .ver-carrito { color: #325172; font-weight: 800; font-size: 1rem; }
+        .total-plata { color: #2a3d34; font-weight: 700; font-size: 0.85rem; }
+      }
+    }
+    .icono-flecha { color: #325172; font-size: 24px; }
+  }
+}
+@keyframes slideUp {
+  from { transform: translateY(100%); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
 }

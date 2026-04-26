@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { Chart, registerables } from 'chart.js';
-import { SupabaseService } from '../../../servicios/supabase.service'; 
+import { SupabaseService } from '../../servicios/supabase.service'; 
 import { UiService } from '../../services/ui'; 
 
 Chart.register(...registerables);
