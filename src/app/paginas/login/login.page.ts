@@ -103,14 +103,14 @@ export class LoginPage implements OnInit {
   //   }
   // }
 
-  async fillUser(perfil: PerfilTestModel) {
+  async onPerfilSeleccionado(perfil: PerfilTestModel) {
     this.loginForm.patchValue({
       email: perfil.email,
       password: perfil.password, // viene de Supabase
     });
 
-    this.loginForm.markAllAsTouched();
-    await Haptics.impact({ style: ImpactStyle.Light });
+    //this.loginForm.markAllAsTouched();
+    //await Haptics.impact({ style: ImpactStyle.Light });
     this.presentToast(
       `Perfil ${perfil.nombre.toUpperCase()} cargado`,
       'success'

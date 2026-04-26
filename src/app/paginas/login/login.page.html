@@ -77,20 +77,5 @@
       </div>
     </div>
   </div>
-
-  <ion-fab
-    slot="fixed"
-    vertical="bottom"
-    horizontal="end"
-    class="fab-acceso-rapido"
-    #fab
-  >
-    <ion-fab-button class="fab-main">
-      <ion-icon name="flash"></ion-icon>
-    </ion-fab-button>
-    <!-- Antes: 50 líneas de HTML repetido -->
-    <!-- Ahora: 1 línea -->
-    <app-acceso-rapido (perfilSeleccionado)="fillUser($event)">
-    </app-acceso-rapido>
-  </ion-fab>
+  <app-acceso-rapido (perfilSeleccionado)="onPerfilSeleccionado($event)"></app-acceso-rapido>
 </ion-content>
