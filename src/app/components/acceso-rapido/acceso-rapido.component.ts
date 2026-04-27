@@ -25,6 +25,7 @@ import {
 export class AccesoRapidoComponent implements OnInit {
 
   perfiles: PerfilTestModel[] = [];
+  fabAbierto = false;
 
   // 👇 Emite el perfil elegido hacia el Login padre
   @Output() perfilSeleccionado = new EventEmitter<PerfilTestModel>();
@@ -45,6 +46,7 @@ export class AccesoRapidoComponent implements OnInit {
 
   async ngOnInit() {
     this.perfiles = await this.perfilesService.getPerfiles();
+    console.log('Mis perfiles de Supabase: ', JSON.stringify(this.perfiles));
   }
 
   seleccionar(perfil: PerfilTestModel) {

@@ -11,16 +11,8 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../servicios/auth.service';
 import {
   IonContent,
-  IonFab,
-  IonFabButton,
-  IonFabList,
   IonIcon,
   ToastController,
-  IonHeader,
-  IonToolbar,
-  IonTitle,
-  IonButtons,
-  IonBackButton,
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { eyeOutline, eyeOffOutline, flash } from 'ionicons/icons';
@@ -38,9 +30,6 @@ import { PerfilTestModel } from '../../models/perfil-test.model';
     FormsModule,
     ReactiveFormsModule,
     IonContent,
-    IonFab,
-    IonFabButton,
-    IonFabList,
     IonIcon,
     AccesoRapidoComponent,
   ],

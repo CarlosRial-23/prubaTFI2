@@ -1,50 +1,91 @@
-$azul-fondo: #121737;
-$azul-card: #325172;
-$gris-medio: #456880;
-$celeste: #769690;
-$verde-btn: #374f43;
-$blanco-off: #e6eceb;
-
 :host {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 1000;
+  position: fixed;
+  bottom: 25px;
+  right: 35px;
+  z-index: 9999;
+  display: block;
 }
 
-.fab-acceso-rapido {
-  pointer-events: auto;
-  margin-right: 20px;
-  margin-bottom: 20px;
+.fab-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
 
-  .fab-main {
-    --background: #{$verde-btn};
-    --color: #{$blanco-off};
+/* Botón principal verde */
+.fab-main {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background-color: var(--ion-color-success, #2dd36f);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.35);
+
+  ion-icon {
+    font-size: 24px;
+    color: #ffffff !important;
   }
+}
 
-  .fab-secundario {
-    --background: #{$azul-fondo};
-    --color: #{$celeste};
-    --background-activated: #{$gris-medio};
-    overflow: visible;
+/* Lista */
+.custom-fab-list {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  margin-bottom: 12px;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(10px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
 
-    &::after {
-      content: attr(data-label);
-      position: absolute;
-      right: 55px; /* Empuja el texto a la izquierda */
-      background: $azul-card;
-      color: $blanco-off;
-      padding: 6px 12px;
-      border-radius: 8px;
-      font-size: 0.75rem;
-      text-transform: capitalize;
-      white-space: nowrap;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
-      border: 1px solid rgba($gris-medio, 0.4);
-      pointer-events: none;
-    }
+  &.visible {
+    opacity: 1;
+    pointer-events: all;
+    transform: translateY(0);
+  }
+}
+
+/* Fila: etiqueta + botón */
+.fab-item-container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-bottom: 10px;
+
+  .fab-label {
+    background: var(--ion-color-secondary, #325172);
+    color: #ffffff;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    text-transform: capitalize;
+    white-space: nowrap;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    margin-right: 12px;
+    pointer-events: none;
+  }
+}
+
+/* Botones secundarios (items) */
+.fab-item-btn {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background-color: var(--ion-color-tertiary, #5260ff);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+
+  ion-icon {
+    font-size: 20px;
+    color: #ffffff !important;
   }
 }

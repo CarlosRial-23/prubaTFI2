@@ -191,46 +191,4 @@ ion-icon {
 }
 
 .fab-acceso-rapido {
-  /* Se aumenta de 10px a 20px para separar los labels del borde de la pantalla */
-  margin-right: 40px;
-  margin-bottom: 10px;
-
-  /* Botón principal (rayo) */
-  .fab-main {
-    --background: #{$verde-btn};
-    --color: #{$blanco-off};
-  }
-
-  /* Botones secundarios de roles */
-  ion-fab-button:not(.fab-main) {
-    --background: #{$azul-fondo};
-    --color: #{$celeste};
-    --background-activated: #{$gris-medio};
-  }
-
-  .fab-item {
-    display: flex;
-    align-items: center;
-    /* Asegura que el contenido se alinee a la derecha para que el botón mande */
-    justify-content: flex-end;
-    margin-bottom: 15px;
-    cursor: pointer;
-    /* Evita que el contenedor desborde si el texto es muy largo */
-    width: max-content;
-    align-self: flex-end;
-
-    .fab-label {
-      background: $azul-card;
-      color: $blanco-off;
-      padding: 6px 12px;
-      border-radius: 8px;
-      font-size: 0.75rem;
-      margin-right: 12px; /* Espacio entre el texto y el botón circular */
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
-      pointer-events: none;
-      border: 1px solid rgba($gris-medio, 0.4);
-      /* Previene que el texto se divida en varias líneas */
-      white-space: nowrap;
-    }
-  }
 }
