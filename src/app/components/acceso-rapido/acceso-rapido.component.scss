@@ -1,91 +1,45 @@
-:host {
-  position: fixed;
-  bottom: 25px;
-  right: 35px;
-  z-index: 9999;
-  display: block;
-}
-
-.fab-wrapper {
-  display: flex;
-  flex-direction: column;
+/* Contenedor de la lista alineado a la derecha */
+ion-fab-list {
   align-items: flex-end;
+  margin-right: 8px;
+  width: max-content;
+  min-width: 200px;
+  right: 0;
 }
 
-/* Botón principal verde */
-.fab-main {
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  background-color: var(--ion-color-success, #2dd36f);
-  border: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.35);
+/* Botones de perfil con color celeste y forma de píldora */
+.profile-button-pildora {
+  --background: var(--ion-color-secondary); /* Color celeste de Ionic */
+  --color: #ffffff; /* Texto en blanco para contraste */
 
-  ion-icon {
-    font-size: 24px;
-    color: #ffffff !important;
-  }
-}
+  --border-radius: 20px;
+  --padding-start: 18px;
+  --padding-end: 18px;
 
-/* Lista */
-.custom-fab-list {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  margin-bottom: 12px;
-  opacity: 0;
-  pointer-events: none;
-  transform: translateY(10px);
-  transition: opacity 0.2s ease, transform 0.2s ease;
-
-  &.visible {
-    opacity: 1;
-    pointer-events: all;
-    transform: translateY(0);
-  }
-}
-
-/* Fila: etiqueta + botón */
-.fab-item-container {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
+  font-weight: bold;
+  white-space: nowrap;
+  height: 42px;
   margin-bottom: 10px;
+  font-size: 14px;
 
-  .fab-label {
-    background: var(--ion-color-secondary, #325172);
-    color: #ffffff;
-    padding: 6px 12px;
-    border-radius: 8px;
-    font-size: 14px;
-    font-weight: 500;
-    text-transform: capitalize;
-    white-space: nowrap;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-    margin-right: 12px;
-    pointer-events: none;
+  /* Sombreado para resaltar sobre el fondo */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+
+  /* Forzamos que el botón tome el ancho del texto */
+  width: max-content !important;
+  min-width: max-content !important;
+
+  &::part(native) {
+    contain: none;
+    width: max-content !important;
+    min-width: max-content !important;
+    background: var(--ion-color-secondary);
+    color: white;
   }
 }
 
-/* Botones secundarios (items) */
-.fab-item-btn {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  background-color: var(--ion-color-tertiary, #5260ff);
-  border: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-
-  ion-icon {
-    font-size: 20px;
-    color: #ffffff !important;
-  }
+.loading-text {
+  color: white;
+  margin-bottom: 10px;
+  font-size: 14px;
 }

@@ -1,16 +1,17 @@
-<div class="fab-wrapper">
+<ion-fab vertical="bottom" horizontal="end" slot="fixed">
+  <ion-fab-button color="primary">
+    <ion-icon name="flash"></ion-icon>
+  </ion-fab-button>
 
-  <div class="custom-fab-list" [class.visible]="fabAbierto">
-    <div class="fab-item-container" *ngFor="let perfil of perfiles">
-      <span class="fab-label">{{ perfil.nombre || 'Sin nombre' }}</span>
-      <button class="fab-item-btn" (click)="seleccionar(perfil); fabAbierto = false">
-        <ion-icon [name]="perfil.icono || 'person-outline'"></ion-icon>
-      </button>
-    </div>
-  </div>
-
-  <button class="fab-main" (click)="fabAbierto = !fabAbierto">
-    <ion-icon [name]="fabAbierto ? 'close' : 'flash'"></ion-icon>
-  </button>
-
-</div>
+  <ion-fab-list side="top">
+    @for (perfil of perfiles; track perfil.id) {
+      <ion-button
+        class="profile-button-pildora"
+        (click)="seleccionar(perfil)">
+        {{ perfil.nombre }}
+      </ion-button>
+    } @empty {
+      <span class="loading-text">Cargando...</span>
+    }
+  </ion-fab-list>
+</ion-fab>

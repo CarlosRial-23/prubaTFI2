@@ -1,55 +1,41 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { IonFab, IonFabButton, IonFabList, IonIcon } from '@ionic/angular/standalone';
+import { IonFab, IonFabButton, IonFabList, IonIcon, IonButton } from '@ionic/angular/standalone';
 import { PerfilesTestService } from '../../servicios/perfil.service';
 import { PerfilTestModel } from '../../models/perfil-test.model';
 import { addIcons } from 'ionicons';
-// Se importan todos los íconos necesarios para los diferentes roles
-import { 
-  flash, 
-  keyOutline, 
-  briefcaseOutline, 
-  shieldCheckmarkOutline, 
-  restaurantOutline, 
-  fastFoodOutline, 
-  wineOutline, 
-  personOutline 
-} from 'ionicons/icons';
+import { flash } from 'ionicons/icons';
 
 @Component({
   selector: 'app-acceso-rapido',
   templateUrl: './acceso-rapido.component.html',
+  styleUrls: ['./acceso-rapido.component.scss'],
   standalone: true,
-  imports: [CommonModule, IonFab, IonFabButton, IonFabList, IonIcon],
+  imports: [CommonModule, IonFab, IonFabButton, IonFabList, IonIcon, IonButton],
 })
 export class AccesoRapidoComponent implements OnInit {
-
   perfiles: PerfilTestModel[] = [];
-  fabAbierto = false;
 
-  // 👇 Emite el perfil elegido hacia el Login padre
-  @Output() perfilSeleccionado = new EventEmitter<PerfilTestModel>();
+  @Output() perfilSeleccionado: EventEmitter<PerfilTestModel> = new EventEmitter<PerfilTestModel>();
 
-  constructor(private perfilesService: PerfilesTestService) {
-    // Se registran los íconos para que Ionic pueda utilizarlos cuando se llamen desde el HTML
-    addIcons({ 
-      flash,
-      keyOutline,
-      briefcaseOutline,
-      shieldCheckmarkOutline,
-      restaurantOutline,
-      fastFoodOutline,
-      wineOutline,
-      personOutline
-    });
+  constructor(
+    private perfilesService: PerfilesTestService,
+    private cdr: ChangeDetectorRef 
+  ) {
+    addIcons({ flash }); // Se registra el ícono flash solicitado
   }
 
   async ngOnInit() {
-    this.perfiles = await this.perfilesService.getPerfiles();
-    console.log('Mis perfiles de Supabase: ', JSON.stringify(this.perfiles));
+    try {
+      const data = await this.perfilesService.getPerfiles();
+      this.perfiles = data || [];
+      this.cdr.detectChanges(); 
+    } catch (error) {
+      console.error('Error cargando perfiles:', error);
+    }
   }
 
   seleccionar(perfil: PerfilTestModel) {
-    this.perfilSeleccionado.emit(perfil);
+    this.perfilSeleccionado.emit(perfil); // Emite el perfil elegido hacia el Login
   }
 }

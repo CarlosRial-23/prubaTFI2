@@ -18,9 +18,9 @@ ion-content {
 }
 
 ion-icon {
-  --background: #{$blanco-off} !important; /* Faltaba el símbolo del $ */
+  --background: #{$blanco-off} !important;
   font-size: 30px;
-  color: #{$blanco-off}; /* Faltaba el símbolo del $ */
+  color: #{$blanco-off};
 }
 
 .viewport {
@@ -188,7 +188,4 @@ ion-icon {
     font-size: 0.75rem;
     cursor: pointer;
   }
-}
-
-.fab-acceso-rapido {
 }
