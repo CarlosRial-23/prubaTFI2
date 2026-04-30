@@ -155,25 +155,29 @@ export class LoginPage implements OnInit {
           'success'
         );
 
-        switch (perfil) {
-          case 'metre':
-            this.router.navigate(['/dashboard-metre']);
-            break;
-          case 'cocinero':
-          case 'cantinero':
-            this.router.navigate(['/alta-producto']);
-            break;
-          case 'duenio':
-          case 'supervisor':
-            this.router.navigate(['/alta-empleado']);
-            break;
-          default:
-            this.router.navigate(['/ingreso-qr']);
-            break;
-        }
-      } else {
-        this.presentToast('Correo o contraseña incorrectos', 'danger');
+        this.router.navigate(['/perfil']);
       }
+      //   switch (perfil) {
+      //     case 'metre':
+      //       this.router.navigate(['/dashboard-metre']);
+      //       break;
+      //     case 'cocinero':
+      //     case 'cantinero':
+      //       this.router.navigate(['/alta-producto']);
+      //       break;
+      //     case 'duenio':
+      //       this.router.navigate(['/perfil']);
+      //       break;
+      //     case 'supervisor':
+      //       this.router.navigate(['/alta-empleado']);
+      //       break;
+      //     default:
+      //       this.router.navigate(['/ingreso-qr']);
+      //       break;
+      //   }
+      // } else {
+      //   this.presentToast('Correo o contraseña incorrectos', 'danger');
+      // }
     } catch (e) {
       this.presentToast('Error de conexión con el servidor', 'danger');
     }
@@ -181,6 +185,9 @@ export class LoginPage implements OnInit {
 
   irAlRegistro() {
     this.router.navigate(['/alta-cliente']);
+  }
+  irAlIngreso() {
+    this.router.navigate(['/ingreso-qr']);
   }
 
   // irAltaEmpleados() {

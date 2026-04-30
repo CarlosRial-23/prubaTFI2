@@ -1,0 +1,63 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/inicio" text=""></ion-back-button>
+    </ion-buttons>
+    <ion-title>Mi Perfil</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="cerrarSesion()" color="dark">
+        <ion-icon slot="icon-only" name="log-out-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="perfil-content">
+  <div class="background-overlay"></div>
+
+
+  @if(!cargando && usuario){
+     <div class="perfil-container">
+    <div class="logo-container">
+      <img src="assets/ursula-logo.png" alt="Logo Ursula" class="app-logo" />
+    </div>
+
+    <div class="profile-card">
+      <div class="avatar-section">
+        <div class="avatar-wrapper">
+          <img
+            [src]="usuario.foto ? usuario.foto : 'assets/imagenes/default-avatar.png'"
+            alt="Foto de perfil"
+            class="profile-img"
+          />
+        </div>
+      </div>
+
+      <div class="info-section">
+        <h1 class="user-name">{{ usuario.nombres }} {{ usuario.apellidos }}</h1>
+        <div class="details-list">
+          <div class="detail-item">
+            <ion-icon name="person-outline"></ion-icon>
+            <span>Perfil: {{ usuario.perfil }}</span>
+          </div>
+          <div class="detail-item">
+            <ion-icon name="mail-outline"></ion-icon>
+            <span>{{ usuario.correo_electronico }}</span>
+          </div>
+          @if(usuario.dni){
+          <div class="detail-item">
+            <ion-icon name="id-card-outline"></ion-icon>
+            <span>DNI: {{ usuario.dni }}</span>
+          </div>
+          }
+        </div>
+      </div>
+    </div>
+  </div>}
+
+  @if (cargando) {
+  <div class="loading-full">
+    <ion-spinner name="crescent" color="light"></ion-spinner>
+  </div>
+  }
+</ion-content>

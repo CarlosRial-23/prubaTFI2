@@ -1,4 +1,5 @@
-import { Component, OnInit, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
+// 1. Añade ViewChild a las importaciones de @angular/core
+import { Component, OnInit, Output, EventEmitter, ChangeDetectorRef, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonFab, IonFabButton, IonFabList, IonIcon, IonButton } from '@ionic/angular/standalone';
 import { PerfilesTestService } from '../../servicios/perfil.service';
@@ -15,6 +16,9 @@ import { flash } from 'ionicons/icons';
 })
 export class AccesoRapidoComponent implements OnInit {
   perfiles: PerfilTestModel[] = [];
+
+  // 2. Captura la referencia del elemento IonFab de tu HTML
+  @ViewChild(IonFab) fabMenu!: IonFab; 
 
   @Output() perfilSeleccionado: EventEmitter<PerfilTestModel> = new EventEmitter<PerfilTestModel>();
 
@@ -36,6 +40,12 @@ export class AccesoRapidoComponent implements OnInit {
   }
 
   seleccionar(perfil: PerfilTestModel) {
-    this.perfilSeleccionado.emit(perfil); // Emite el perfil elegido hacia el Login
+    // Emite el perfil elegido hacia el Login
+    this.perfilSeleccionado.emit(perfil); 
+    
+    // 3. Llama al método close() para contraer el botón flotante
+    if (this.fabMenu) {
+      this.fabMenu.close();
+    }
   }
 }

@@ -22,7 +22,15 @@
         <div class="tarjeta-item">
           <div class="info-principal">
             <h2 class="nombre-plato">{{ item.nombre }}</h2>
-            <span class="cantidad-badge">x{{ item.cantidad }}</span>
+            <div class="control-cantidad">
+              <ion-button fill="clear" (click)="modificarCantidad(item.producto_id, -1)" class="btn-cant">
+                <ion-icon name="remove-outline" slot="icon-only"></ion-icon>
+              </ion-button>
+              <span class="cantidad-badge">{{ item.cantidad }}</span>
+              <ion-button fill="clear" (click)="modificarCantidad(item.producto_id, 1)" class="btn-cant">
+                <ion-icon name="add-outline" slot="icon-only"></ion-icon>
+              </ion-button>
+            </div>
           </div>
           <div class="info-secundaria">
             <span class="precio-unitario">Unitario: ${{ item.precio }}</span>
@@ -51,10 +59,10 @@
         <span class="valor-total">${{ carritoService.total() }}</span>
       </div>
     </div>
-    <ion-toolbar>
-      <ion-button expand="block" shape="round" class="btn-confirmar" (click)="confirmarPedido()">
-        Confirmar y Pedir
-      </ion-button>
-    </ion-toolbar>
+    <div class="button-wrapper">
+      <button class="btn-confirmar-nativo" (click)="confirmarPedido()">
+        CONFIRMAR Y PEDIR
+      </button>
+    </div>
   </ion-footer>
 }

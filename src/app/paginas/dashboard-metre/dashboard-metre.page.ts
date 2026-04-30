@@ -119,22 +119,33 @@ export class DashboardMetrePage implements OnInit {
   }
 
   async confirmarAsignacion() {
-    if (!this.clienteSeleccionado || !this.mesaSeleccionada) return;
+  if (!this.clienteSeleccionado || !this.mesaSeleccionada) return;
 
-    await this.supabase.client
-      .from('mesas')
-      .update({ estado: 'ocupada' })
-      .eq('nro_mesa', this.mesaSeleccionada.nro_mesa);
+  await this.supabase.client
+    .from('mesas')
+    .update({ estado: 'ocupada' })
+    .eq('nro_mesa', this.mesaSeleccionada.nro_mesa);
 
-    await this.supabase.client
-      .from('lista_espera')
-      .update({ id_mesa: this.mesaSeleccionada.nro_mesa, estado_espera: 'asignado' })
-      .eq('cliente_id', this.clienteSeleccionado.cliente_id);
+  const { data, error } = await this.supabase.client
+    .from('lista_espera')
+    .update({
+      id_mesa: this.mesaSeleccionada.id, // 👈 CLAVE
+      estado_espera: 'asignado'
+    })
+    .eq('cliente_id', this.clienteSeleccionado.cliente_id)
+    .select();
 
-    await Haptics.notification({ type: NotificationType.Success });
+  console.log('RESULTADO UPDATE:', data, error);
 
-    this.clienteSeleccionado = null;
-    this.mesaSeleccionada = null;
-    await this.cargarDatos();
+  if (error) {
+    console.error('Error actualizando lista_espera:', error);
+    return;
   }
+
+  await Haptics.notification({ type: NotificationType.Success });
+
+  this.clienteSeleccionado = null;
+  this.mesaSeleccionada = null;
+  await this.cargarDatos();
+}
 }
